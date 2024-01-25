@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using ServMidMan.Data;
+
 namespace ServMidMan
 {
     public class Program
@@ -5,7 +8,10 @@ namespace ServMidMan
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddDbContext<DataProviderContext>(options =>
+            {
+                options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+            });
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
