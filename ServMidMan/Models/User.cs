@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace ServMidMan.Models
 {
@@ -17,5 +18,9 @@ namespace ServMidMan.Models
         Servicer,
         Client,
         Both
+    }
+    public class UserWithRegister : User
+    {
+        public string Password2 { get; set; }
     }
 }

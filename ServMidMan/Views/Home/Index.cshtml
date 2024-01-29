@@ -1,8 +1,274 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<link href="ServMidMan.styles.css" rel="stylesheet" />
+<section>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container">
+			<!-- Brand/logo -->
+			<a class="navbar-brand" href="#">Product Filter</a>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+			<!-- Links -->
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<input class="form-control" type="search" placeholder="Search" aria-label="Search">
+					</li>
+					<li class="nav-item">
+						<select class="form-control" id="CategoryRadio" onchange="changeFirstElementContent()">
+							<option selected>Category</option>
+							<option value="1">Cat </option>
+							<option value="2">Cat 2</option>
+							<option value="3">Cat asdasdas3</option>
+							<!-- Add more category options as needed -->
+						</select>
+					</li>
+					<li class="nav-item">
+						<input class="form-control" type="text" placeholder="Location">
+					</li>
+					<li class="nav-item">
+						<input class="form-control" type="text" placeholder="Around of the location">
+					</li>
+					<li class="nav-item">
+						<input class="form-control" type="number" placeholder="Min Price">
+					</li>
+					<li class="nav-item">
+						<input class="form-control" type="number" placeholder="Max Price">
+					</li>
+					<li class="nav-item">
+						<button class="btn btn-outline-success" type="submit">Search</button>
+					</li>
+					<!-- Add more filter options as needed -->
+				</ul>
+			</div>
+		</div>
+	</nav>
+</section>
+<section class="section-products">
+	<div class="container">
+		<div class="row justify-content-center text-center">
+			<div class="col-md-8 col-lg-6">
+				<div class="header">
+					<h3>Featured Product</h3>
+					<h2>Popular Products</h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-1" class="single-product">
+					<div class="part-1">
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-old-price">$79.99</h4>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-1" class="single-product">
+					<div class="part-1">
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-old-price">$79.99</h4>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-2" class="single-product">
+					<div class="part-1">
+						<span class="discount">15% off</span>
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-3" class="single-product">
+					<div class="part-1">
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-old-price">$79.99</h4>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-4" class="single-product">
+					<div class="part-1">
+						<span class="new">new</span>
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-1" class="single-product">
+					<div class="part-1">
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-old-price">$79.99</h4>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-2" class="single-product">
+					<div class="part-1">
+						<span class="discount">15% off</span>
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-3" class="single-product">
+					<div class="part-1">
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-old-price">$79.99</h4>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+			<!-- Single Product -->
+			<div class="col-md-6 col-lg-4 col-xl-3">
+				<div id="product-4" class="single-product">
+					<div class="part-1">
+						<span class="new">new</span>
+						<ul>
+							<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+							<li><a href="#"><i class="fas fa-heart"></i></a></li>
+							<li><a href="#"><i class="fas fa-plus"></i></a></li>
+							<li><a href="#"><i class="fas fa-expand"></i></a></li>
+						</ul>
+					</div>
+					<div class="part-2">
+						<h3 class="product-title">Here Product Title</h3>
+						<h4 class="product-price">$49.99</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<script>
+	window.onload = function () {
+		// Get the default option text
+		var defaultOptionText = document.getElementById("CategoryRadio").options[0].text;
+
+		// Get the width of the default option text
+		var minWidth = getTextWidth(defaultOptionText);
+
+		// Set the minimum width for the dropdown
+		document.getElementById("CategoryRadio").style.minWidth = minWidth + "px";
+	};
+
+	function getTextWidth(text) {
+		// Create a temporary span element to measure text width
+		var span = document.createElement("span");
+		span.style.visibility = "hidden";
+		span.style.position = "absolute";
+		span.style.whiteSpace = "nowrap";
+		span.innerText = text;
+
+		// Append the span to the body
+		document.body.appendChild(span);
+
+		// Get the width of the span
+		var width = span.offsetWidth;
+
+		// Remove the span from the body
+		document.body.removeChild(span);
+
+		return width;
+	}
+	function changeFirstElementContent() {
+		var dropdown = document.getElementById("CategoryRadio");
+		var firstOption = dropdown.options[0]; // Get the first option element
+
+		// Change its content based on the selected option
+		switch (dropdown.value) {
+			case "item1":
+				firstOption.textContent = "1";
+				break;
+			case "item2":
+				firstOption.textContent = "2";
+				break;
+			case "item3":
+				firstOption.textContent = "3";
+				break;
+			default:
+				firstOption.textContent = "4";
+				break;
+		}
+	}
+</script>

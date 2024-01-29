@@ -22,6 +22,15 @@ namespace ServMidMan.Controllers
         {
             return View();
         }
+        public IActionResult Upload()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult NewProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> file)
+        {
+            return RedirectToAction("Index");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

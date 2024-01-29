@@ -71,8 +71,5 @@ namespace ServMidMan.Controllers
             return RedirectToAction("Welcome");
         }
     }
-    public class UserWithRegister : User
-    {
-        public string Password2{ get; set; }
-    }
+
 }
