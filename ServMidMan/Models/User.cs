@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ServMidMan.Models
 {
+    [Index(nameof(Email))]
     public class User
     {
         [Key]
