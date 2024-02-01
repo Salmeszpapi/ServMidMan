@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServMidMan.Data;
 using ServMidMan.Models;
@@ -49,14 +50,24 @@ namespace ServMidMan.Controllers
             try
             {
                 user.Password = PasswordHasher.HashPassword(user.Password);
-                var result = _dataProvider.Users.Add(user as User);
+                _dataProvider.Users.Add(user as User);
+                var isThereAnyEqualEmails = _dataProvider.Users.Where(x => x.Email == user.Email).FirstOrDefault();
+                if(isThereAnyEqualEmails is not null)
+                {
+                    ViewBag.ErrorMessage = "Already taken email";
+                    return View("Register");
+                }
+
                 _dataProvider.SaveChanges();
+                var result = _dataProvider.Users.Where(x=>x.Email == user.Email && x.Name == user.Name).FirstOrDefault();
                 HttpContext.Session.SetString("Login", "True");
+                HttpContext.Session.SetString("UserId", result.Id.ToString());
+                HttpContext.Session.SetString("UserType", result.TypeOfUser.ToString());
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Already taken email";
+                ViewBag.ErrorMessage = "Already taken email";
             }
             return RedirectToAction("Register");
         }
@@ -68,10 +79,12 @@ namespace ServMidMan.Controllers
             if(result != null)
             {
 	            HttpContext.Session.SetString("Login", "True");
-				return RedirectToAction("Index","Home");
+                HttpContext.Session.SetString("UserId", result.Id.ToString());
+                HttpContext.Session.SetString("UserType", result.TypeOfUser.ToString());
+                return RedirectToAction("Index","Home");
                 //show alert
             }
-            TempData["ErrorMessage"] = "Invalid Username or Password ";
+            ViewBag.ErrorMessage = "Invalid Username or Password ";
             return RedirectToAction("Welcome");
         }
     }

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI.Common;
 using ServMidMan.Data;
+using ServMidMan.Helper;
 using ServMidMan.Models;
 using System.Diagnostics;
 
@@ -18,8 +20,14 @@ namespace ServMidMan.Controllers
 
         public IActionResult Index()
         {
-	        List<Product> products = _dataProvider.Products.ToList() ;
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
+            var typeOfUser = HttpContext.Session.GetString("UserType");
+            List<Product> products = _dataProvider.Products.ToList() ;
 	        ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+	        ViewData["typeOfUser"] = typeOfUser;
 			return View(products);
         }
 
@@ -27,8 +35,17 @@ namespace ServMidMan.Controllers
         {
             return View();
         }
-        public IActionResult Upload()
+        public IActionResult Product(string id)
         {
+	        List<Product> products = _dataProvider.Products.Where(x=>x.Id.ToString() == id).ToList();
+			return View(products);
+        }
+		public IActionResult Upload()
+        {
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             return View();
         }
@@ -39,7 +56,8 @@ namespace ServMidMan.Controllers
 		[HttpPost]
         public IActionResult NewProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> file)
         {
-            
+            var userId = HttpContext.Session.GetString("UserId");
+            product.UserId = Convert.ToInt32(userId);
             _dataProvider.Products.Add(product);
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");

@@ -63,7 +63,7 @@
 			@foreach (var product in Model)
 			{
 				<div class="col-md-6 col-lg-4 col-xl-3">
-					<div id="product-1" class="single-product">
+					<div id="product-@product.Id" style="background: url('https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg') no-repeat center; background-size: cover;" class="single-product" onclick="redirectToProduct('@product.Id')">
 						<div class="part-1">
 							<ul>
 								<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
@@ -80,6 +80,8 @@
 					</div>
 				</div>
 			}
+
+
 
 			<!-- Single Product -->
 @* 			<div class="col-md-6 col-lg-4 col-xl-3">
@@ -278,5 +280,8 @@
 				firstOption.textContent = "4";
 				break;
 		}
+	}
+	function redirectToProduct(productId) {
+		window.location.href = '/Home/Product?id=' + productId;
 	}
 </script>

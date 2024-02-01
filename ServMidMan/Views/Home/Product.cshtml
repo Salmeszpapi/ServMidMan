@@ -1,0 +1,24 @@
+﻿@using MySqlX.XDevAPI
+@using Microsoft.AspNetCore.Http
+
+<h1>Product</h1>
+@foreach (var product in Model)
+{
+	<div class="col-md-6 col-lg-4 col-xl-3">
+		<div id="product-@product.Id" class="single-product" onclick="redirectToProduct('@product.Id')">
+			<div class="part-1">
+				<ul>
+					<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+					<li><a href="#"><i class="fas fa-heart"></i></a></li>
+					<li><a href="#"><i class="fas fa-plus"></i></a></li>
+					<li><a href="#"><i class="fas fa-expand"></i></a></li>
+				</ul>
+			</div>
+			<div class="part-2">
+				<h3 class="product-title">@product.Name</h3>
+				<h4 class="product-old-price">@(product.Price + 56)€</h4>
+				<h4 class="product-price">@product.Price €</h4>
+			</div>
+		</div>
+	</div>
+}

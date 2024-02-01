@@ -40,81 +40,83 @@
 </head>
 <body>
 
-    <div class="centered-form">
-        <form class="bordered-form" method="post" action="/Home/NewProduct" enctype="multipart/form-data">
-	        <div class="form-row">
-		        <div class="col-md-4 mb-3">
-			        <label for="validationDefault01">Product name</label>
-			        <input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="Title" required>
-		        </div>
-                
-	        </div>
-	        <div class="form-row">
-		        <div class="col-md-2 mb-3">
-			        <label for="validationDefault01">Category</label>
-                    <select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
-					    <option selected>Category</option>
-                        <option value="Electronincs">Electronincs </option>
-                        <option value="Mobile">Mobile</option>
-                        <option value="PC">PC</option>
-                        <option value="Notebook">Notebook</option>
-                        <option value="Camera">Camera</option>
-                        <option value="Car">Car</option>
-                        <option value="Vehchile">Vehchile</option>
-                        <option value="Car">Car</option>
-                        <option value="Motorcycle">Motorcycle</option>
-                        <option value="Bicycle">Bicycle</option>
-				        </select>
-			    </div>
-                
-	        </div>
-            <div class="form-row">
-                <div class="col-md-6 mb-3">
-                    <label for="validationDefault01">Description</label>
-                    <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" ></textarea>
-                </div>
+<div class="centered-form">
 
-            </div>
+	<form class="bordered-form" method="post" action="/Home/NewProduct" enctype="multipart/form-data">
+		<center><h2>Upload new product</h2></center>
+		<div class="form-row">
+			<div class="col-md-4 mb-3">
+				<label for="validationDefault01">Product name</label>
+				<input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="Title" required>
+			</div>
 
-            <div class="form-row">
-                <div class="col-md-2 mb-3">
-                    <label for="validationDefault03">Price</label>
-                    <div class="input-group">
-                        <input type="text" name="Price" class="form-control" id="validationDefault03" placeholder="Price" required >
-                        <div class="input-group-append">
-                            <span class="input-group-text">€</span>
-                        </div>
+		</div>
+		<div class="form-row">
+			<div class="col-md-2 mb-3">
+				<label for="validationDefault01">Category</label>
+				<select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
+					<option selected>Category</option>
+					<option value="Electronincs">Electronincs </option>
+					<option value="Mobile">Mobile</option>
+					<option value="PC">PC</option>
+					<option value="Notebook">Notebook</option>
+					<option value="Camera">Camera</option>
+					<option value="Car">Car</option>
+					<option value="Vehchile">Vehchile</option>
+					<option value="Car">Car</option>
+					<option value="Motorcycle">Motorcycle</option>
+					<option value="Bicycle">Bicycle</option>
+				</select>
+			</div>
 
-                    </div>
-                    <label for="validationDefault03" style="margin-top:10px;">Location</label>
-                    <div class="input-group">
-                        <input type="text" name="Location" class="form-control" id="validationDefault03" placeholder="12345" required >
-                    </div>
+		</div>
+		<div class="form-row">
+			<div class="col-md-6 mb-3">
+				<label for="validationDefault01">Description</label>
+				<textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" ></textarea>
+			</div>
 
-                </div>
+		</div>
 
-                <div class="form-group">
+		<div class="form-row">
+			<div class="col-md-2 mb-3">
+				<label for="validationDefault03">Price</label>
+				<div class="input-group">
+					<input type="text" name="Price" class="form-control" id="validationDefault03" placeholder="Price" required>
+					<div class="input-group-append">
+						<span class="input-group-text">€</span>
+					</div>
 
-                    <label for="fileInput">Select Image(s):</label>
-                    <input type="file" name="fileInput" id="fileInput" accept="image/*" multiple onchange="previewImages(event)" />
+				</div>
+				<label for="validationDefault03" style="margin-top:10px;">Location</label>
+				<div class="input-group">
+					<input type="text" name="Location" class="form-control" id="validationDefault03" placeholder="12345" required>
+				</div>
 
-                    <div class="image-preview-container" id="imagePreviewContainer">
-                        <!-- Image previews will be dynamically added here -->
-                    </div>
-                </div>
+			</div>
 
-            </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
-                    <label class="form-check-label" for="invalidCheck2">
-                        Agree to terms and conditions
-                    </label>
-                </div>
-            </div>
-            <button class="btn btn-primary" type="submit">Submit form</button>
-        </form>
-    </div>
+			<div class="form-group">
+
+				<label for="fileInput">Select Image(s):</label>
+				<input type="file" name="fileInput" id="fileInput" accept="image/*" multiple onchange="previewImages(event)"/>
+
+				<div class="image-preview-container" id="imagePreviewContainer">
+					<!-- Image previews will be dynamically added here -->
+				</div>
+			</div>
+
+		</div>
+		<div class="form-group">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+				<label class="form-check-label" for="invalidCheck2">
+					Agree to terms and conditions
+				</label>
+			</div>
+		</div>
+		<button class="btn btn-primary" type="submit">Submit form</button>
+	</form>
+</div>
     <script>
         function previewImages(event) {
             var input = event.target;
