@@ -45,7 +45,7 @@
 	        <div class="form-row">
 		        <div class="col-md-4 mb-3">
 			        <label for="validationDefault01">Product name</label>
-			        <input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="First name" value="Funyiro" required>
+			        <input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="Title" required>
 		        </div>
                 
 	        </div>
@@ -54,9 +54,16 @@
 			        <label for="validationDefault01">Category</label>
                     <select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
 					    <option selected>Category</option>
-                        <option value="Auto Cat">Auto Cat </option>
-                        <option value="Auto Cat 2">Auto Cat 2</option>
-                        <option value="Auto VW">Auto VW</option>
+                        <option value="Electronincs">Electronincs </option>
+                        <option value="Mobile">Mobile</option>
+                        <option value="PC">PC</option>
+                        <option value="Notebook">Notebook</option>
+                        <option value="Camera">Camera</option>
+                        <option value="Car">Car</option>
+                        <option value="Vehchile">Vehchile</option>
+                        <option value="Car">Car</option>
+                        <option value="Motorcycle">Motorcycle</option>
+                        <option value="Bicycle">Bicycle</option>
 				        </select>
 			    </div>
                 
@@ -64,7 +71,7 @@
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label for="validationDefault01">Description</label>
-                    <textarea name="Description" class="form-control" id="validationDefault03" value="Description" placeholder="Description" rows="4" ></textarea>
+                    <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" ></textarea>
                 </div>
 
             </div>
@@ -73,7 +80,7 @@
                 <div class="col-md-2 mb-3">
                     <label for="validationDefault03">Price</label>
                     <div class="input-group">
-                        <input type="text" name="Price" class="form-control" id="validationDefault03" value="23" placeholder="Price">
+                        <input type="text" name="Price" class="form-control" id="validationDefault03" placeholder="Price" required >
                         <div class="input-group-append">
                             <span class="input-group-text">€</span>
                         </div>
@@ -81,14 +88,14 @@
                     </div>
                     <label for="validationDefault03" style="margin-top:10px;">Location</label>
                     <div class="input-group">
-                        <input type="text" name="Location" class="form-control" id="validationDefault03" value="94501" placeholder="Price">
+                        <input type="text" name="Location" class="form-control" id="validationDefault03" placeholder="12345" required >
                     </div>
 
                 </div>
 
                 <div class="form-group">
 
-                    <label for="fileInput">Select Image(s) or Vieos(s):</label>
+                    <label for="fileInput">Select Image(s):</label>
                     <input type="file" name="fileInput" id="fileInput" accept="image/*" multiple onchange="previewImages(event)" />
 
                     <div class="image-preview-container" id="imagePreviewContainer">
