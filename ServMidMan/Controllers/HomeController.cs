@@ -29,6 +29,7 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Upload()
         {
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             return View();
         }
         public IActionResult Logout()
@@ -38,6 +39,7 @@ namespace ServMidMan.Controllers
 		[HttpPost]
         public IActionResult NewProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> file)
         {
+            
             _dataProvider.Products.Add(product);
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");
