@@ -18,7 +18,9 @@ namespace ServMidMan.Controllers
 
         public IActionResult Index()
         {
-            return View();
+	        List<Product> products = _dataProvider.Products.ToList() ;
+	        ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+			return View(products);
         }
 
         public IActionResult Privacy()
@@ -29,7 +31,11 @@ namespace ServMidMan.Controllers
         {
             return View();
         }
-        [HttpPost]
+        public IActionResult Logout()
+        {
+			return RedirectToAction("Welcome", "Authentication");
+		}
+		[HttpPost]
         public IActionResult NewProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> file)
         {
             _dataProvider.Products.Add(product);

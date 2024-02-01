@@ -30,12 +30,14 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Welcome()
         {
-            if (TempData["ErrorMessage"] != null)
+            HttpContext.Session.SetString("Login","False");
+			if (TempData["ErrorMessage"] != null)
             {
                 ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
             }
 
-            return View();
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+			return View();
         }
         public IActionResult Register(UserWithRegister user)
         {
@@ -49,6 +51,7 @@ namespace ServMidMan.Controllers
                 user.Password = PasswordHasher.HashPassword(user.Password);
                 var result = _dataProvider.Users.Add(user as User);
                 _dataProvider.SaveChanges();
+                HttpContext.Session.SetString("Login", "True");
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
@@ -64,7 +67,8 @@ namespace ServMidMan.Controllers
             var result = _dataProvider.Users.Where(x=>x.Email == user.Email && x.Password == pw).FirstOrDefault();
             if(result != null)
             {
-                return RedirectToAction("Index","Home");
+	            HttpContext.Session.SetString("Login", "True");
+				return RedirectToAction("Index","Home");
                 //show alert
             }
             TempData["ErrorMessage"] = "Invalid Username or Password ";

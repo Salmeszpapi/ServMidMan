@@ -42,13 +42,25 @@
 
     <div class="centered-form">
         <form class="bordered-form" method="post" action="/Home/NewProduct" enctype="multipart/form-data">
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="validationDefault01">Product name</label>
-                    <input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="First name" value="Funyiro" required>
-                </div>
+	        <div class="form-row">
+		        <div class="col-md-4 mb-3">
+			        <label for="validationDefault01">Product name</label>
+			        <input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="First name" value="Funyiro" required>
+		        </div>
                 
-            </div>
+	        </div>
+	        <div class="form-row">
+		        <div class="col-md-2 mb-3">
+			        <label for="validationDefault01">Category</label>
+                    <select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
+					    <option selected>Category</option>
+                        <option value="Auto Cat">Auto Cat </option>
+                        <option value="Auto Cat 2">Auto Cat 2</option>
+                        <option value="Auto VW">Auto VW</option>
+				        </select>
+			    </div>
+                
+	        </div>
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label for="validationDefault01">Description</label>
@@ -58,12 +70,8 @@
             </div>
 
             <div class="form-row">
-                <div class="col-md-6 mb-3">
-                    <label for="validationDefault03">Problem</label>
-                    <textarea name="Weight" class="form-control" id="validationDefault03" value="Funyiro" placeholder="Problem Description" rows="4" ></textarea>
-                </div>
                 <div class="col-md-2 mb-3">
-                    <label for="validationDefault03">Problem</label>
+                    <label for="validationDefault03">Price</label>
                     <div class="input-group">
                         <input type="text" name="Price" class="form-control" id="validationDefault03" value="23" placeholder="Price">
                         <div class="input-group-append">
@@ -77,8 +85,6 @@
                     </div>
 
                 </div>
-
-
 
                 <div class="form-group">
 
@@ -126,6 +132,14 @@
                 reader.readAsDataURL(input.files[i]);
             }
 
+        }
+
+        function updateHiddenInput() {
+            // Get the selected value
+            var selectedValue = document.getElementById("CategoryRadio").value;
+
+            // Update the value of the hidden input field
+            document.getElementById("selectedValue").value = selectedValue;
         }
     </script>
 </body>
