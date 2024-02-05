@@ -4,6 +4,7 @@ using ServMidMan.Data;
 using ServMidMan.Helper;
 using ServMidMan.Models;
 using System.Diagnostics;
+using System.Net;
 
 namespace ServMidMan.Controllers
 {
@@ -24,11 +25,27 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
+
+            List<Product> products = _dataProvider.Products.ToList();
+
+            List<Byte[]> bytes = new List<Byte[]>();
+            List<ProductWithByteImages> myProductWithByteImages = new List<ProductWithByteImages>();
+            foreach (var product in products)
+            {
+                var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x=>x.FileName).ToList();
+                myProductWithByteImages.Add(new ProductWithByteImages
+                {
+                    Products =  product ,
+                    ImageResources =  ImageOperator.DownlaodImages(myImages),
+                });
+            }
+
             var typeOfUser = HttpContext.Session.GetString("UserType");
-            List<Product> products = _dataProvider.Products.ToList() ;
-	        ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
-	        ViewData["typeOfUser"] = typeOfUser;
-			return View(products);
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            ViewData["typeOfUser"] = typeOfUser;
+
+
+            return View(myProductWithByteImages);
         }
 
         public IActionResult Privacy()
@@ -38,11 +55,11 @@ namespace ServMidMan.Controllers
         public IActionResult Product(string id)
         {
             var typeOfUser = HttpContext.Session.GetString("UserType");
-           
+
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["typeOfUser"] = typeOfUser;
-            Product products = _dataProvider.Products.Where(x=>x.Id.ToString() == id).FirstOrDefault();
-            List<Image> images = _dataProvider.Images.Where(x => x.ProductReferenceId == products.Id.ToString()).ToList();
+            Product products = _dataProvider.Products.Where(x => x.Id.ToString() == id).FirstOrDefault();
+            List<Image> images = _dataProvider.Images.Where(x => x.ProductReferenceId == products.Id).ToList();
             ProductWithImages productWithImages = new ProductWithImages
             {
                 Id = products.Id,
@@ -57,7 +74,7 @@ namespace ServMidMan.Controllers
             };
             return View(productWithImages);
         }
-		public IActionResult Upload()
+        public IActionResult Upload()
         {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
@@ -68,54 +85,29 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Logout()
         {
-			return RedirectToAction("Welcome", "Authentication");
-		}
-		[HttpPost]
+            return RedirectToAction("Welcome", "Authentication");
+        }
+        [HttpPost]
         public IActionResult NewProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
         {
-            int lastId = _dataProvider.Products.Max(p => p.Id);
+            int lastId = _dataProvider.Products.Max(p => p.Id)+1;
             var userId = HttpContext.Session.GetString("UserId");
             product.UserId = Convert.ToInt32(userId);
             _dataProvider.Products.Add(product);
-            _dataProvider.SaveChanges();
-            if (files != null && files.Count > 0)
+            List<Image> myImagesToPush = new List<Image>();
+            foreach (IFormFile file in files) 
             {
-                foreach (var file in files)
+                Guid guid = Guid.NewGuid();
+                Image myImage = new Image()
                 {
-                    var a = new byte[1] { 0x01 };
-
-                    IFormFile myFile = file;
-                    if (file.Length > 0)
-                    {
-                        Image image = new Image()
-                        {
-                            TestImage = a,
-                            ProductReferenceId = Convert.ToString(lastId),
-                            FileName = myFile.FileName,
-                        };
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            myFile.CopyTo(memoryStream);
-                            image.ImageData = memoryStream.ToArray();
-                        }
-                            //var byteImg = ImageOperator.ImageToByteArray(myFile);
-
-                        _dataProvider.Images.Add(image);
-                        try
-                        {
-                            _dataProvider.SaveChanges();
-
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
-                        
-                    }
-                }
+                    FileName = guid + file.FileName,
+                    ProductReferenceId = lastId
+                };
+                myImagesToPush.Add(myImage);
+                _dataProvider.Images.Add(myImage);
             }
-
+            _dataProvider.SaveChanges();
+            ImageOperator.imageUploaderToServer(files, myImagesToPush);
             return RedirectToAction("Index");
         }
 

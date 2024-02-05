@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServMidMan.Data;
 
@@ -10,9 +11,11 @@ using ServMidMan.Data;
 namespace ServMidMan.Migrations
 {
     [DbContext(typeof(DataProviderContext))]
-    partial class DataProviderContextModelSnapshot : ModelSnapshot
+    [Migration("20240205165813_ModifyTypeOfUse")]
+    partial class ModifyTypeOfUse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,8 +32,9 @@ namespace ServMidMan.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ProductReferenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProductReferenceId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 

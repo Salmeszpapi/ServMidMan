@@ -7,9 +7,11 @@ namespace ServMidMan.Models
     {
         [Key]
         public int Id { get; set; }
-        public byte[] ImageData { get; set; }
         public string FileName { get; set; }
-        public string ProductReferenceId { get; set; }
-        public byte[] TestImage { get; set; }
+        public int ProductReferenceId { get; set; }
+    }
+    public class ImageWithResources : Image
+    {
+        public List<Byte[]> ImageResources { get; set; } = new List<Byte[]>();
     }
 }

@@ -19,4 +19,10 @@ namespace ServMidMan.Models
     {
         public List<Image> Images { get; set; }
     }
+    public class ProductWithByteImages
+    {
+        public Product Products { get; set; } = new Product();
+        public List<byte[]> ImageResources { get; set; } = new List<byte[]>();
+
+    }
 }
