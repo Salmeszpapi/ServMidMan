@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ServMidMan.Interface;
+using System.ComponentModel.DataAnnotations;
 
 namespace ServMidMan.Models
 {
@@ -13,5 +14,9 @@ namespace ServMidMan.Models
         public int UserId { get; set; }
         public string Location { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+    }
+    public class ProductWithImages : Product
+    {
+        public List<Image> Images { get; set; }
     }
 }

@@ -8,12 +8,12 @@ namespace ServMidMan.Data
     {
         public DataProviderContext(DbContextOptions<DataProviderContext> options) : base(options)
         {
-
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
