@@ -83,7 +83,8 @@ namespace ServMidMan.Controllers
                 .Select(c => new
                 {
                     sendTime = c.SendTime.ToString("h:mm tt"),
-                    message = c.Massege
+                    message = c.Massege,
+                    sender = c.SenderId
                 })
                 .ToList();
 

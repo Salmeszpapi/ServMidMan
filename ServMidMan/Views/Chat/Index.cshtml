@@ -111,7 +111,7 @@
                                     }
                                 }
                             </ul>
-                                        }
+                            }
                         </div>
                         <div class="chat-message clearfix">
                             <div class="input-group mb-0">
@@ -177,18 +177,25 @@
                     // Populate chat history with retrieved messages
                     response.forEach(function (message) {
                         var messageHtml = '<li class="clearfix">';
+                        messageHtml += '<div class="message-data">';
 
                         // Check if the message is from the sender (current user)
-                        if (message.senderId == @((int)ViewData["MyId"])) {
+                        if (message.sender == @((int)ViewData["MyId"])) {
+                            messageHtml += '<div class="message-data">';
+                            messageHtml += '<span class="message-data-time">' + message.sendTime + '</span>';
+                            messageHtml += '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'; // Add this line to include the avatar
+                            messageHtml += '</div>';
                             messageHtml += '<div class="message my-message">' + message.message + '</div>';
                         } else {
+                            messageHtml += '<div class="message-data text-right">';
+                            messageHtml += '<span class="message-data-time">' + message.sendTime + '</span>';
+                            messageHtml += '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'; // Add this line to include the avatar
+                            messageHtml += '</div>';
                             messageHtml += '<div class="message other-message float-right">' + message.message + '</div>';
                         }
 
                         // Append the time to the message container
-                        messageHtml += '<div class="message-data">';
-                        messageHtml += '<span class="message-data-time">' + message.sendTime + '</span>';
-                        messageHtml += '</div>';
+
 
                         messageHtml += '</li>';
                         $('.chat-history ul').append(messageHtml);
