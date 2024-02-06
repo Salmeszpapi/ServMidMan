@@ -1,5 +1,4 @@
-﻿@model ProductWithImages
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -36,7 +35,23 @@
         .rating-stars {
             font-size: 24px;
         }
+        /* Style for the modal */
+        .modal-dialog {
+            max-width: 800px;
+            margin: auto; /* Center the modal horizontally */
+            margin-top: calc(50vh - 230px); /* Center the modal vertically */
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+        }
     </style>
+
+    <!-- Bootstrap and jQuery scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -47,16 +62,22 @@
                         <div class="col-md-6">
                             <div class="product-images">
                                 <!-- Placeholder for product images -->
-                                @* <img src="data:image;base64,@Convert.ToBase64String(Model.ImageData)" alt="Product Image"> *@
+                                <img src="data:image;base64,@Convert.ToBase64String(Model.ImageResources[0])" alt="Product Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal">
+                            </div>
+                            <div class="image-indicators">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <span class="image-indicator" onclick="showImageAtIndex(@i)"></span>
+                                }
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <h2>{{ @Model.Name }}</h2>
-                            <p><strong>Description:</strong> {{ Model.Description }}</p>
-                            <p><strong>Category:</strong> {{ Model.Category }}</p>
-                            <p><strong>Price:</strong> ${{ Model.Price }}</p>
-                            <p><strong>Location:</strong> {{ Model.Location }}</p>
-                            <p><strong>Created Date:</strong> {{ Model.CreatedDate }}</p>
+                            <h2>@Model.Products.Name</h2>
+                            <p><strong>Description:</strong>@Model.Products.Description</p>
+                            <p><strong>Category:</strong> @Model.Products.Price </p>
+                            <p><strong>Price:</strong> @Model.Products.Price </p>
+                            <p><strong>Location:</strong>@Model.Products.Location</p>
+                            <p><strong>Created Date:</strong>@Model.Products.CreatedDate </p>
                             <div class="ratings">
                                 <p><strong>Ratings:</strong></p>
                                 <div class="rating-stars">
@@ -83,5 +104,23 @@
             </div>
         </div>
     </div>
+    <!-- Modal for displaying the image -->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="" id="modalImage" class="img-fluid" alt="Modal Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to handle the modal functionality -->
+    <script>
+        function showImage(element) {
+            var imageUrl = element.src;
+            document.getElementById('modalImage').src = imageUrl;
+        }
+    </script>
 </body>
 </html>

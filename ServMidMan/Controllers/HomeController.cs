@@ -58,21 +58,16 @@ namespace ServMidMan.Controllers
 
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["typeOfUser"] = typeOfUser;
-            Product products = _dataProvider.Products.Where(x => x.Id.ToString() == id).FirstOrDefault();
-            List<Image> images = _dataProvider.Images.Where(x => x.ProductReferenceId == products.Id).ToList();
-            ProductWithImages productWithImages = new ProductWithImages
+            Product product = _dataProvider.Products.Where(x => x.Id.ToString() == id).FirstOrDefault();
+            var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
+            ProductWithByteImages myProductWithByteImages = new ProductWithByteImages();
+            myProductWithByteImages = new ProductWithByteImages
             {
-                Id = products.Id,
-                Name = products.Name,
-                Description = products.Description,
-                Category = products.Category,
-                Price = products.Price,
-                UserId = products.UserId,
-                Location = products.Location,
-                CreatedDate = products.CreatedDate,
-                Images = images
+                Products = product,
+                ImageResources = ImageOperator.DownlaodImages(myImages),
             };
-            return View(productWithImages);
+
+            return View(myProductWithByteImages);
         }
         public IActionResult Upload()
         {

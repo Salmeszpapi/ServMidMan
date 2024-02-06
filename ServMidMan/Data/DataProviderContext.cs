@@ -14,6 +14,7 @@ namespace ServMidMan.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Chat> ChatHistory { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

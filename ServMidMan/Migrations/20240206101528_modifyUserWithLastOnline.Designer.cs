@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServMidMan.Data;
 
@@ -10,9 +11,11 @@ using ServMidMan.Data;
 namespace ServMidMan.Migrations
 {
     [DbContext(typeof(DataProviderContext))]
-    partial class DataProviderContextModelSnapshot : ModelSnapshot
+    [Migration("20240206101528_modifyUserWithLastOnline")]
+    partial class modifyUserWithLastOnline
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,9 +34,6 @@ namespace ServMidMan.Migrations
 
                     b.Property<int>("ReceiverID")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("SendTime")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("SenderId")
                         .HasColumnType("int");

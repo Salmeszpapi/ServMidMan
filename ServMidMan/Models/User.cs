@@ -16,6 +16,7 @@ namespace ServMidMan.Models
         public UserType TypeOfUser { get; set; }
         public double Rating { get; set; }
         public int Voters { get; set; }
+        public DateTime LastLogin { get; set; }
     }
     public enum UserType
     {
