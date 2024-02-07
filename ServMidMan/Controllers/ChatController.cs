@@ -23,6 +23,7 @@ namespace ServMidMan.Controllers
                 return RedirectToAction("Welcome", "Authentication");
             }
             var userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            ViewData["MyId"] = userId;
             ViewData["NoExistingMessages"] = true;
             ChatWithPerson chatWithPerson = new ChatWithPerson();
             chatWithPerson.AllUsers = _dataProvider.Users.ToList();
@@ -35,7 +36,7 @@ namespace ServMidMan.Controllers
                 return View(chatWithPerson);
             }
             ViewData["NoExistingMessages"] = false;
-            ViewData["MyId"] = userId;
+
             var partnerId = chatWithPerson.Messages[0].ReceiverID == userId ? chatWithPerson.Messages[0].SenderId : chatWithPerson.Messages[0].ReceiverID;
             var partner = _dataProvider.Users.Where(c => c.Id == partnerId).FirstOrDefault();
             chatWithPerson.Partner = partner;

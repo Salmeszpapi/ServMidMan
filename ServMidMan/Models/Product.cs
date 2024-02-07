@@ -14,6 +14,7 @@ namespace ServMidMan.Models
         public int UserId { get; set; }
         public string Location { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public int? ServiceId { get; set; }
     }
     public class ProductWithImages : Product
     {

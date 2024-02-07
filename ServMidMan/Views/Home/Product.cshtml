@@ -8,6 +8,8 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap Datepicker CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
 
     <!-- Custom styles -->
     <style>
@@ -24,7 +26,8 @@
         }
 
         .product-images img {
-            width: 100%;
+            max-width: 100%; /* Set maximum width to 100% of its container */
+            max-height: 400px; /* Set maximum height to 400 pixels */
             margin-bottom: 20px;
         }
 
@@ -48,10 +51,7 @@
         }
     </style>
 
-    <!-- Bootstrap and jQuery scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </head>
 <body>
     <div class="container-fluid">
@@ -74,37 +74,108 @@
                         <div class="col-md-6">
                             <h2>@Model.Products.Name</h2>
                             <p><strong>Description:</strong>@Model.Products.Description</p>
-                            <p><strong>Category:</strong> @Model.Products.Price </p>
+                            <p><strong>Category:</strong> @Model.Products.Category </p>
                             <p><strong>Price:</strong> @Model.Products.Price </p>
                             <p><strong>Location:</strong>@Model.Products.Location</p>
                             <p><strong>Created Date:</strong>@Model.Products.CreatedDate </p>
-                            <div class="ratings">
-                                <p><strong>Ratings:</strong></p>
-                                <div class="rating-stars">
-                                    <!-- Loop through to generate stars based on average rating -->
-                                    @for (int i = 0; i < 2; i++)
-                                    {
-                                        <i class="fas fa-star text-warning"></i>
-                                    }
-                                    <!-- Show remaining empty stars -->
-                                    @for (int i = 4; i < 5; i++)
-                                    {
-                                        <i class="far fa-star text-warning"></i>
-                                    }
-                                </div>
+                            @*                             <div class="ratings">
+                            <p><strong>Ratings:</strong></p>
+                            <div class="rating-stars">
+                            <!-- Loop through to generate stars based on average rating -->
+                            @for (int i = 0; i < 2; i++)
+                            {
+                            <i class="fas fa-star text-warning"></i>
+                            }
+                            <!-- Show remaining empty stars -->
+                            @for (int i = 4; i < 5; i++)
+                            {
+                            <i class="far fa-star text-warning"></i>
+                            }
                             </div>
+                            </div> *@
+
+
                             <div class="text-center mt-4">
-                                <button class="btn btn-primary mr-2">Buy</button>
-                                <button class="btn btn-success mr-2">Write</button>
-                                <button class="btn btn-danger">Delete</button>
+                                <button class="btn btn-primary mr-2" onclick="toggleAdditionalFields()">Send request</button>
+                                <button class="btn btn-success mr-2">Contact</button>
+                                @{
+                                    var clientId = Convert.ToInt32(ViewData["ClientId"]);
+                                    if (clientId == @Model.Products.UserId)
+                                    {
+                                        <button class="btn btn-dark mr-2" onclick="toggleEditMode()">Edit</button>
+                                        <button class="btn btn-danger">Delete</button>
+                                    }
+                                }
                             </div>
+                            <form method="post" action="/Home/UpdateProduct">
+                                <input type="hidden" name="Id" value="@Model.Products.Id" />
+                                <div id="editFields" style="display: none; margin-top:10px">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editName">Name</label>
+                                        <input type="text" class="form-control" name="Name" id="Name" value="@Model.Products.Name">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editDescription">Description</label>
+                                        <textarea class="form-control" id="Description" name="Description" rows="4">@Model.Products.Description</textarea>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="validationDefault01">Category</label>
+                                        <select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
+                                            <option selected>@Model.Products.Category</option>
+                                            <option value="Electronincs">Electronincs </option>
+                                            <option value="Mobile">Mobile</option>
+                                            <option value="PC">PC</option>
+                                            <option value="Notebook">Notebook</option>
+                                            <option value="Camera">Camera</option>
+                                            <option value="Car">Car</option>
+                                            <option value="Vehchile">Vehchile</option>
+                                            <option value="Car">Car</option>
+                                            <option value="Motorcycle">Motorcycle</option>
+                                            <option value="Bicycle">Bicycle</option>
+                                            <option value="Bicycle">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editPrice">Price</label>
+                                        <input type="text" class="form-control" id="Price" name="Price" oninput="validateNumber(this)" value="@Model.Products.Price">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editLocation">Location</label>
+                                        <input type="text" class="form-control" id="Location" name="Location" value="@Model.Products.Location">
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
+                                        <button class="btn btn-secondary" onclick="toggleEditMode()">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <form method="post" action="/Service/SendRequest">
+                                <input type="hidden" name="Id" value="@Model.Products.Id" />
+                                <div id="additionalFields" style="display: none; margin-top:10px">
+                                    <!-- Additional fields to be displayed when the "Send request" button is clicked -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationDefault01">Description</label>
+                                        <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4"></textarea>
+                                    </div>
+                                    <div class="input-group col-md-6 mb-3">
+                                        <input type="text" name="Price" oninput="validateNumber(this)" class="form-control" id="validationDefault03" placeholder="Price" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">€</span>
+                                        </div>
+                                    </div>
+                                    <!-- Save button -->
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button class="btn btn-secondary" onclick="toggleAdditionalFields()">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modal for displaying the image -->
     <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -115,12 +186,61 @@
         </div>
     </div>
 
-    <!-- JavaScript to handle the modal functionality -->
     <script>
         function showImage(element) {
             var imageUrl = element.src;
             document.getElementById('modalImage').src = imageUrl;
         }
+
+        function toggleAdditionalFields() {
+            var additionalFields = document.getElementById('additionalFields');
+            var editFields = document.getElementById('editFields');
+
+            // Hide edit fields if they are visible
+            if (editFields.style.display !== 'none') {
+                toggleEditMode();
+            }
+
+            if (additionalFields.style.display === 'none') {
+                additionalFields.style.display = 'block';
+            } else {
+                additionalFields.style.display = 'none';
+            }
+        }
+
+        function toggleEditMode() {
+            var additionalFields = document.getElementById('additionalFields');
+            var editFields = document.getElementById('editFields');
+
+            // Hide additional fields if they are visible
+            if (additionalFields.style.display !== 'none') {
+                toggleAdditionalFields();
+            }
+
+            if (editFields.style.display === 'none') {
+                editFields.style.display = 'block';
+            } else {
+                editFields.style.display = 'none';
+            }
+        }
+
+        function validateNumber(input) {
+            input.value = input.value.replace(/[^0-9.]/g, ''); // Remove all characters except digits and dots
+            input.value = input.value.replace(/^(\d*\.\d*).*$/, '$1'); // Allow only one dot
+        }
+
+        function saveChanges() {
+            var name = document.getElementById('Name').value;
+            var description = document.getElementById('Description').value;
+            var category = document.getElementById('CategoryRadio').value;
+            var price = document.getElementById('Price').value;
+            var location = document.getElementById('Location').value;
+
+
+        }
+$("#datepickerID").datepicker({ 
+          OPTIONS
+    }).datepicker('update', new Date());
     </script>
 </body>
 </html>

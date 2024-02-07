@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MySqlX.XDevAPI.Common;
 using ServMidMan.Data;
 using ServMidMan.Helper;
@@ -44,7 +45,6 @@ namespace ServMidMan.Controllers
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["typeOfUser"] = typeOfUser;
 
-
             return View(myProductWithByteImages);
         }
 
@@ -58,6 +58,7 @@ namespace ServMidMan.Controllers
 
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["typeOfUser"] = typeOfUser;
+            ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             Product product = _dataProvider.Products.Where(x => x.Id.ToString() == id).FirstOrDefault();
             var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
             ProductWithByteImages myProductWithByteImages = new ProductWithByteImages();
@@ -68,15 +69,6 @@ namespace ServMidMan.Controllers
             };
 
             return View(myProductWithByteImages);
-        }
-        public IActionResult Upload()
-        {
-            if (!SiteGuardian.CheckSession(HttpContext))
-            {
-                return RedirectToAction("Welcome", "Authentication");
-            }
-            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
-            return View();
         }
         public IActionResult Logout()
         {
@@ -105,11 +97,64 @@ namespace ServMidMan.Controllers
             ImageOperator.imageUploaderToServer(files, myImagesToPush);
             return RedirectToAction("Index");
         }
+        public IActionResult UpdateProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
+        {
+            product.UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            Product dbProduct = _dataProvider.Products.FirstOrDefault(c => c.Id == product.Id);
+            if (dbProduct != null)
+            {
+                dbProduct.Name = product.Name;
+                dbProduct.Price = product.Price;
+                dbProduct.Location = product.Location;
+                dbProduct.Description = product.Description;
+                dbProduct.Location = product.Location.ToString();
+                dbProduct.Category = product.Category;
+                // Update other properties as needed
+                dbProduct.UserId = product.UserId; // Make sure to update the UserId if needed
+            }
+
+            List<Image> myImagesToPush = new List<Image>();
+            foreach (IFormFile file in files)
+            {
+                Guid guid = Guid.NewGuid();
+                Image myImage = new Image()
+                {
+                    FileName = guid + file.FileName,
+                    ProductReferenceId = dbProduct.Id
+                };
+                myImagesToPush.Add(myImage);
+                _dataProvider.Images.Add(myImage);
+            }
+            _dataProvider.SaveChanges();
+            if(files.Count != 0)
+            {
+                ImageOperator.imageUploaderToServer(files, myImagesToPush);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
+        {
+            product.UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            Product dbProduct = _dataProvider.Products.FirstOrDefault(c => c.Id == product.Id);
+            _dataProvider.Products.Remove(dbProduct);
+            _dataProvider.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public IActionResult Upload()
+        {
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            return View();
         }
     }
 }

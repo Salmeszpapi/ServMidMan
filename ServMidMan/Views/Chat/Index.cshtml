@@ -143,7 +143,13 @@
                     },
                     success: function (response) {
                         // Construct the HTML for the new message
-                        var newMessage = '<li class="clearfix"><div class="message-data"><span class="message-data-time">' + response.time + '</span></div><div class="message my-message">' + response.message + '</div></li>';
+                        var newMessage = '<li class="clearfix">';
+                        newMessage += '<div class="message-data">';
+                        newMessage += '<span class="message-data-time">' + response.time + '</span>';
+                        newMessage += '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'; // Add this line to include the avatar
+                        newMessage += '</div>';
+                        newMessage += '<div class="message my-message">' + response.message + '</div>';
+                        newMessage += '</li>';
                         // Append the new message to the chat history
                         $('.chat-history ul').append(newMessage);
                         // Clear the message input

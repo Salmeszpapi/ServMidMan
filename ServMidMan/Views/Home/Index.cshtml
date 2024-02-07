@@ -60,32 +60,11 @@
                         {
                             <div class="product-card">
                                 <h2 class="text-center">@product.Products.Name</h2>
-                                <div id="product-@product.Products.Id" style="background: url('@(Convert.ToBase64String(product.ImageResources[0]) != null ? $"data:image;base64,{Convert.ToBase64String(product.ImageResources[0])}" : "https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg")') no-repeat center; background-size: cover;" class="single-product" onclick="redirectToProduct('@product.Products.Id')">
+                                <div id="product-@product.Products.Id" style="background: url('@(string.IsNullOrEmpty(Convert.ToBase64String(product.ImageResources[0])) ? "https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg" : $"data:image;base64,{Convert.ToBase64String(product.ImageResources[0])}")') no-repeat center; background-size: cover;" class="single-product" onclick="redirectToProduct('@product.Products.Id')">
                                     <div class="part-1">
-@*                                         <ul>
-                                            <li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
-                                            <li><a href="#"><i class="fas fa-heart"></i></a></li>
-                                            <li><a href="#"><i class="fas fa-expand"></i></a></li>
-                                        </ul> *@
+                                        <!-- Add your other content here if needed -->
                                     </div>
                                 </div>
-
-                                <div class="ratings">
-                                    <p><strong>Ratings:</strong></p>
-                                    <div class="rating-stars">
-                                        <!-- Loop through to generate stars based on average rating -->
-                                        @for (int i = 0; i < 4; i++)
-                                        {
-                                            <i class="fas fa-star text-warning"></i>
-                                        }
-                                        <!-- Show remaining empty stars -->
-                                        @for (int i = 4; i < 5; i++)
-                                        {
-                                            <i class="far fa-star text-warning"></i>
-                                        }
-                                    </div>
-                                </div>
-
                             </div>
                         }
 
