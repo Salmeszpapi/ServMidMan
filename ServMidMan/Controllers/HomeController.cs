@@ -26,7 +26,7 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
-
+            SiteGuardian.ClientType = HttpContext.Session.GetString("UserType");
             List<Product> products = _dataProvider.Products.ToList();
 
             List<Byte[]> bytes = new List<Byte[]>();
@@ -77,7 +77,11 @@ namespace ServMidMan.Controllers
         [HttpPost]
         public IActionResult NewProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
         {
-            int lastId = _dataProvider.Products.Max(p => p.Id)+1;
+            int lastId = 0;
+            if (_dataProvider.Products.Any())
+            {
+                lastId = _dataProvider.Products.Max(p => p.Id)+1;
+            }
             var userId = HttpContext.Session.GetString("UserId");
             product.UserId = Convert.ToInt32(userId);
             _dataProvider.Products.Add(product);
@@ -137,6 +141,14 @@ namespace ServMidMan.Controllers
         {
             product.UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             Product dbProduct = _dataProvider.Products.FirstOrDefault(c => c.Id == product.Id);
+            List<Image> images= _dataProvider.Images.Where(c => c.ProductReferenceId == dbProduct.Id).ToList();
+            List<string> imageNames = images.Select(x => x.FileName).ToList();
+            ImageOperator.FTPImgaeRemover(imageNames);
+            foreach(Image image in images)
+            {
+                _dataProvider.Images.Remove(image);
+
+            }
             _dataProvider.Products.Remove(dbProduct);
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");

@@ -13,4 +13,9 @@ namespace ServMidMan.Models
         public bool Approved { get; set; } = false;
 
     }
+    public class ServicesOrdered()
+    {
+        public List<Service> SenderServices= new List<Service>();
+        public List<Service> ReceivedServices= new List<Service>();
+    }
 }

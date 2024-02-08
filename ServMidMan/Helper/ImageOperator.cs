@@ -43,10 +43,38 @@ namespace ServMidMan.Helper
                     client.Credentials = new NetworkCredential(userName, password);
                     bytesofImages.Add(client.DownloadData(ftpServerUrl + picturename));
                 }
-                
             }
-
             return bytesofImages;
+        }
+        public static void FTPImgaeRemover(List<string> imageNames)
+        {
+            foreach (var imageName in imageNames)
+            {
+                // Create FTP request
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpServerUrl + imageName);
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+
+                // Set credentials
+                request.Credentials = new NetworkCredential(userName, password);
+
+                try
+                {
+                    // Send the request to the FTP server
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                    // Display server response
+                    Console.WriteLine($"FTP Server Response: {response.StatusDescription}");
+
+                    // Clean up resources
+                    response.Close();
+                }
+                catch (WebException ex)
+                {
+                    // Handle any errors
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            }
+           
         }
     }
 }

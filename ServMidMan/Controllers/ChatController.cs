@@ -22,6 +22,8 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
+            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             var userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             ViewData["MyId"] = userId;
             ViewData["NoExistingMessages"] = true;
@@ -46,6 +48,7 @@ namespace ServMidMan.Controllers
         [HttpPost]
         public ActionResult SendMessage(string message, string receiverName)
         {
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             var userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             // Process the message
             User receiverUser = _dataProvider.Users.Where(x=>x.Name == receiverName).FirstOrDefault();
@@ -69,6 +72,8 @@ namespace ServMidMan.Controllers
         }
         public IActionResult GetConversation(string partnerName)
         {
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             var userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             var partner = _dataProvider.Users.FirstOrDefault(u => u.Name == partnerName);
 

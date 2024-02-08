@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using ServMidMan.Helper
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,7 +19,7 @@
 	}
 </style>
 <body>
-	@if ((string)ViewData["LoggedIn"] == "True")
+	@if ((string)ViewData["LoggedIn"] == "True" || SiteGuardian.CurrentClientId.HasValue)
 	{
 	// Your code here
 	<header>
@@ -40,6 +41,9 @@
 								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Upload">Upload product</a>
 							</li>
 						}
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">Requests</a>
+							</li>
 
 					</ul>
 						<a href="/Chat">

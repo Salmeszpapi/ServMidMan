@@ -1,1 +1,118 @@
-﻿
+﻿@model ServMidMan.Models.ServicesOrdered
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Services Ordered</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .service-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .service-item {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .approve-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .approve-button:hover {
+                background-color: #45a049;
+            }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="text-center">Services Ordered</h1>
+                <div class="text-center mb-3">
+                    <button class="btn btn-primary mr-2" onclick="showReceivedServices()">Show Received Services</button>
+                    <button class="btn btn-primary" onclick="showSenderServices()">Show Sender Services</button>
+                </div>
+                @if (Model.ReceivedServices != null && Model.ReceivedServices.Any())
+                {
+                    <h2>Received Services</h2>
+                    @foreach (var group in Model.ReceivedServices.GroupBy(service => service.ProductId))
+                    {
+                        <h3>Product ID: @group.Key</h3>
+                        <ul class="service-list">
+                            @foreach (var service in group)
+                            {
+                                <li class="service-item">
+                                    <div>Service ID: @service.Id</div>
+                                    <div>Product ID: @service.ProductId</div>
+                                    <!-- Add other properties as needed -->
+                                    <button class="approve-button" onclick="approveService(@service.Id)">Approve</button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                }
+
+                @if (Model.SenderServices != null && Model.SenderServices.Any())
+                {
+                    <h2>Sender Services</h2>
+                    @foreach (var group in Model.SenderServices.GroupBy(service => service.ProductId))
+                    {
+                        <h3>Product ID: @group.Key</h3>
+                        <ul class="service-list">
+                            @foreach (var service in group)
+                            {
+                                <li class="service-item">
+                                    <div>Service ID: @service.Id</div>
+                                    <div>Product ID: @service.ProductId</div>
+                                    <!-- Add other properties as needed -->
+                                </li>
+                            }
+                        </ul>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showReceivedServices() {
+            document.getElementById('receivedServices').style.display = 'block';
+            document.getElementById('senderServices').style.display = 'none';
+        }
+
+        function showSenderServices() {
+            document.getElementById('senderServices').style.display = 'block';
+            document.getElementById('receivedServices').style.display = 'none';
+        }
+
+        function approveService(serviceId) {
+            // Logic to approve the service with the given serviceId
+            // You can make an AJAX call to your backend to handle the approval process
+            // Example:
+            // fetch('/services/approve/' + serviceId, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({ serviceId: serviceId })
+            // })
+            // .then(response => {
+            //     if (response.ok) {
+            //         // Service approved successfully, you can update the UI as needed
+            //     } else {
+            //         // Handle error
+            //     }
+            // })
+            // .catch(error => console.error('Error approving service:', error));
+        }
+    </script>
+</body>
+</html>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServMidMan.Data;
+using ServMidMan.Helper;
 using ServMidMan.Models;
 using ServMidMan.Services;
 
@@ -64,6 +65,8 @@ namespace ServMidMan.Controllers
                 HttpContext.Session.SetString("Login", "True");
                 HttpContext.Session.SetString("UserId", result.Id.ToString());
                 HttpContext.Session.SetString("UserType", result.TypeOfUser.ToString());
+                SiteGuardian.CurrentClientId = result.Id;
+
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
@@ -81,7 +84,8 @@ namespace ServMidMan.Controllers
             {
 	            HttpContext.Session.SetString("Login", "True");
                 HttpContext.Session.SetString("UserId", resultUser.Id.ToString());
-                HttpContext.Session.SetString("UserType", resultUser.TypeOfUser.ToString());
+                SiteGuardian.CurrentClientId = resultUser.Id;
+				HttpContext.Session.SetString("UserType", resultUser.TypeOfUser.ToString());
                 resultUser.LastLogin = DateTime.Now;
                 _dataProvider.SaveChanges();
                 return RedirectToAction("Index","Home");
