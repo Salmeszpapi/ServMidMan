@@ -2,18 +2,22 @@
     font-family: "Poppins", sans-serif;
     color: antiquewhite;
 }
+
 a,
 a:hover {
     text-decoration: none;
     color: inherit;
 }
+
 .navbar {
     display: flex;
     justify-content: center;
 }
+
 .navbar-nav li {
     margin-right: 10px; /* Adjust the value as needed */
 }
+
 .section-products {
 }
 
@@ -60,13 +64,13 @@ a:hover {
             transform: scale(1.2,1.2) rotate(5deg);
         }
 
-    .section-products #product-1 .part-1::before {
+    .section-products .part-1::before {
         background: url("") no-repeat center;
         background-size: cover;
         transition: all 0.3s;
     }
 
-/*    .section-products #product-2 .part-1::before {
+    /*    .section-products #product-2 .part-1::before {
         background: url("https://t.ly/qjovM") no-repeat center;
         background-size: cover;
     }

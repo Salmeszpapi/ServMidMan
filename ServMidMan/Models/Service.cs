@@ -11,6 +11,7 @@ namespace ServMidMan.Models
         public DateTime ApproximetlyFinishDate { get; set; }
         public double Price { get; set; }
         public bool Approved { get; set; } = false;
+        public string Description { get; set; }
 
     }
     public class ServicesOrdered()

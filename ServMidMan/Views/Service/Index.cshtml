@@ -42,47 +42,64 @@
                 </div>
                 @if (Model.ReceivedServices != null && Model.ReceivedServices.Any())
                 {
-                    <h2>Received Services</h2>
-                    @foreach (var group in Model.ReceivedServices.GroupBy(service => service.ProductId))
-                    {
-                        <h3>Product ID: @group.Key</h3>
-                        <ul class="service-list">
-                            @foreach (var service in group)
-                            {
-                                <li class="service-item">
-                                    <div>Service ID: @service.Id</div>
-                                    <div>Product ID: @service.ProductId</div>
-                                    <!-- Add other properties as needed -->
-                                    <button class="approve-button" onclick="approveService(@service.Id)">Approve</button>
-                                </li>
-                            }
-                        </ul>
-                    }
+                    <div id="receivedServices">
+                        <!-- Add this div -->
+                        <h2>Received requests</h2>
+                        @foreach (var group in Model.ReceivedServices.GroupBy(service => service.ProductId))
+                        {
+                            <h3>Product ID: @group.Key</h3>
+                            <ul class="service-list">
+                                @foreach (var service in group)
+                                {
+                                    <li class="service-item">
+                                        <div>Service ID: @service.Id</div>
+                                        <div>Product ID: @service.ProductId</div>
+                                        <div>Price: @service.Price€</div>
+                                        <div>Description: @service.Description</div>
+                                        <div>Date when finished:  @service.ApproximetlyFinishDate</div>
+                                        <!-- Add other properties as needed -->
+                                        <button class="approve-button" onclick="approveService(@service.Id)">Approve</button>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
                 }
 
                 @if (Model.SenderServices != null && Model.SenderServices.Any())
                 {
-                    <h2>Sender Services</h2>
-                    @foreach (var group in Model.SenderServices.GroupBy(service => service.ProductId))
-                    {
-                        <h3>Product ID: @group.Key</h3>
-                        <ul class="service-list">
-                            @foreach (var service in group)
-                            {
-                                <li class="service-item">
-                                    <div>Service ID: @service.Id</div>
-                                    <div>Product ID: @service.ProductId</div>
-                                    <!-- Add other properties as needed -->
-                                </li>
-                            }
-                        </ul>
-                    }
+                    <div id="senderServices">
+                        <!-- Add this div -->
+                        <h2>Sended requests</h2>
+                        @foreach (var group in Model.SenderServices.GroupBy(service => service.ProductId))
+                        {
+                            <h3>Product ID: @group.Key</h3>
+                            <ul class="service-list">
+                                @foreach (var service in group)
+                                {
+                                    <li class="service-item">
+                                        <div>Service ID: @service.Id</div>
+                                        <div>Product ID: @service.ProductId</div>
+                                        <div>Price: @service.Price€</div>
+                                        <div>Description: @service.Description</div>
+                                        <div>Date when finished:  @service.ApproximetlyFinishDate</div>
+                                        <!-- Add other properties as needed -->
+                                        <button class="btn btn-danger" onclick="approveService(@service.Id)">Delete request</button>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
                 }
             </div>
         </div>
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('senderServices').style.display = 'block';
+            document.getElementById('receivedServices').style.display = 'none';
+        });
         function showReceivedServices() {
             document.getElementById('receivedServices').style.display = 'block';
             document.getElementById('senderServices').style.display = 'none';

@@ -31,18 +31,14 @@ namespace ServMidMan.Controllers
 
             //return request whery userId is mine 
 
-            List<Service> SendedRequests = _dataProvider.Services.Where(x=>x.UserId == SiteGuardian.CurrentClientId).ToList();
-
             ServicesOrdered servicesOrdered = new ServicesOrdered();
+            servicesOrdered.SenderServices = _dataProvider.Services.Where(x=>x.UserId == SiteGuardian.CurrentClientId).ToList();
+
             foreach (Service service in servicesDb)
             {
                 if (service.UserId == SiteGuardian.CurrentClientId)
                 {
                     servicesOrdered.ReceivedServices = servicesDb;
-                }
-                else
-                {
-                    servicesOrdered.SenderServices = SendedRequests;
                 }
             }
             return View(servicesOrdered);
@@ -57,12 +53,13 @@ namespace ServMidMan.Controllers
                 Approved = false,
                 Price = productId.Price,
                 ProductId = productId.Id,
-                UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"))
+                UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId")),
+                Description = productId.Description,
             };
 
             _dataProvider.Services.Add(service);
             _dataProvider.SaveChanges();
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
     }
