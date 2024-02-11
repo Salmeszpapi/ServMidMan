@@ -66,5 +66,18 @@ namespace ServMidMan.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult Delete(Service inputService)
+        {
+            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+
+            var myservice = _dataProvider.Services.Where(x => x.Id == inputService.Id).FirstOrDefault();
+
+            _dataProvider.Services.Remove(myservice);
+            _dataProvider.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
     }
 }

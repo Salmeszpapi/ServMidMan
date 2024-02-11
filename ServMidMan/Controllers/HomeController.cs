@@ -5,6 +5,7 @@ using ServMidMan.Data;
 using ServMidMan.Helper;
 using ServMidMan.Hubs;
 using ServMidMan.Models;
+using ServMidMan.Services;
 using System.Diagnostics;
 using System.Net;
 
@@ -43,9 +44,8 @@ namespace ServMidMan.Controllers
                 });
             }
 
-            var typeOfUser = HttpContext.Session.GetString("UserType");
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
-            ViewData["typeOfUser"] = typeOfUser;
+            ViewData["typeOfUser"] = SiteGuardian.ClientType;
 
             return View(myProductWithByteImages);
         }
@@ -56,10 +56,9 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Product(string id)
         {
-            var typeOfUser = HttpContext.Session.GetString("UserType");
+            ViewData["typeOfUser"] = SiteGuardian.ClientType;
 
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
-            ViewData["typeOfUser"] = typeOfUser;
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             Product product = _dataProvider.Products.Where(x => x.Id.ToString() == id).FirstOrDefault();
             if(product == null)
@@ -80,6 +79,8 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Logout()
         {
+            SiteGuardian.CurrentClientId = null;
+            ViewBag.LoggedIn = null;
             return RedirectToAction("Welcome", "Authentication");
         }
         [HttpPost]
@@ -165,6 +166,34 @@ namespace ServMidMan.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult Profile()
+        {
+            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            User userInfo = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
+            return View(userInfo);
+        }
+
+        [HttpPost]
+        public IActionResult ProfileUpdate(UserWithRegister user)
+        {
+            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            User dbProduct = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
+            if((user.Password == user.Password2) && !string.IsNullOrWhiteSpace(user.Password))
+            {
+                dbProduct.Password = PasswordHasher.HashPassword(user.Password);
+            }
+            dbProduct.Name = user.Name;
+            if (!EmailVerificator.IsValidEmail(user.Email))
+            {
+                dbProduct.Email = user.Email;
+            }
+            _dataProvider.SaveChanges();
+            //checking 
+            return View("Profile", dbProduct);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -172,6 +201,7 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Upload()
         {
+            ViewData["typeOfUser"] = SiteGuardian.ClientType;
             if (!SiteGuardian.CheckSession(HttpContext))
             {
                 return RedirectToAction("Welcome", "Authentication");

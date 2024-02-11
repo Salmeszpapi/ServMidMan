@@ -85,15 +85,24 @@
                                 <ul class="service-list">
                                     @foreach (var service in group)
                                     {
+                                        <form action="/Service/Delete" method="post">
                                         <li class="service-item">
+                                            <input type="hidden" name="id" value="@service.Id">
+                                            <input type="hidden" name="productId" value="@service.ProductId">
+                                            <input type="hidden" name="price" value="@service.Price">
+                                            <input type="hidden" name="description" value="@service.Description">
+                                            <input type="hidden" name="finishDate" value="@service.ApproximetlyFinishDate">
+
                                             <div>Service ID: @service.Id</div>
                                             <div>Product ID: @service.ProductId</div>
                                             <div>Price: @service.Price€</div>
                                             <div>Description: @service.Description</div>
-                                            <div>Date when finished:  @service.ApproximetlyFinishDate</div>
+                                           @*  <div>Date when finished:  @service.ApproximetlyFinishDate</div> *@
                                             <!-- Add other properties as needed -->
-                                            <button class="btn btn-danger" onclick="approveService(@service.Id)">Delete request</button>
+                                            <button class="btn btn-danger" type="submit">Delete request</button>
                                         </li>
+                                        </form>
+
                                     }
                                 </ul>
                             }

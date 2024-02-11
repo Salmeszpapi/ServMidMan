@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using ServMidMan.Helper
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -98,7 +99,10 @@
                                     </div>
                                 </div>
                                 <div class="text-center mt-4">
-                                    <button class="btn btn-primary mr-2" onclick="toggleAdditionalFields()">Send request</button>
+                                        @if (SiteGuardian.ClientType == "Servicer")
+                                        {
+                                            <button class="btn btn-primary mr-2" onclick="toggleAdditionalFields()">Send request</button>
+                                        }
                                     <button class="btn btn-success mr-2">Contact</button>
                                     @{
                                         var clientId = Convert.ToInt32(ViewData["ClientId"]);

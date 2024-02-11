@@ -29,6 +29,3 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     event.preventDefault();
 });
 
-connection.on("NewProductUpdated", function (productId)){
-    showPopup();
-}
