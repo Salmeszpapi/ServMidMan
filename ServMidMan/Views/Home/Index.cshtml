@@ -60,11 +60,23 @@
                         {
                             <div class="product-card">
                                 <h2 class="text-center">@product.Products.Name</h2>
-                                <div id="product-@product.Products.Id" style="background: url('@(product.ImageResources != null && product.ImageResources.Count > 0 && !string.IsNullOrEmpty(Convert.ToBase64String(product.ImageResources[0])) ? $"data:image;base64,{Convert.ToBase64String(product.ImageResources[0])}" : "https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg")') no-repeat center; background-size: cover;" class="single-product" onclick="redirectToProduct('@product.Products.Id')">
-                                    <div class="part-1">
-                                        <!-- Add your other content here if needed -->
+                                @if (@product.ImagePaths.Count == 0)
+                                {
+                                    <div id="product-@product.Products.Id" style="background: url('https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg') no-repeat center; background-size: cover;" class="single-product" onclick="redirectToProduct('@product.Products.Id')">
+                                        <div class="part-1">
+                                            <!-- Add your other content here if needed -->
+                                        </div>
                                     </div>
-                                </div>
+                                }
+                                else
+                                {
+                                    <div id="product-@product.Products.Id" style="background: url('@product.ImagePaths[0]') no-repeat center; background-size: cover;" class="single-product" onclick="redirectToProduct('@product.Products.Id')">
+                                        <div class="part-1">
+                                            <!-- Add your other content here if needed -->
+                                        </div>
+                                    </div>
+                                    
+                                }
                             </div>
                         }
 
@@ -146,9 +158,9 @@
         padding: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         margin: 20px;
-        flex: 1 0 calc(25% - 40px); /* Set flex-grow, flex-shrink, and flex-basis */
-        max-width: calc(25% - 40px); /* Set max-width */
-        min-width: calc(25% - 40px); /* Set min-width */
+        flex: 1 0 calc(25% - 50px); /* Set flex-grow, flex-shrink, and flex-basis */
+        max-width: calc(25% - 50px); /* Set max-width */
+        min-width: calc(25% - 50px); /* Set min-width */
     }
     @@media (max-width: 1200px) {
     .product-card {

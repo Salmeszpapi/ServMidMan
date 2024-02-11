@@ -73,16 +73,16 @@
 		<div class="form-row">
 			<div class="col-md-6 mb-3">
 				<label for="validationDefault01">Description</label>
-				<textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" ></textarea>
+					<textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" required></textarea>
 			</div>
 
 		</div>
 
 		<div class="form-row">
-			<div class="col-md-2 mb-3">
+			<div class="col-md-4 mb-3">
 				<label for="validationDefault03">Price</label>
 				<div class="input-group">
-					<input type="text" name="Price" class="form-control" id="validationDefault03" placeholder="Price" required>
+						<input type="text" class="form-control" id="Price" name="Price" oninput="validateNumber(this)" required>
 					<div class="input-group-append">
 						<span class="input-group-text">€</span>
 					</div>
@@ -90,7 +90,7 @@
 				</div>
 				<label for="validationDefault03" style="margin-top:10px;">Location</label>
 				<div class="input-group">
-					<input type="text" name="Location" class="form-control" id="validationDefault03" placeholder="12345" required>
+					<input type="text" name="Location" class="form-control" id="validationDefault03" placeholder="Bratislavsak cesta 1713" required>
 				</div>
 
 			</div>
@@ -150,6 +150,10 @@
             // Update the value of the hidden input field
             document.getElementById("selectedValue").value = selectedValue;
         }
+		function validateNumber(input) {
+			input.value = input.value.replace(/[^0-9.]/g, ''); // Remove all characters except digits and dots
+			input.value = input.value.replace(/^(\d*\.\d*).*$/, '$1'); // Allow only one dot
+		}
     </script>
 </body>
 </html>

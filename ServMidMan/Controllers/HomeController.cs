@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MySqlX.XDevAPI.Common;
 using ServMidMan.Data;
 using ServMidMan.Helper;
+using ServMidMan.Hubs;
 using ServMidMan.Models;
 using System.Diagnostics;
 using System.Net;
@@ -13,8 +14,8 @@ namespace ServMidMan.Controllers
     {
         private readonly DataProviderContext _dataProvider;
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger, DataProviderContext dataProviderContext)
+        private readonly ChatHub _chatHub;
+		public HomeController(ILogger<HomeController> logger, DataProviderContext dataProviderContext, ChatHub chatHub)
         {
             _logger = logger;
             _dataProvider = dataProviderContext;
@@ -37,7 +38,8 @@ namespace ServMidMan.Controllers
                 myProductWithByteImages.Add(new ProductWithByteImages
                 {
                     Products =  product ,
-                    ImageResources =  ImageOperator.DownlaodImages(myImages),
+                    //ImageResources =  ImageOperator.DownloadImages(myImages),
+                    ImagePaths = ImageOperator.getImageFullPath(myImages),
                 });
             }
 
@@ -60,12 +62,18 @@ namespace ServMidMan.Controllers
             ViewData["typeOfUser"] = typeOfUser;
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             Product product = _dataProvider.Products.Where(x => x.Id.ToString() == id).FirstOrDefault();
+            if(product == null)
+            {
+                ViewBag.Error = "Product not find";
+                return View();
+            }
             var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
             ProductWithByteImages myProductWithByteImages = new ProductWithByteImages();
             myProductWithByteImages = new ProductWithByteImages
             {
                 Products = product,
-                ImageResources = ImageOperator.DownlaodImages(myImages),
+                //ImageResources = ImageOperator.DownloadImages(myImages),
+                ImagePaths = ImageOperator.getImageFullPath(myImages)
             };
 
             return View(myProductWithByteImages);
@@ -98,8 +106,11 @@ namespace ServMidMan.Controllers
                 _dataProvider.Images.Add(myImage);
             }
             _dataProvider.SaveChanges();
-            ImageOperator.imageUploaderToServer(files, myImagesToPush);
-            return RedirectToAction("Index");
+            ImageOperator.ImageUploaderToServer(files, myImagesToPush);
+            //Here call SignalR to notify the users, new product has been uploaded 
+            //_chatHub.NewProductUpdated(product.Id);
+
+			return RedirectToAction("Index");
         }
         public IActionResult UpdateProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
         {
@@ -132,7 +143,7 @@ namespace ServMidMan.Controllers
             _dataProvider.SaveChanges();
             if(files.Count != 0)
             {
-                ImageOperator.imageUploaderToServer(files, myImagesToPush);
+                ImageOperator.ImageUploaderToServer(files, myImagesToPush);
             }
             return RedirectToAction("Index");
         }

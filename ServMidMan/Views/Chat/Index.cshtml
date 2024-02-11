@@ -130,6 +130,12 @@
         </div>
     </div>
     <script>
+        function scrollToBottom() {
+            var chatHistory = document.querySelector('.chat-history');
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+        // Call scrollToBottom function when the page is loaded
+        window.onload = scrollToBottom;
         $(document).ready(function () {
             $('#sendMessageBtn').click(function () {
                 var message = $('#messageInput').val();
@@ -206,11 +212,13 @@
                         messageHtml += '</li>';
                         $('.chat-history ul').append(messageHtml);
                     });
+                    scrollToBottom();
                 },
                 error: function () {
                     alert('Error retrieving conversation.');
                 }
             });
+            
         }
     </script>
     <style>

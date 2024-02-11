@@ -96,5 +96,10 @@ namespace ServMidMan.Controllers
 
             return Json(conversation);
         }
-    }
+
+        public IActionResult Test()
+        {
+            return View();
+        }
+	}
 }

@@ -33,7 +33,11 @@ namespace ServMidMan.Controllers
 
             ServicesOrdered servicesOrdered = new ServicesOrdered();
             servicesOrdered.SenderServices = _dataProvider.Services.Where(x=>x.UserId == SiteGuardian.CurrentClientId).ToList();
-
+            if(servicesDb.Count == 0 && servicesOrdered.SenderServices.Count == 0)
+            {
+                ViewBag.Services = "No existing requests";
+                return View();
+            }
             foreach (Service service in servicesDb)
             {
                 if (service.UserId == SiteGuardian.CurrentClientId)

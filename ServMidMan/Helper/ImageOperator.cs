@@ -6,44 +6,80 @@ namespace ServMidMan.Helper
 {
     public static class ImageOperator
     {
-        private static string ftpServerUrl = "ftp://salmadevelop.eu/ServMidMan/";
-        private static string userName = "hojszi.salmadevelop.eu";
-        private static string password = "myNewDatabasePassword1";
+        private static string ImageBasePath = "https://servmidman.salmadevelop.eu/";
+		private static string ftpServerUrl = "ftp://salmadevelop.eu/salmadevelop.eu/sub/servmidman";
+		private static string userName = "hojszi.salmadevelop.eu";
+		private static string password = "myNewDatabasePassword1";
 
-        public static bool imageUploaderToServer(List<IFormFile> fromFile, List<Models.Image> images)
-        {
+		public static bool ImageUploaderToServer(List<IFormFile> fromFiles, List<Models.Image> images)
+		{
+			if (fromFiles != null && fromFiles.Count > 0)
+			{
+				for (int i = 0; i < fromFiles.Count; i++)
+				{
+					// Construct full FTP path
+					string ftpFilePath = $"{ftpServerUrl}/{images[i].FileName}";
 
-            if (fromFile != null && fromFile.Count > 0)
-            {
-                for (int i = 0; i < fromFile.Count; i++) 
-                {
-                    // Create FTP request
-                    FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpServerUrl + images[i].FileName);
-                    ftpRequest.Credentials = new NetworkCredential(userName, password);
-                    ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+					// Create FTP request
+					FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpFilePath);
+					ftpRequest.Credentials = new NetworkCredential(userName, password);
+					ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
 
-                    // Upload the file to FTP server
-                    using (Stream requestStream = ftpRequest.GetRequestStream())
-                    {
-                        fromFile[i].CopyTo(requestStream);
-                    }
-                }
+					// Upload the file to FTP server
+					using (Stream requestStream = ftpRequest.GetRequestStream())
+					{
+						fromFiles[i].CopyTo(requestStream);
+					}
+				}
+				return true;
+			}
+			else
+			{
+				// Handle case where no files are provided
+				return false;
+			}
+		}
 
-            }
-            return true;
-        }
-        public static List<byte[]> DownlaodImages(List<string> imageNames)
+		public static List<byte[]> DownloadImages(List<string> imageNames)
         {
             List<byte[]> bytesofImages = new List<byte[]>();
+
+            // Set TLS version explicitly
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             foreach (var picturename in imageNames)
             {
-                // Download the image from FTP server to cache
-                using (WebClient client = new WebClient())
+                try
                 {
-                    client.Credentials = new NetworkCredential(userName, password);
-                    bytesofImages.Add(client.DownloadData(ftpServerUrl + picturename));
+                    // Download the image from FTP server to cache
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Credentials = new NetworkCredential(userName, password);
+                        bytesofImages.Add(client.DownloadData(ftpServerUrl + picturename));
+                    }
+                }
+                catch (WebException ex)
+                {
+                    // Handle specific FTP errors
+                    var response = ex.Response as FtpWebResponse;
+                    if (response != null && response.StatusCode == FtpStatusCode.NotLoggedIn)
+                    {
+                        // Handle not logged in error
+                        Console.WriteLine($"Error downloading image {picturename}: Not logged in.");
+                    }
+                    else
+                    {
+                        // Handle other FTP errors
+                        Console.WriteLine($"Error downloading image {picturename}: {ex.Message}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle general errors
+                    Console.WriteLine($"Error downloading image {picturename}: {ex.Message}");
                 }
             }
+
             return bytesofImages;
         }
         public static void FTPImgaeRemover(List<string> imageNames)
@@ -75,6 +111,16 @@ namespace ServMidMan.Helper
                 }
             }
            
+        }
+
+        public static List<string> getImageFullPath(List<string> myImages)
+        {
+            List<string> imgaePaths = new List<string>();
+            foreach(var imageName in myImages)
+            {
+                imgaePaths.Add(ImageBasePath + imageName);
+            }
+            return imgaePaths;
         }
     }
 }

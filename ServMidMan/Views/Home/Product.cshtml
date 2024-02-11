@@ -10,7 +10,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap Datepicker CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
-
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script>
     <!-- Custom styles -->
     <style>
         body {
@@ -54,17 +55,28 @@
 
 </head>
 <body>
-    <div class="container-fluid">
+    @if (ViewBag.Error == null)
+    {
+        <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
+
                             <div class="col-md-6">
                                 <div class="product-images">
                                     <!-- Placeholder for product images -->
-                                    <img src="data:image;base64,@Convert.ToBase64String(Model.ImageResources[0])" alt="Product Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal">
-                                </div>
+                                        @if (Model.ImagePaths.Count > 0)
+                                        {
+                                            <img src="@Model.ImagePaths[0]" alt="Product Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal">
+
+                                        }else
+                                        {
+                                            <img src="https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg" alt="Product Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal">
+                                        }
+                                    </div>
+                                    
                                 <div class="image-indicators">
                                     @for (int i = 0; i < 5; i++)
                                     {
@@ -78,7 +90,7 @@
                                     <div class="col-md-6">
                                         <p><strong>Description:</strong> @Model.Products.Description</p>
                                         <p><strong>Category:</strong> @Model.Products.Category</p>
-                                        <p><strong>Price:</strong> @Model.Products.Price</p>
+                                        <p><strong>Price:</strong> @Model.Products.Price€</p>
                                     </div>
                                     <div class="col-md-6">
                                         <p><strong>Location:</strong> @Model.Products.Location</p>
@@ -168,7 +180,14 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            <strong>Error:</strong> @ViewBag.Error
+        </div>  
+    }
 
     <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

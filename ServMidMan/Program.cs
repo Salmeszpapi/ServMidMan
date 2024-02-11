@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ServMidMan.Data;
-
+using ServMidMan.Hubs;
 namespace ServMidMan
 {
     public class Program
@@ -12,8 +12,10 @@ namespace ServMidMan
             {
                 options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnectionString"));
             });
+            builder.Services.AddTransient<ChatHub>();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR();
             builder.Services.AddSession();
             builder.Services.AddSession(options =>
             {
@@ -41,7 +43,7 @@ namespace ServMidMan
 			app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            app.MapHub<ChatHub>("/chatHub");
             app.Run();
         }
 
