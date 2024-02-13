@@ -62,7 +62,7 @@
                     {
                         <div id="receivedServices">
                             <!-- Add this div -->
-                            @if(SiteGuardian.ClientType == "Client")
+                            @if (ViewData["typeOfUser"] == "Client")
                             {
                                 <h2>Received requests</h2>
                             }
@@ -88,7 +88,7 @@
                                                 }
                                                 else
                                                 {
-                                                    @if (SiteGuardian.ClientType == "Client")
+                                                    @if (ViewData["typeOfUser"] == "Client")
                                                     {
                                                         <div class="text-center">
                                                             <button class="approve-button" onclick="approveService(@group.service.Id)">Approve</button>

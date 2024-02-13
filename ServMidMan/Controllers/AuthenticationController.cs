@@ -95,8 +95,7 @@ namespace ServMidMan.Controllers
             {
 	            HttpContext.Session.SetString("Login", "True");
                 HttpContext.Session.SetString("UserId", resultUser.Id.ToString());
-                SiteGuardian.CurrentClientId = resultUser.Id;
-                SiteGuardian.ClientType = resultUser.TypeOfUser.ToString();
+                ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
                 HttpContext.Session.SetString("UserType", resultUser.TypeOfUser.ToString());
                 resultUser.LastLogin = DateTime.Now;
                 _dataProvider.SaveChanges();

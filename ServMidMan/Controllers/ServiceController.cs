@@ -21,14 +21,14 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
 
-            var myProducts = _dataProvider.Products.Where(x => x.UserId == SiteGuardian.CurrentClientId)
+            var myProducts = _dataProvider.Products.Where(x => x.UserId == Convert.ToInt32(HttpContext.Session.GetString("UserId")))
                 .Select(x=>x.Id)
                 .ToList();
             List<Service> serviceList = new List<Service>();
             ServicesOrdered servicesOrdered = new ServicesOrdered();
-            if(SiteGuardian.ClientType == "Client")
+            if (ViewData["typeOfUser"] == "Client")
             {
                 foreach (var product in myProducts) {
                     serviceList = _dataProvider.Services.Where(service => service.ProductId == product)
@@ -52,7 +52,7 @@ namespace ServMidMan.Controllers
             else
             {
                 ServiceWithProduct serviceWithProduct = new ServiceWithProduct();
-                   var myServices =  _dataProvider.Services.Where(x => x.UserId == SiteGuardian.CurrentClientId).ToList();
+                   var myServices =  _dataProvider.Services.Where(x => x.UserId == Convert.ToInt32(HttpContext.Session.GetString("UserId"))).ToList();
                 foreach(var service in myServices)
                 {
                     serviceWithProduct.service = service;
@@ -72,7 +72,7 @@ namespace ServMidMan.Controllers
 
         public IActionResult SendRequest(Product productId)
         {
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             Service service = new Service()
             {
@@ -108,7 +108,7 @@ namespace ServMidMan.Controllers
         [HttpPost]
         public IActionResult Delete(Service inputService)
         {
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
 
             var myservice = _dataProvider.Services.Where(x => x.Id == inputService.Id).FirstOrDefault();
@@ -121,7 +121,7 @@ namespace ServMidMan.Controllers
         [HttpGet]
         public IActionResult Deletev2(int serviceId)
         {
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
 
             var myservice = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();

@@ -31,7 +31,6 @@ namespace ServMidMan.Controllers
             }
             var products = ProductsFilter(filteredProducts);
 
-            SiteGuardian.ClientType = HttpContext.Session.GetString("UserType");
 
             List<Byte[]> bytes = new List<Byte[]>();
             List<ProductWithByteImages> myProductWithByteImages = new List<ProductWithByteImages>();
@@ -51,7 +50,7 @@ namespace ServMidMan.Controllers
                 return View();
             }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
 
             return View(myProductWithByteImages);
         }
@@ -63,7 +62,7 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Product(string id)
         {
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
 
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
@@ -86,13 +85,13 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Logout()
         {
-            SiteGuardian.CurrentClientId = null;
             ViewBag.LoggedIn = null;
             return RedirectToAction("Welcome", "Authentication");
         }
         [HttpPost]
         public IActionResult NewProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
         {
+
             int lastId = 0;
             if (_dataProvider.Products.Any())
             {
@@ -175,7 +174,11 @@ namespace ServMidMan.Controllers
 
         public IActionResult Profile()
         {
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
+            ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             var myProducts = _dataProvider.Products.Where(x=>x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
@@ -197,7 +200,7 @@ namespace ServMidMan.Controllers
         [HttpPost]
         public IActionResult ProfileUpdate(UserWithRegister user)
         {
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             User dbProduct = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
             if((user.Password == user.Password2) && !string.IsNullOrWhiteSpace(user.Password))
@@ -221,7 +224,7 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Upload()
         {
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
             if (!SiteGuardian.CheckSession(HttpContext))
             {
                 return RedirectToAction("Welcome", "Authentication");

@@ -1,4 +1,5 @@
 ﻿@using ServMidMan.Helper
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,11 +100,14 @@
                                     </div>
                                 </div>
                                 <div class="text-center mt-4">
-                                        @if (SiteGuardian.ClientType == "Servicer")
+                                        @if (ViewData["typeOfUser"] == "Servicer")
                                         {
                                             <button class="btn btn-primary mr-2" onclick="toggleAdditionalFields()">Send request</button>
                                         }
-                                    <button class="btn btn-success mr-2">Contact</button>
+                                        <form method="post" action="/Chat/Index" style="display: inline;">
+                                            <input type="hidden" name="Id" value="@Model.Products.UserId" />
+                                            <button type="submit" class="btn btn-success mr-2">Contact</button>
+                                        </form>
                                     @{
                                         var clientId = Convert.ToInt32(ViewData["ClientId"]);
                                         if (clientId == @Model.Products.UserId)

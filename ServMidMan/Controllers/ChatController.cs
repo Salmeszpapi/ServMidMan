@@ -22,7 +22,7 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
-            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             var userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             ViewData["MyId"] = userId;
@@ -40,7 +40,7 @@ namespace ServMidMan.Controllers
             ViewData["NoExistingMessages"] = false;
 
             var partnerId = chatWithPerson.Messages[0].ReceiverID == userId ? chatWithPerson.Messages[0].SenderId : chatWithPerson.Messages[0].ReceiverID;
-            var partner = _dataProvider.Users.Where(c => c.Id == partnerId).FirstOrDefault();
+            var partner = _dataProvider.Users.Where(c => c.Id == id).FirstOrDefault();
             chatWithPerson.Partner = partner;
            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             return View(chatWithPerson);

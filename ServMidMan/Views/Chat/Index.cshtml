@@ -253,10 +253,14 @@
         }
 
         .people-list {
-            -moz-transition: .5s;
-            -o-transition: .5s;
-            -webkit-transition: .5s;
-            transition: .5s
+            width: 280px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 20px;
+            z-index: 7;
+            height: 100%; /* Set a fixed height */
+            overflow-y: auto; /* Enable vertical scrolling */
         }
 
             .people-list .chat-list li {
