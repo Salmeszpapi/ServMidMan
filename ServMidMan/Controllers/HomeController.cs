@@ -8,6 +8,7 @@ using ServMidMan.Models;
 using ServMidMan.Services;
 using System.Diagnostics;
 using System.Net;
+using System.Reflection;
 
 namespace ServMidMan.Controllers
 {
@@ -22,14 +23,15 @@ namespace ServMidMan.Controllers
             _dataProvider = dataProviderContext;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(SearchProducts filteredProducts = null)
         {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
+            var products = ProductsFilter(filteredProducts);
+
             SiteGuardian.ClientType = HttpContext.Session.GetString("UserType");
-            List<Product> products = _dataProvider.Products.ToList();
 
             List<Byte[]> bytes = new List<Byte[]>();
             List<ProductWithByteImages> myProductWithByteImages = new List<ProductWithByteImages>();
@@ -43,12 +45,17 @@ namespace ServMidMan.Controllers
                     ImagePaths = ImageOperator.getImageFullPath(myImages),
                 });
             }
-
+            if (products.Count == 0)
+            {
+                ViewBag.NoProduct = "No existing products";
+                return View();
+            }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["typeOfUser"] = SiteGuardian.ClientType;
 
             return View(myProductWithByteImages);
         }
+
 
         public IActionResult Privacy()
         {
@@ -221,6 +228,69 @@ namespace ServMidMan.Controllers
             }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             return View();
+        }
+
+        private List<Product> ProductsFilter(SearchProducts searchProducts)
+        {
+            List<Product> products = null;
+            if (searchProducts.Name != null)
+            {
+                products = _dataProvider.Products.Where(x => x.Name == searchProducts.Name).ToList();
+            }
+            if (searchProducts.Category != null)
+            {
+                if(products == null)
+                {
+                    products = _dataProvider.Products.Where(x => x.Category == searchProducts.Category).ToList();
+                }
+                else
+                {
+                    products.Where(x => x.Category == searchProducts.Category).ToList();
+                }
+                
+            }
+            if (searchProducts.Location != null)
+            {
+                if (products == null)
+                {
+                    products = _dataProvider.Products.Where(x => x.Location == searchProducts.Location).ToList();
+                }
+                else
+                {
+                    products.Where(x => x.Location == searchProducts.Location).ToList();
+                }
+                
+            }
+            if (searchProducts.LocationAround != null)
+            {
+                //TODO
+            }
+            if (searchProducts.MinPrice != null)
+            {
+                if (products == null)
+                {
+                    products = _dataProvider.Products.Where(x => x.Price >= searchProducts.MinPrice).ToList();
+                }
+                else
+                {
+                    products.Where(x => x.Price >= searchProducts.MinPrice).ToList();
+                }
+            }
+            if (searchProducts.Price != null)
+            {
+                if (products == null)
+                {
+                    products = _dataProvider.Products.Where(x => x.Price <= searchProducts.Price).ToList();
+                }
+                else
+                {
+                    products.Where(x => x.Price <= searchProducts.Price).ToList();
+                }
+            }
+
+
+
+            return products;
         }
     }
 }

@@ -30,6 +30,18 @@ namespace ServMidMan.Models
     {
         public List<ProductWithByteImages> productWithByteImages { get; set; } = new List<ProductWithByteImages> { new ProductWithByteImages() };
         public User UserInfo { get; set; }
-
+    }
+    public class SearchProducts 
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Category { get; set; }
+        public double Price { get; set; }
+        public int UserId { get; set; }
+        public string Location { get; set; }
+        public int? ServiceId { get; set; }
+        public double MinPrice { get; set; }
+        public double LocationAround { get; set; }
     }
 }

@@ -15,8 +15,12 @@ namespace ServMidMan.Controllers
             _logger = logger;
             _dataProvider = dataProviderContext;
         }
-        public IActionResult Index(int productId)
+        public IActionResult Index()
         {
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
             ViewData["typeOfUser"] = SiteGuardian.ClientType;
 
             var myProducts = _dataProvider.Products.Where(x => x.UserId == SiteGuardian.CurrentClientId)
