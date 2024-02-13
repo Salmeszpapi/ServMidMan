@@ -23,7 +23,6 @@ namespace ServMidMan.Models
     public class ProductWithByteImages
     {
         public Product Products { get; set; } = new Product();
-        public List<byte[]> ImageResources { get; set; } = new List<byte[]>();
         public List<string> ImagePaths { get; set; } = new List<string>();
 
     }

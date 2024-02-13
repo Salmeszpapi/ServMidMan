@@ -16,8 +16,11 @@ namespace ServMidMan.Models
     }
     public class ServicesOrdered()
     {
-        public List<Service> SenderServices= new List<Service>();
-        public List<Service> ReceivedServices= new List<Service>();
-        public List<Product> Products= new List<Product>();
+        public List<ServiceWithProduct> Services= new List<ServiceWithProduct>();
+    }
+    public class ServiceWithProduct() 
+    {
+        public Service service { get; set; } = new Service();
+        public ProductWithByteImages product {  get; set; } = new ProductWithByteImages();
     }
 }

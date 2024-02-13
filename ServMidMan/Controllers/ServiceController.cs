@@ -18,34 +18,50 @@ namespace ServMidMan.Controllers
         public IActionResult Index(int productId)
         {
             ViewData["typeOfUser"] = SiteGuardian.ClientType;
-            List<Service> servicesDb= new List<Service>();
+
             var myProducts = _dataProvider.Products.Where(x => x.UserId == SiteGuardian.CurrentClientId)
                 .Select(x=>x.Id)
                 .ToList();
             List<Service> serviceList = new List<Service>();
-            foreach (var product in myProducts) {
-                serviceList = _dataProvider.Services.Where(service => service.ProductId == product)
-                    .ToList();
-                foreach (var service in serviceList)
-                {
-                    servicesDb.Add(service);
+            ServicesOrdered servicesOrdered = new ServicesOrdered();
+            if(SiteGuardian.ClientType == "Client")
+            {
+                foreach (var product in myProducts) {
+                    serviceList = _dataProvider.Services.Where(service => service.ProductId == product)
+                        .ToList();
+                    ServiceWithProduct serviceWithProduct = new ServiceWithProduct();
+                    foreach (var service in serviceList)
+                    {
+                        var foundProduct = _dataProvider.Products.FirstOrDefault(x => x.Id == product);
+                        
+                        serviceWithProduct.product.Products = foundProduct;
+                        serviceWithProduct.product.ImagePaths = ImageOperator.getImageFullPath(_dataProvider.Images.Where(x => x.ProductReferenceId == serviceWithProduct.product.Products.Id).Select(x => x.FileName).ToList());
+                        serviceWithProduct.service = service;
+                    }
+                    if (serviceList.Count > 0)
+                    {
+                        servicesOrdered.Services.Add(serviceWithProduct);
+
+                    }
                 }
             }
+            else
+            {
+                ServiceWithProduct serviceWithProduct = new ServiceWithProduct();
+                   var myServices =  _dataProvider.Services.Where(x => x.UserId == SiteGuardian.CurrentClientId).ToList();
+                foreach(var service in myServices)
+                {
+                    serviceWithProduct.service = service;
+                    serviceWithProduct.product.Products = _dataProvider.Products.Where(x=>x.Id == service.ProductId).FirstOrDefault();
+                    serviceWithProduct.product.ImagePaths = ImageOperator.getImageFullPath(_dataProvider.Images.Where(x => x.ProductReferenceId == serviceWithProduct.product.Products.Id).Select(x => x.FileName).ToList());
+                    servicesOrdered.Services.Add(serviceWithProduct);
+                }
 
-            // check if the product is mine 
-
-            //return request whery userId is mine 
-
-            ServicesOrdered servicesOrdered = new ServicesOrdered();
-            servicesOrdered.SenderServices = _dataProvider.Services.Where(x=>x.UserId == SiteGuardian.CurrentClientId).ToList();
-            if(servicesDb.Count == 0 && servicesOrdered.SenderServices.Count == 0)
+            }
+            if (servicesOrdered.Services.Count == 0)
             {
                 ViewBag.Services = "No existing requests";
                 return View();
-            }
-            foreach (Service service in servicesDb)
-            {
-                servicesOrdered.ReceivedServices = servicesDb;
             }
             return View(servicesOrdered);
         }

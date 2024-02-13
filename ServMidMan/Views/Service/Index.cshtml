@@ -1,5 +1,5 @@
 ﻿@model ServMidMan.Models.ServicesOrdered
-
+@using ServMidMan.Helper
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,7 +47,7 @@
 <body>
     <div class="container mt-5">
         <div class="row">
-            <div class="col-md-8 offset-md-3">
+            <div class="col-md-8 offset-md-2">
                 <h1 class="text-center">Requests</h1>
 
                 @if (ViewBag.Services != null)
@@ -58,80 +58,65 @@
                 }
                 else
                 {
-                    @if (Model.ReceivedServices != null && Model.ReceivedServices.Any())
+                    @if (Model.Services != null && Model.Services.Any())
                     {
                         <div id="receivedServices">
                             <!-- Add this div -->
-                            <h2>Received requests</h2>
-                            @foreach (var group in Model.ReceivedServices.GroupBy(service => service.ProductId))
+                            @if(SiteGuardian.ClientType == "Client")
                             {
-                                <h3>Product ID: @group.Key</h3>
-                                <ul class="service-list">
-                                    @foreach (var service in group)
-                                    {
-                                        <li class="service-item">
-                                            <div>Service ID: @service.Id</div>
-                                            <div>Product ID: @service.ProductId</div>
-                                            <div>Price: @service.Price€</div>
-                                            <div>Description: @service.Description</div>
-                                            <div>Date when finished:  @service.ApproximetlyFinishDate</div>
-                                            <!-- Add other properties as needed -->
-                                            @if (service.Approved)
-                                            {
-                                                <h1 class="display-4 text-danger">Approved !</h1>
-                                            }
-                                            else
-                                            {
-                                                <button class="approve-button" onclick="approveService(@service.Id)">Approve</button>
-                                                <button class="reject-button" onclick="rejectService(@service.Id)">Reject</button>                                                
-                                            }
-                                        </li>
-                                    }
-                                </ul>
+                                <h2>Received requests</h2>
                             }
-                        </div>
-                    }
-
-                    @if (Model.SenderServices != null && Model.SenderServices.Any())
-                    {
-                        <div id="senderServices">
-                            <!-- Add this div -->
-                            <h2>Sended requests</h2>
-                            @foreach (var group in Model.SenderServices.GroupBy(service => service.ProductId))
+                            else
                             {
-                                <h3>Product ID: @group.Key</h3>
+                                <h2>Sended requests</h2>
+                            }
+                            @foreach (var group in Model.Services)
+                            {
+                                <h3>Product ID: @group.service.Id</h3>
                                 <ul class="service-list">
-                                    @foreach (var service in group)
-                                    {
-                                        <form action="/Service/Delete" method="get">
-                                        <li class="service-item">
-                                            <input type="hidden" name="id" value="@service.Id">
-                                            <input type="hidden" name="productId" value="@service.ProductId">
-                                            <input type="hidden" name="price" value="@service.Price">
-                                            <input type="hidden" name="description" value="@service.Description">
-                                            <input type="hidden" name="finishDate" value="@service.ApproximetlyFinishDate">
+                                    <li class="service-item">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div>Service ID: @group.service.Id</div>
+                                                <div>Product ID: @group.service.ProductId</div>
+                                                <div>Price: @group.service.Price€</div>
+                                                <div>Description: @group.service.Description</div>
+                                                <div>Date when finished: @group.service.ApproximetlyFinishDate</div>
+                                                @if (group.service.Approved)
+                                                {
+                                                    <h1 class="display-4 text-danger">Approved !</h1>
+                                                }
+                                                else
+                                                {
+                                                    @if (SiteGuardian.ClientType == "Client")
+                                                    {
+                                                        <div class="text-center">
+                                                            <button class="approve-button" onclick="approveService(@group.service.Id)">Approve</button>
+                                                            <button class="reject-button" onclick="rejectService(@group.service.Id)">Reject</button>
+                                                        </div>
+                                                    }else
+                                                    {
+                                                        <div class="text-center">
+                                                            <button class="reject-button" onclick="rejectService(@group.service.Id)">Remove request</button>
+                                                        </div>
+                                                    }
 
-                                            <div>Service ID: @service.Id</div>
-                                            <div>Product ID: @service.ProductId</div>
-                                            <div>Price: @service.Price€</div>
-                                            <div>Description: @service.Description</div>
-                                           @*  <div>Date when finished:  @service.ApproximetlyFinishDate</div> *@
-                                            <!-- Add other properties as needed -->
-                                            <button class="btn btn-danger" type="submit">Delete request</button>
-                                        </li>
-                                        </form>
-
-                                    }
+                                                }
+                                            </div>
+                                            <div class="col-md-6">
+                                                <img class="product-images" src="@group.product.ImagePaths[0]" alt="Product Image" data-toggle="modal" data-target="#imageModal">
+                                            </div>
+                                        </div>
+                                    </li>
                                 </ul>
                             }
                         </div>
                     }
                 }
-
-
             </div>
         </div>
     </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -184,5 +169,13 @@
                 .catch(error => console.error('Error approving service:', error));
         }
     </script>
+    <style>
+        .product-images{
+
+            max-width: 300px;
+            max-height: 400px; /* Set maximum height to 400 pixels */
+            margin-bottom: 20px;
+        }
+    </style>
 </body>
 </html>
