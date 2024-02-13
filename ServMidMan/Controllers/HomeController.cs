@@ -178,6 +178,9 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
+
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             var myProducts = _dataProvider.Products.Where(x=>x.UserId == userId).ToList();
