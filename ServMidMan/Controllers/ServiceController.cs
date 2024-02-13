@@ -23,6 +23,8 @@ namespace ServMidMan.Controllers
             }
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
 
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             var myProducts = _dataProvider.Products.Where(x => x.UserId == Convert.ToInt32(HttpContext.Session.GetString("UserId")))
                 .Select(x=>x.Id)
                 .ToList();
