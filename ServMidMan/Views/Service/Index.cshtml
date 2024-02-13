@@ -26,6 +26,19 @@
             cursor: pointer;
         }
 
+        .reject-button {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .reject-button:hover {
+            background-color: darkred;
+        }
+
             .approve-button:hover {
                 background-color: #45a049;
             }
@@ -35,11 +48,8 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-8 offset-md-3">
-                <h1 class="text-center">Incoming/Outcoming Requests</h1>
-                <div class="text-center mb-3">
-                    <button class="btn btn-primary mr-2" onclick="showReceivedServices()">Show Received Services</button>
-                    <button class="btn btn-primary" onclick="showSenderServices()">Show Sender Services</button>
-                </div>
+                <h1 class="text-center">Requests</h1>
+
                 @if (ViewBag.Services != null)
                 {
                     <div class="alert alert-info" role="alert">
@@ -66,7 +76,15 @@
                                             <div>Description: @service.Description</div>
                                             <div>Date when finished:  @service.ApproximetlyFinishDate</div>
                                             <!-- Add other properties as needed -->
-                                            <button class="approve-button" onclick="approveService(@service.Id)">Approve</button>
+                                            @if (service.Approved)
+                                            {
+                                                <h1 class="display-4 text-danger">Approved !</h1>
+                                            }
+                                            else
+                                            {
+                                                <button class="approve-button" onclick="approveService(@service.Id)">Approve</button>
+                                                <button class="reject-button" onclick="rejectService(@service.Id)">Reject</button>                                                
+                                            }
                                         </li>
                                     }
                                 </ul>
@@ -85,7 +103,7 @@
                                 <ul class="service-list">
                                     @foreach (var service in group)
                                     {
-                                        <form action="/Service/Delete" method="post">
+                                        <form action="/Service/Delete" method="get">
                                         <li class="service-item">
                                             <input type="hidden" name="id" value="@service.Id">
                                             <input type="hidden" name="productId" value="@service.ProductId">
@@ -131,24 +149,39 @@
         }
 
         function approveService(serviceId) {
-            // Logic to approve the service with the given serviceId
-            // You can make an AJAX call to your backend to handle the approval process
-            // Example:
-            // fetch('/services/approve/' + serviceId, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({ serviceId: serviceId })
-            // })
-            // .then(response => {
-            //     if (response.ok) {
-            //         // Service approved successfully, you can update the UI as needed
-            //     } else {
-            //         // Handle error
-            //     }
-            // })
-            // .catch(error => console.error('Error approving service:', error));
+            fetch('/service/approve?serviceId=' + serviceId, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Service approved successfully, you can update the UI as needed
+                        location.reload();
+                    } else {
+                        // Handle error
+                    }
+                })
+                .catch(error => console.error('Error approving service:', error));
+        }
+
+        function rejectService(serviceId) {
+            fetch('/service/deletev2?serviceId=' + serviceId, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Service approved successfully, you can update the UI as needed
+                        location.reload();
+                    } else {
+                        // Handle error
+                    }
+                })
+                .catch(error => console.error('Error approving service:', error));
         }
     </script>
 </body>

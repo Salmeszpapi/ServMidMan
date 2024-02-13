@@ -68,15 +68,15 @@ namespace ServMidMan.Controllers
                         return View("Register");
                     }
                 }
+                else
+                {
+                    ViewBag.ErrorMessage = "Invalid Email";
+                    return View("Register");
+                }
                 user.Password = PasswordHasher.HashPassword(user.Password);
                 user.LastLogin = DateTime.Now;
                 _dataProvider.Users.Add(user as User);
                 _dataProvider.SaveChanges();
-                //var result = _dataProvider.Users.Where(x=>x.Email == user.Email && x.Name == user.Name).FirstOrDefault();
-                //HttpContext.Session.SetString("Login", "True");
-                //HttpContext.Session.SetString("UserId", result.Id.ToString());
-                //HttpContext.Session.SetString("UserType", result.TypeOfUser.ToString());
-                //SiteGuardian.CurrentClientId = result.Id;
 
                 return View("Welcome");
             }

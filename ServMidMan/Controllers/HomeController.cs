@@ -170,8 +170,21 @@ namespace ServMidMan.Controllers
         {
             ViewData["typeOfUser"] = SiteGuardian.ClientType;
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-            User userInfo = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
-            return View(userInfo);
+            var myProducts = _dataProvider.Products.Where(x=>x.UserId == userId).ToList();
+            ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
+            productWithImagesPathAndUserInfo.UserInfo = _dataProvider.Users.Where(x=>x.Id == userId).FirstOrDefault();
+            foreach (var product in myProducts)
+            {
+                var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
+                productWithImagesPathAndUserInfo.productWithByteImages.Add(new ProductWithByteImages
+                {
+                    Products = product,
+                    //ImageResources =  ImageOperator.DownloadImages(myImages),
+                    ImagePaths = ImageOperator.getImageFullPath(myImages),
+                });
+            }
+
+            return View(productWithImagesPathAndUserInfo);
         }
 
         [HttpPost]

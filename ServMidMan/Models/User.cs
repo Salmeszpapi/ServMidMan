@@ -28,4 +28,9 @@ namespace ServMidMan.Models
     {
         public string Password2 { get; set; }
     }
+    public class UserWithProduct
+    {
+        public User UserInfo { get; set; }
+        public List<Product> Products { get; set; }
+    }
 }

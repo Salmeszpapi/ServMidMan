@@ -18,5 +18,6 @@ namespace ServMidMan.Models
     {
         public List<Service> SenderServices= new List<Service>();
         public List<Service> ReceivedServices= new List<Service>();
+        public List<Product> Products= new List<Product>();
     }
 }

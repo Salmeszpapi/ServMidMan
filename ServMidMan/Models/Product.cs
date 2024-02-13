@@ -27,4 +27,10 @@ namespace ServMidMan.Models
         public List<string> ImagePaths { get; set; } = new List<string>();
 
     }
+    public class ProductWithImagesPathAndUserInfo
+    {
+        public List<ProductWithByteImages> productWithByteImages { get; set; } = new List<ProductWithByteImages> { new ProductWithByteImages() };
+        public User UserInfo { get; set; }
+
+    }
 }

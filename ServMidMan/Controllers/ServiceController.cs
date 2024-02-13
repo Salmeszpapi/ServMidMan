@@ -22,11 +22,16 @@ namespace ServMidMan.Controllers
             var myProducts = _dataProvider.Products.Where(x => x.UserId == SiteGuardian.CurrentClientId)
                 .Select(x=>x.Id)
                 .ToList();
-
+            List<Service> serviceList = new List<Service>();
             foreach (var product in myProducts) {
-				servicesDb = _dataProvider.Services.Where(service => service.ProductId == product)
-	                .ToList();
-			}
+                serviceList = _dataProvider.Services.Where(service => service.ProductId == product)
+                    .ToList();
+                foreach (var service in serviceList)
+                {
+                    servicesDb.Add(service);
+                }
+            }
+
             // check if the product is mine 
 
             //return request whery userId is mine 
@@ -40,10 +45,7 @@ namespace ServMidMan.Controllers
             }
             foreach (Service service in servicesDb)
             {
-                if (service.UserId == SiteGuardian.CurrentClientId)
-                {
-                    servicesOrdered.ReceivedServices = servicesDb;
-                }
+                servicesOrdered.ReceivedServices = servicesDb;
             }
             return View(servicesOrdered);
         }
@@ -65,6 +67,23 @@ namespace ServMidMan.Controllers
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public IActionResult Approve(int serviceId)
+        {
+            // Implement the logic to approve the service with the given serviceId
+            var myAprrovedService = _dataProvider.Services.Where(x=>x.Id == serviceId).FirstOrDefault();
+            var ProductId = _dataProvider.Products.Where(x=>x.Id == myAprrovedService.ProductId).Select(x=>x.Id).FirstOrDefault();
+            myAprrovedService.Approved = true;
+            _dataProvider.Services.Where(_x => _x.ProductId == ProductId).ToList().ForEach(x =>
+            {
+                if(!x.Approved)
+                {
+                    _dataProvider.Services.Remove(x);
+                }
+            });
+            _dataProvider.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
         [HttpPost]
         public IActionResult Delete(Service inputService)
@@ -73,6 +92,19 @@ namespace ServMidMan.Controllers
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
 
             var myservice = _dataProvider.Services.Where(x => x.Id == inputService.Id).FirstOrDefault();
+
+            _dataProvider.Services.Remove(myservice);
+            _dataProvider.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Deletev2(int serviceId)
+        {
+            ViewData["typeOfUser"] = SiteGuardian.ClientType;
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+
+            var myservice = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();
 
             _dataProvider.Services.Remove(myservice);
             _dataProvider.SaveChanges();
