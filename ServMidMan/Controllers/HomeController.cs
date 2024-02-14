@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using MySqlX.XDevAPI;
 using MySqlX.XDevAPI.Common;
 using ServMidMan.Data;
 using ServMidMan.Helper;
@@ -16,8 +18,8 @@ namespace ServMidMan.Controllers
     {
         private readonly DataProviderContext _dataProvider;
         private readonly ILogger<HomeController> _logger;
-        private readonly ChatHub _chatHub;
-		public HomeController(ILogger<HomeController> logger, DataProviderContext dataProviderContext, ChatHub chatHub)
+        private readonly IHubContext<ChatHub> _hubContext;
+        public HomeController(ILogger<HomeController> logger, DataProviderContext dataProviderContext, IHubContext<ChatHub> hubContext)
         {
             _logger = logger;
             _dataProvider = dataProviderContext;
@@ -80,7 +82,6 @@ namespace ServMidMan.Controllers
                 //ImageResources = ImageOperator.DownloadImages(myImages),
                 ImagePaths = ImageOperator.getImageFullPath(myImages)
             };
-
             return View(myProductWithByteImages);
         }
         public IActionResult Logout()
@@ -114,10 +115,8 @@ namespace ServMidMan.Controllers
             }
             _dataProvider.SaveChanges();
             ImageOperator.ImageUploaderToServer(files, myImagesToPush);
-            //Here call SignalR to notify the users, new product has been uploaded 
-            //_chatHub.NewProductUpdated(product.Id);
 
-			return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
         public IActionResult UpdateProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
         {
@@ -205,19 +204,30 @@ namespace ServMidMan.Controllers
         {
             ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-            User dbProduct = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
+            User myUser = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
             if((user.Password == user.Password2) && !string.IsNullOrWhiteSpace(user.Password))
             {
-                dbProduct.Password = PasswordHasher.HashPassword(user.Password);
+                myUser.Password = PasswordHasher.HashPassword(user.Password);
             }
-            dbProduct.Name = user.Name;
-            if (!EmailVerificator.IsValidEmail(user.Email))
-            {
-                dbProduct.Email = user.Email;
-            }
+            myUser.Name = user.Name;
+
             _dataProvider.SaveChanges();
+
+            var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
+            ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
+            productWithImagesPathAndUserInfo.UserInfo = myUser;
+            foreach (var product in myProducts)
+            {
+                var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
+                productWithImagesPathAndUserInfo.productWithByteImages.Add(new ProductWithByteImages
+                {
+                    Products = product,
+                    //ImageResources =  ImageOperator.DownloadImages(myImages),
+                    ImagePaths = ImageOperator.getImageFullPath(myImages),
+                });
+            }
             //checking 
-            return View("Profile", dbProduct);
+            return View("Profile", productWithImagesPathAndUserInfo);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

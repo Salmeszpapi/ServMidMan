@@ -16,7 +16,6 @@ namespace ServMidMan
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
-            builder.Services.AddSession();
             builder.Services.AddSession(options =>
             {
 	            options.IdleTimeout = TimeSpan.FromMinutes(30);

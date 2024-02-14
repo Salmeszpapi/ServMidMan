@@ -8,6 +8,9 @@
 <link href="ServMidMan.styles.css" rel="stylesheet" />
 
 <section id="navbar">
+    <input type="hidden" id="sendButton" value="Send Message" />
+    @* <button class="btn btn-primary" id="ProductUploadedButton">Submit2 form</button> *@
+    <input type="hidden" id="ProductUploadedButton" value="Send Message" />
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <!-- Brand/logo -->
@@ -218,3 +221,5 @@
         font-size: 24px;
     }
 </style>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script>
