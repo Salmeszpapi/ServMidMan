@@ -202,7 +202,13 @@ namespace ServMidMan.Controllers
         [HttpPost]
         public IActionResult ProfileUpdate(UserWithRegister user)
         {
-            ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             User myUser = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
             if((user.Password == user.Password2) && !string.IsNullOrWhiteSpace(user.Password))
@@ -213,6 +219,38 @@ namespace ServMidMan.Controllers
 
             _dataProvider.SaveChanges();
 
+            var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
+            ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
+            productWithImagesPathAndUserInfo.UserInfo = myUser;
+            foreach (var product in myProducts)
+            {
+                var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
+                productWithImagesPathAndUserInfo.productWithByteImages.Add(new ProductWithByteImages
+                {
+                    Products = product,
+                    //ImageResources =  ImageOperator.DownloadImages(myImages),
+                    ImagePaths = ImageOperator.getImageFullPath(myImages),
+                });
+            }
+            //checking 
+            return View("Profile", productWithImagesPathAndUserInfo);
+        }
+
+        [HttpPost]
+        public IActionResult ProfileRatingUpdate(int rating)
+        {
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
+            int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            User myUser = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
+            myUser.Voters += 1;
+            myUser.Rating = myUser.Rating + rating;
+            _dataProvider.SaveChanges();
             var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
             productWithImagesPathAndUserInfo.UserInfo = myUser;

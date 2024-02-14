@@ -60,56 +60,61 @@
             <div class="card mb-4">
                 <div class="card-header">Rating</div>
                 <div class="card-body">
-                    <form method="post" action="/Home/ProfileUpdate">
+                    <form method="post" action="/Home/ProfileRatingUpdate">
                         <!-- Form Group (username)-->
                         <div class="ratings">
                             <h3>Average rating: </h3>
                             <div class="rating-stars">
-                                <!-- Loop through to generate stars based on average rating -->
-                                @for (int i = 0; i < @Model.UserInfo.Rating; i++)
+                                @if (@Model.UserInfo.Voters == 0)
                                 {
-                                    <i class="fas fa-star text-warning"></i>
+                                    <!-- Loop through to generate stars based on average rating -->
+                                    @for (int i = 5; i < 5; i++)
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                    <!-- Show remaining empty stars -->
+                                    @for (int i = 5; i < 5; i++)
+                                    {
+                                        <i class="far fa-star text-warning"></i>
+                                    }
                                 }
-                                <!-- Show remaining empty stars -->
-                                @for (int i = Convert.ToInt32(@Model.UserInfo.Rating); i < 5; i++)
+                                else
                                 {
-                                    <i class="far fa-star text-warning"></i>
+                                    <!-- Loop through to generate stars based on average rating -->
+                                    @for (int i = 0; i < Convert.ToInt32(@Model.UserInfo.Rating / @Model.UserInfo.Voters); i++)
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                    <!-- Show remaining empty stars -->
+                                    @for (int i = Convert.ToInt32(@Model.UserInfo.Rating) / @Model.UserInfo.Voters; i < 5; i++)
+                                    {
+                                        <i class="far fa-star text-warning"></i>
+                                    }
                                 }
+
 
                             </div>
                             <div>
-                                <a>Rating : @Model.UserInfo.Rating</a>
+                                @{
+                                    var average = @Model.UserInfo.Rating / @Model.UserInfo.Voters;
+                                }
+                                <a>Rating : @average</a>
 
                             </div>
-                            <a>Total voters : @Model.UserInfo.Rating</a>
+                            <a>Total voters : @Model.UserInfo.Voters</a>
                         </div>
                         <div class="ratings">
                             <h3>Rate </h3>
-                            <div class="rating-stars">
-                                <!-- Loop through to generate stars based on average rating -->
-                                @for (int i = 0; i < 4; i++)
-                                {
-                                    <i class="fas fa-star text-warning"></i>
-                                }
-                                <!-- Show remaining empty stars -->
-                                @for (int i = 4; i < 5; i++)
-                                {
-                                    <i class="far fa-star text-warning"></i>
-                                }
+                            <div class="rating">
+                                <input type="radio" id="star5" name="rating" value="5" /><label for="star5"></label>
+                                <input type="radio" id="star4" name="rating" value="4" /><label for="star4"></label>
+                                <input type="radio" id="star3" name="rating" value="3" /><label for="star3"></label>
+                                <input type="radio" id="star2" name="rating" value="2" /><label for="star2"></label>
+                                <input type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
                             </div>
                         </div>
-                        <h1>Pure CSS Star Rating</h1>
-                        <div class="rating">
-                            <input type="radio" id="star5" name="rating" value="5" /><label for="star5"></label>
-                            <input type="radio" id="star4" name="rating" value="4" /><label for="star4"></label>
-                            <input type="radio" id="star3" name="rating" value="3" /><label for="star3"></label>
-                            <input type="radio" id="star2" name="rating" value="2" /><label for="star2"></label>
-                            <input type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
-                        </div>
-
-
-
                         <button class="btn btn-primary" type="submit">Save changes</button>
+
                     </form>
                 </div>
             </div>
@@ -227,6 +232,47 @@
         margin-right: 1rem;
     }
 
+        .rating {
+            float: left;
+            height: 46px;
+            padding: 0 10px;
+        }
+
+            .rating:not(:checked) > input {
+                position: absolute;
+                top: -9999px;
+            }
+
+            .rating:not(:checked) > label {
+                float: right;
+                width: 1em;
+                overflow: hidden;
+                white-space: nowrap;
+                cursor: pointer;
+                font-size: 30px;
+                color: #ccc;
+            }
+
+                .rating:not(:checked) > label:before {
+                    content: '★ ';
+                }
+
+            .rating > input:checked ~ label {
+                color: #ffc700;
+            }
+
+            .rating:not(:checked) > label:hover,
+            .rating:not(:checked) > label:hover ~ label {
+                color: #deb217;
+            }
+
+            .rating > input:checked + label:hover,
+            .rating > input:checked + label:hover ~ label,
+            .rating > input:checked ~ label:hover,
+            .rating > input:checked ~ label:hover ~ label,
+            .rating > label:hover ~ input:checked ~ label {
+                color: #c59b08;
+            }
 
     </style>
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
