@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-5">
+        <div class="col-xl-4">
             <!-- Account details card-->
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
@@ -54,11 +54,65 @@
                     </form>
                 </div>
             </div>
-
-          
-
-            
         </div>
+        <div class="col-xl-4">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Rating</div>
+                <div class="card-body">
+                    <form method="post" action="/Home/ProfileUpdate">
+                        <!-- Form Group (username)-->
+                        <div class="ratings">
+                            <h3>Average rating: </h3>
+                            <div class="rating-stars">
+                                <!-- Loop through to generate stars based on average rating -->
+                                @for (int i = 0; i < @Model.UserInfo.Rating; i++)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                                <!-- Show remaining empty stars -->
+                                @for (int i = Convert.ToInt32(@Model.UserInfo.Rating); i < 5; i++)
+                                {
+                                    <i class="far fa-star text-warning"></i>
+                                }
+
+                            </div>
+                            <div>
+                                <a>Rating : @Model.UserInfo.Rating</a>
+
+                            </div>
+                            <a>Total voters : @Model.UserInfo.Rating</a>
+                        </div>
+                        <div class="ratings">
+                            <h3>Rate </h3>
+                            <div class="rating-stars">
+                                <!-- Loop through to generate stars based on average rating -->
+                                @for (int i = 0; i < 4; i++)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                                <!-- Show remaining empty stars -->
+                                @for (int i = 4; i < 5; i++)
+                                {
+                                    <i class="far fa-star text-warning"></i>
+                                }
+                            </div>
+                        </div>
+                        <h1>Pure CSS Star Rating</h1>
+                        <div class="rating">
+                            <input type="radio" id="star5" name="rating" value="5" /><label for="star5"></label>
+                            <input type="radio" id="star4" name="rating" value="4" /><label for="star4"></label>
+                            <input type="radio" id="star3" name="rating" value="3" /><label for="star3"></label>
+                            <input type="radio" id="star2" name="rating" value="2" /><label for="star2"></label>
+                            <input type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
+                        </div>
+
+
+
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                    </form>
+                </div>
+            </div>
     </div>
 </div>
 <div class="col-xl-12">
@@ -173,6 +227,7 @@
         margin-right: 1rem;
     }
 
-</style>
+
+    </style>
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script>
