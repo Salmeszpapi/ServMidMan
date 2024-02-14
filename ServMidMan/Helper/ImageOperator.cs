@@ -11,14 +11,14 @@ namespace ServMidMan.Helper
 		private static string userName = "hojszi.salmadevelop.eu";
 		private static string password = "myNewDatabasePassword1";
 
-		public static bool ImageUploaderToServer(List<IFormFile> fromFiles, List<Models.Image> images)
+		public static bool ImageUploaderToServer(List<IFormFile> fromFiles, List<string> images)
 		{
 			if (fromFiles != null && fromFiles.Count > 0)
 			{
 				for (int i = 0; i < fromFiles.Count; i++)
 				{
 					// Construct full FTP path
-					string ftpFilePath = $"{ftpServerUrl}/{images[i].FileName}";
+					string ftpFilePath = $"{ftpServerUrl}/{images[i]}";
 
 					// Create FTP request
 					FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpFilePath);
@@ -40,48 +40,48 @@ namespace ServMidMan.Helper
 			}
 		}
 
-		public static List<byte[]> DownloadImages(List<string> imageNames)
-        {
-            List<byte[]> bytesofImages = new List<byte[]>();
+		//public static List<byte[]> DownloadImages(List<string> imageNames)
+  //      {
+  //          List<byte[]> bytesofImages = new List<byte[]>();
 
-            // Set TLS version explicitly
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+  //          // Set TLS version explicitly
+  //          ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            foreach (var picturename in imageNames)
-            {
-                try
-                {
-                    // Download the image from FTP server to cache
-                    using (WebClient client = new WebClient())
-                    {
-                        client.Credentials = new NetworkCredential(userName, password);
-                        bytesofImages.Add(client.DownloadData(ftpServerUrl + picturename));
-                    }
-                }
-                catch (WebException ex)
-                {
-                    // Handle specific FTP errors
-                    var response = ex.Response as FtpWebResponse;
-                    if (response != null && response.StatusCode == FtpStatusCode.NotLoggedIn)
-                    {
-                        // Handle not logged in error
-                        Console.WriteLine($"Error downloading image {picturename}: Not logged in.");
-                    }
-                    else
-                    {
-                        // Handle other FTP errors
-                        Console.WriteLine($"Error downloading image {picturename}: {ex.Message}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Handle general errors
-                    Console.WriteLine($"Error downloading image {picturename}: {ex.Message}");
-                }
-            }
+  //          foreach (var picturename in imageNames)
+  //          {
+  //              try
+  //              {
+  //                  // Download the image from FTP server to cache
+  //                  using (WebClient client = new WebClient())
+  //                  {
+  //                      client.Credentials = new NetworkCredential(userName, password);
+  //                      bytesofImages.Add(client.DownloadData(ftpServerUrl + picturename));
+  //                  }
+  //              }
+  //              catch (WebException ex)
+  //              {
+  //                  // Handle specific FTP errors
+  //                  var response = ex.Response as FtpWebResponse;
+  //                  if (response != null && response.StatusCode == FtpStatusCode.NotLoggedIn)
+  //                  {
+  //                      // Handle not logged in error
+  //                      Console.WriteLine($"Error downloading image {picturename}: Not logged in.");
+  //                  }
+  //                  else
+  //                  {
+  //                      // Handle other FTP errors
+  //                      Console.WriteLine($"Error downloading image {picturename}: {ex.Message}");
+  //                  }
+  //              }
+  //              catch (Exception ex)
+  //              {
+  //                  // Handle general errors
+  //                  Console.WriteLine($"Error downloading image {picturename}: {ex.Message}");
+  //              }
+  //          }
 
-            return bytesofImages;
-        }
+  //          return bytesofImages;
+  //      }
         public static void FTPImgaeRemover(List<string> imageNames)
         {
             foreach (var imageName in imageNames)

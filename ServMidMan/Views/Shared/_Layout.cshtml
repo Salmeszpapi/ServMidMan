@@ -18,8 +18,11 @@
 	.orange-chat-bubble {
 		color: #ff6600; /* Custom color for the chat bubble icon */
 	}
+	.body{
+		background-color :black;
+	}
 </style>
-<body>
+<body style="background-image: url('https://servmidman.salmadevelop.eu/cica.jpg');">
 	@if ((string)ViewData["LoggedIn"] == "True")
 	{
 	// Your code here
@@ -70,7 +73,7 @@
 	</header>
 	}
 
-	<div class="container-fluid" style="height: 80vh;">
+	<div class="container-fluid">
 		<main role="main" class="pb-3" style="height: 100%;">
 			@RenderBody()
 		</main>

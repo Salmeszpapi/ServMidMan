@@ -10,7 +10,7 @@ namespace ServMidMan.Models
         public int UserId { get; set; }
         public DateTime ApproximetlyFinishDate { get; set; }
         public double Price { get; set; }
-        public bool Approved { get; set; } = false;
+        public ServiceStatus Approved { get; set; }
         public string Description { get; set; }
 
     }
@@ -22,5 +22,11 @@ namespace ServMidMan.Models
     {
         public Service service { get; set; } = new Service();
         public ProductWithByteImages product {  get; set; } = new ProductWithByteImages();
+    }
+    public enum ServiceStatus
+    {
+        UnSettled,
+        Approved,
+        Rejected,
     }
 }

@@ -85,13 +85,14 @@
                                                 <div>Price: @group.service.Price€</div>
                                                 <div>Description: @group.service.Description</div>
                                                 <div>Date when finished: @group.service.ApproximetlyFinishDate</div>
-                                                @if (group.service.Approved)
+                                                @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
-                                                    <h1 class="display-4 text-danger">Approved !</h1>
+                                                    <h1 class="display-4 text-success">Approved !</h1>
                                                 }
                                                 else
                                                 {
-                                                    @if (ViewData["typeOfUser"] == "Client")
+
+                                                    @if (ViewData["typeOfUser"].Equals("Client"))
                                                     {
                                                         <div class="text-center">
                                                             <button class="approve-button" onclick="approveService(@group.service.Id)">Approve</button>

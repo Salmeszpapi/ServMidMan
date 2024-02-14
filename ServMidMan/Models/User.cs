@@ -17,13 +17,12 @@ namespace ServMidMan.Models
         public double Rating { get; set; }
         public int Voters { get; set; }
         public DateTime LastLogin { get; set; }
-        public string ProfileImagePath { get; set; }
+        public string ProfileImagePath { get; set; } = "avatar1";
     }
     public enum UserType
     {
         Servicer,
-        Client,
-        Both
+        Client
     }
     public class UserWithRegister : User
     {

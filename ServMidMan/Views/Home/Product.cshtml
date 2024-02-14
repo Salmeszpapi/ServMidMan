@@ -66,7 +66,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" >
                         <div class="row">
 
                             <div class="col-md-6">
@@ -89,7 +89,8 @@
                                     }
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" >
+                                
                                 <h2 class="card-title">@Model.Products.Name</h2>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -103,8 +104,13 @@
                                     </div>
                                 </div>
                                 <div class="text-center mt-4">
-                                        @if (ViewData["typeOfUser"] == "Servicer")
+                                        @{
+                                            var myUserType = ViewData["typeOfUser"];
+                                        }
+                                        @if (myUserType.Equals("Servicer"))
                                         {
+                                            var a = 5;
+                                            
                                             <button class="btn btn-primary mr-2" onclick="toggleAdditionalFields()">Send request</button>
                                         }
                                         <form method="post" action="/Chat/Index" style="display: inline;">
@@ -123,7 +129,7 @@
                                         }
                                     }
                                 </div>
-                                <form method="post" action="/Home/UpdateProduct">
+                                <form method="post" action="/Home/UpdateProduct" >
                                     <input type="hidden" name="Id" value="@Model.Products.Id" />
                                     <div id="editFields" style="display: none; margin-top:10px">
                                         <div class="col-md-6 mb-3">

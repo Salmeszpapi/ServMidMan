@@ -28,7 +28,7 @@ namespace ServMidMan.Models
     }
     public class ProductWithImagesPathAndUserInfo
     {
-        public List<ProductWithByteImages> productWithByteImages { get; set; } = new List<ProductWithByteImages> { new ProductWithByteImages() };
+        public List<ProductWithByteImages> productWithByteImages { get; set; } /*= new List<ProductWithByteImages> { new ProductWithByteImages() };*/
         public User UserInfo { get; set; }
     }
     public class SearchProducts 

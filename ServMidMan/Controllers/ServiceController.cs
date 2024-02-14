@@ -26,11 +26,11 @@ namespace ServMidMan.Controllers
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             var myProducts = _dataProvider.Products.Where(x => x.UserId == Convert.ToInt32(HttpContext.Session.GetString("UserId")))
-                .Select(x=>x.Id)
+                .Select(x => x.Id)
                 .ToList();
             List<Service> serviceList = new List<Service>();
             ServicesOrdered servicesOrdered = new ServicesOrdered();
-            if (ViewData["typeOfUser"] == "Client")
+            if (ViewData["typeOfUser"].Equals("Client"))
             {
                 foreach (var product in myProducts) {
                     serviceList = _dataProvider.Services.Where(service => service.ProductId == product)
@@ -53,10 +53,10 @@ namespace ServMidMan.Controllers
             }
             else
             {
-                ServiceWithProduct serviceWithProduct = new ServiceWithProduct();
                    var myServices =  _dataProvider.Services.Where(x => x.UserId == Convert.ToInt32(HttpContext.Session.GetString("UserId"))).ToList();
                 foreach(var service in myServices)
                 {
+                    ServiceWithProduct serviceWithProduct = new ServiceWithProduct();
                     serviceWithProduct.service = service;
                     serviceWithProduct.product.Products = _dataProvider.Products.Where(x=>x.Id == service.ProductId).FirstOrDefault();
                     serviceWithProduct.product.ImagePaths = ImageOperator.getImageFullPath(_dataProvider.Images.Where(x => x.ProductReferenceId == serviceWithProduct.product.Products.Id).Select(x => x.FileName).ToList());
@@ -78,7 +78,7 @@ namespace ServMidMan.Controllers
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             Service service = new Service()
             {
-                Approved = false,
+                Approved = ServiceStatus.UnSettled,
                 Price = productId.Price,
                 ProductId = productId.Id,
                 UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId")),
@@ -95,10 +95,10 @@ namespace ServMidMan.Controllers
             // Implement the logic to approve the service with the given serviceId
             var myAprrovedService = _dataProvider.Services.Where(x=>x.Id == serviceId).FirstOrDefault();
             var ProductId = _dataProvider.Products.Where(x=>x.Id == myAprrovedService.ProductId).Select(x=>x.Id).FirstOrDefault();
-            myAprrovedService.Approved = true;
+            myAprrovedService.Approved = ServiceStatus.Approved;
             _dataProvider.Services.Where(_x => _x.ProductId == ProductId).ToList().ForEach(x =>
             {
-                if(!x.Approved)
+                if(x.Approved != ServiceStatus.Approved)
                 {
                     _dataProvider.Services.Remove(x);
                 }

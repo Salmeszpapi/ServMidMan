@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServMidMan.Data;
 
@@ -10,9 +11,11 @@ using ServMidMan.Data;
 namespace ServMidMan.Migrations
 {
     [DbContext(typeof(DataProviderContext))]
-    partial class DataProviderContextModelSnapshot : ModelSnapshot
+    [Migration("20240214164741_addProfileImagePathToUsers")]
+    partial class addProfileImagePathToUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,8 +124,8 @@ namespace ServMidMan.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Approved")
-                        .HasColumnType("int");
+                    b.Property<bool>("Approved")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("ApproximetlyFinishDate")
                         .HasColumnType("datetime(6)");

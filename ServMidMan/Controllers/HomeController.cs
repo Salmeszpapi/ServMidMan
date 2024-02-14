@@ -32,7 +32,9 @@ namespace ServMidMan.Controllers
                 return RedirectToAction("Welcome", "Authentication");
             }
             var products = ProductsFilter(filteredProducts);
-
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
 
             List<Byte[]> bytes = new List<Byte[]>();
             List<ProductWithByteImages> myProductWithByteImages = new List<ProductWithByteImages>();
@@ -101,7 +103,7 @@ namespace ServMidMan.Controllers
             var userId = HttpContext.Session.GetString("UserId");
             product.UserId = Convert.ToInt32(userId);
             _dataProvider.Products.Add(product);
-            List<Image> myImagesToPush = new List<Image>();
+            List<string> myImagesToPush = new List<string>();
             foreach (IFormFile file in files) 
             {
                 Guid guid = Guid.NewGuid();
@@ -110,7 +112,7 @@ namespace ServMidMan.Controllers
                     FileName = guid + file.FileName,
                     ProductReferenceId = lastId
                 };
-                myImagesToPush.Add(myImage);
+                myImagesToPush.Add(myImage.FileName);
                 _dataProvider.Images.Add(myImage);
             }
             _dataProvider.SaveChanges();
@@ -134,7 +136,7 @@ namespace ServMidMan.Controllers
                 dbProduct.UserId = product.UserId; // Make sure to update the UserId if needed
             }
 
-            List<Image> myImagesToPush = new List<Image>();
+            List<string> myImagesToPush = new List<string>();
             foreach (IFormFile file in files)
             {
                 Guid guid = Guid.NewGuid();
@@ -143,7 +145,7 @@ namespace ServMidMan.Controllers
                     FileName = guid + file.FileName,
                     ProductReferenceId = dbProduct.Id
                 };
-                myImagesToPush.Add(myImage);
+                myImagesToPush.Add(myImage.FileName);
                 _dataProvider.Images.Add(myImage);
             }
             _dataProvider.SaveChanges();
@@ -185,6 +187,7 @@ namespace ServMidMan.Controllers
             var myProducts = _dataProvider.Products.Where(x=>x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
             productWithImagesPathAndUserInfo.UserInfo = _dataProvider.Users.Where(x=>x.Id == userId).FirstOrDefault();
+            productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath = ImageOperator.getImageFullPath(new List<string>() { productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath }).FirstOrDefault();
             foreach (var product in myProducts)
             {
                 var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
@@ -254,6 +257,8 @@ namespace ServMidMan.Controllers
             var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
             productWithImagesPathAndUserInfo.UserInfo = myUser;
+            productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath = ImageOperator.getImageFullPath(new List<string>() { productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath }).FirstOrDefault();
+
             foreach (var product in myProducts)
             {
                 var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
@@ -267,6 +272,45 @@ namespace ServMidMan.Controllers
             //checking 
             return View("Profile", productWithImagesPathAndUserInfo);
         }
+
+        [HttpPost]
+        public IActionResult ProfilePictureUpdateUpdate([FromForm(Name = "fileInput")] List<IFormFile> files)
+        {
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
+            int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            User myUser = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
+            //myUser.Rating = myUser.Rating + rating;
+
+            List<string> myImagesToPush = new List<string>();
+
+            Guid guid = Guid.NewGuid();
+            myImagesToPush.Add(guid + files[0].FileName);
+            ImageOperator.ImageUploaderToServer(files, myImagesToPush);
+            myUser.ProfileImagePath = ImageOperator.getImageFullPath(myImagesToPush).FirstOrDefault();
+            _dataProvider.SaveChanges();
+            var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
+            ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
+            productWithImagesPathAndUserInfo.UserInfo = myUser;
+            foreach (var product in myProducts)
+            {
+                var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
+                productWithImagesPathAndUserInfo.productWithByteImages.Add(new ProductWithByteImages
+                {
+                    Products = product,
+                    //ImageResources =  ImageOperator.DownloadImages(myImages),
+                    ImagePaths = ImageOperator.getImageFullPath(myImages),
+                });
+            }
+            //checking 
+            return View("Profile", productWithImagesPathAndUserInfo);
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
