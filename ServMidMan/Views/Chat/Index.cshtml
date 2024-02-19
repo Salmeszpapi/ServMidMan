@@ -87,9 +87,9 @@
                         </div>
 
                         <div class="chat-history">
+                            <ul class="m-b-0">
                             @if (!(bool)ViewData["NoExistingMessages"])
                             {
-                            <ul class="m-b-0">
                                 @foreach (var messages in Model.Messages)
                                 {
                                     if (messages.SenderId == (int)ViewData["MyId"])
@@ -113,8 +113,8 @@
                                         </li>
                                     }
                                 }
-                            </ul>
                             }
+                                </ul>
                         </div>
                         <div class="chat-message clearfix">
                             <div class="input-group mb-0">

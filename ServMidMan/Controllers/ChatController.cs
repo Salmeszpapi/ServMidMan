@@ -16,7 +16,7 @@ namespace ServMidMan.Controllers
             _logger = logger;
             _dataProvider = dataProviderContext;
         }
-        public IActionResult Index(int id)
+        public IActionResult Index(int? id)
 		{
             if (!SiteGuardian.CheckSession(HttpContext))
             {
@@ -28,18 +28,39 @@ namespace ServMidMan.Controllers
             ViewData["MyId"] = userId;
             ViewData["NoExistingMessages"] = true;
             ChatWithPerson chatWithPerson = new ChatWithPerson();
-            chatWithPerson.AllUsers = _dataProvider.Users.ToList();
 
-            chatWithPerson.Messages = _dataProvider.ChatHistory
-                                        .Where(c => c.SenderId == userId || c.ReceiverID == userId)
-                                        .ToList();
-            if(chatWithPerson.Messages.Count == 0)
+            var usersWithMessages = _dataProvider.Users
+    .Where(user => _dataProvider.ChatHistory.Any(chat =>
+        (chat.SenderId == user.Id && chat.ReceiverID == userId) ||
+        (chat.SenderId == userId && chat.ReceiverID == user.Id)))
+    .ToList();
+            chatWithPerson.AllUsers = usersWithMessages;
+            if(id != null)
+            {
+                chatWithPerson.AllUsers.Insert(0, _dataProvider.Users.Where(x => x.Id == id).FirstOrDefault());
+                chatWithPerson.Messages = _dataProvider.ChatHistory
+                                                        .Where(c => c.SenderId == userId && c.ReceiverID == id)
+                                                        .ToList();
+                chatWithPerson.Partner = _dataProvider.Users.Where(x=>x.Id == id).FirstOrDefault();
+            }
+            else
+            {
+                chatWithPerson.Messages = _dataProvider.ChatHistory
+                            .Where(c => c.SenderId == userId || c.ReceiverID == userId)
+                            .ToList();
+            }
+
+            if (chatWithPerson.Messages.Count == 0)
             {
                 return View(chatWithPerson);
             }
             ViewData["NoExistingMessages"] = false;
 
-            var partnerId = chatWithPerson.Messages[0].ReceiverID == userId ? chatWithPerson.Messages[0].SenderId : chatWithPerson.Messages[0].ReceiverID;
+            if(id == null)
+            {
+                id = chatWithPerson.AllUsers[0].Id;
+            }
+
             var partner = _dataProvider.Users.Where(c => c.Id == id).FirstOrDefault();
             chatWithPerson.Partner = partner;
            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
@@ -81,7 +102,6 @@ namespace ServMidMan.Controllers
             {
                 return BadRequest("Partner not found.");
             }
-
             var conversation = _dataProvider.ChatHistory
                 .Where(c => (c.SenderId == userId && c.ReceiverID == partner.Id) ||
                             (c.SenderId == partner.Id && c.ReceiverID == userId))
@@ -93,7 +113,10 @@ namespace ServMidMan.Controllers
                     sender = c.SenderId
                 })
                 .ToList();
-
+            if(conversation != null)
+            {
+                ViewData["NoExistingMessages"] = false;
+            }
             return Json(conversation);
         }
 

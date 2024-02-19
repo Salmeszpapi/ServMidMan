@@ -74,9 +74,20 @@
                                     <!-- Placeholder for product images -->
                                         @if (Model.ImagePaths.Count > 0)
                                         {
-                                            <img src="@Model.ImagePaths[0]" alt="Product Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal">
-
-                                        }else
+                                            <div class="product-images">
+                                                <img src="@Model.ImagePaths[0]" alt="Product Image" onclick="showImage(this)" style="border: 2px solid black; margin: 5px;" data-toggle="modal" data-target="#imageModal">
+                                            </div>
+                                            @if (Model.ImagePaths.Count > 1)
+                                            {
+                                                <div class="additional-images" >
+                                                    @for (int i = 1; i < Model.ImagePaths.Count; i++)
+                                                    {
+                                                        <img src="@Model.ImagePaths[i]" width="100"  alt="Additional Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal" style="border: 2px solid black; margin: 5px;">
+                                                    }
+                                                </div>
+                                            }
+                                        }
+                                        else
                                         {
                                             <img src="https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg" alt="Product Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal">
                                         }

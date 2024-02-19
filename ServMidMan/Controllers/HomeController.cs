@@ -344,7 +344,7 @@ namespace ServMidMan.Controllers
 
         private List<Product> ProductsFilter(SearchProducts searchProducts)
         {
-            List<Product> products = null;
+            List<Product> products = _dataProvider.Products.ToList();
             if (searchProducts.Name != null)
             {
                 products = _dataProvider.Products.Where(x => x.Name == searchProducts.Name).ToList();
@@ -357,7 +357,7 @@ namespace ServMidMan.Controllers
                 }
                 else
                 {
-                    products.Where(x => x.Category == searchProducts.Category).ToList();
+                    products = products.Where(x => x.Category == searchProducts.Category).ToList();
                 }
                 
             }
@@ -369,7 +369,7 @@ namespace ServMidMan.Controllers
                 }
                 else
                 {
-                    products.Where(x => x.Location == searchProducts.Location).ToList();
+                    products = products.Where(x => x.Location == searchProducts.Location).ToList();
                 }
                 
             }
@@ -385,7 +385,7 @@ namespace ServMidMan.Controllers
                 }
                 else
                 {
-                    products.Where(x => x.Price >= searchProducts.MinPrice).ToList();
+                    products = products.Where(x => x.Price >= searchProducts.MinPrice).ToList();
                 }
             }
             if (searchProducts.Price != null)
@@ -396,7 +396,7 @@ namespace ServMidMan.Controllers
                 }
                 else
                 {
-                    products.Where(x => x.Price <= searchProducts.Price).ToList();
+                    products = products.Where(x => x.Price <= searchProducts.Price).ToList();
                 }
             }
 
