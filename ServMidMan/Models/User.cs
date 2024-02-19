@@ -17,7 +17,7 @@ namespace ServMidMan.Models
         public double Rating { get; set; }
         public int Voters { get; set; }
         public DateTime LastLogin { get; set; }
-        public string ProfileImagePath { get; set; } = "avatar1";
+        public string ProfileImagePath { get; set; } = "https://servmidman.salmadevelop.eu/avatar1.png";
     }
     public enum UserType
     {

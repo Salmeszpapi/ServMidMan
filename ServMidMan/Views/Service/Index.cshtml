@@ -9,6 +9,7 @@
         .service-list {
             list-style-type: none;
             padding: 0;
+            background-color: white;
         }
 
         .service-item {
@@ -65,7 +66,7 @@
                     {
                         <div id="receivedServices">
                             <!-- Add this div -->
-                            @if (ViewData["typeOfUser"] == "Client")
+                            @if (ViewData["typeOfUser"].Equals("Client"))
                             {
                                 <h2>Received requests</h2>
                             }
@@ -75,14 +76,16 @@
                             }
                             @foreach (var group in Model.Services)
                             {
-                                <h3>Product ID: @group.service.Id</h3>
+                                <h3>Service ID: @group.service.Id</h3>
                                 <ul class="service-list">
                                     <li class="service-item">
                                         <div class="row">
                                             <div class="col-md-6">
+                                                <div>Product name: @group.product.Products.Name</div>
+                                                <div>User ID: @group.product.Products.UserId </div>
                                                 <div>Service ID: @group.service.Id</div>
                                                 <div>Product ID: @group.service.ProductId</div>
-                                                <div>Price: @group.service.Price€</div>
+                                                <div>Recived service price: @group.service.Price€</div>
                                                 <div>Description: @group.service.Description</div>
                                                 <div>Date when finished: @group.service.ApproximetlyFinishDate</div>
                                                 @if (group.service.Approved == ServiceStatus.Approved)
