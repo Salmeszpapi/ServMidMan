@@ -13,5 +13,9 @@ namespace ServMidMan.Hubs
         {
             await Clients.All.SendAsync("ChangeColor", "red"); // Or any other color you want to broadcast
         }
+        public async Task NewChatIncomed(string userId)
+        {
+            await Clients.All.SendAsync("ChangeColor"); // Or any other color you want to broadcast
+        }
     }
 }

@@ -19,6 +19,19 @@ connection.on("ChangeColor", function (color) {
     popupMessage.style.backgroundColor = "green";
     var myPopupContainer = document.getElementById("popup-container");
     myPopupContainer.style.display = "Block";
+    myPopupContainer.innerText = "New product has been added";
+    setTimeout(function () {
+        popupMessage.style.backgroundColor = "white"; // Reset color after 5 seconds
+        myPopupContainer.style.display = "None";
+    }, 5000);
+});
+
+connection.on("ReceivedMessage", function() {
+    var popupMessage = document.getElementById("popup-message");
+    popupMessage.style.backgroundColor = "green";
+    var myPopupContainer = document.getElementById("popup-container");
+    myPopupContainer.style.display = "Block";
+    myPopupContainer.innerText = "New message has been added";
     setTimeout(function () {
         popupMessage.style.backgroundColor = "white"; // Reset color after 5 seconds
         myPopupContainer.style.display = "None";
@@ -51,13 +64,22 @@ document.getElementById("ProductUploadedButton").addEventListener("click", funct
     var form = document.getElementById("ProductUploadedButtonForm");
 
     form.submit();
-    var user = "12";
-    var message = "1";
 
     var myPopupContainer = document.getElementById("popup-container");
     myPopupContainer.style.display = "Block";
     var myPopup = document.getElementById("popup-message");
     connection.invoke("NewProductUpdated", user, message).catch(function (err) {
+        return console.error(err.toString());
+    });
+    event.preventDefault();
+});
+
+document.getElementById("sendMessageBtn").addEventListener("click", function (event) {
+    var user = document.getElementById("ChatWithCurrentUser").innerText;
+    var myPopupContainer = document.getElementById("popup-container");
+    myPopupContainer.style.display = "Block";
+    var myPopup = document.getElementById("popup-message");
+    connection.invoke("NewChatIncomed", user).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();

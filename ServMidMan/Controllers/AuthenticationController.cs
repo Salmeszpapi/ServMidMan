@@ -5,7 +5,7 @@ using ServMidMan.Data;
 using ServMidMan.Helper;
 using ServMidMan.Models;
 using ServMidMan.Services;
-using System.Text.RegularExpressions;
+using CaptchaMvc.HtmlHelpers;
 
 namespace ServMidMan.Controllers
 {
@@ -46,6 +46,11 @@ namespace ServMidMan.Controllers
         public IActionResult Register(UserWithRegister user)
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult Captcha(string check)
+        {
+            return View(check);
         }
         [HttpPost]
         public IActionResult RegisterHandling(UserWithRegister user, string verificationCode)

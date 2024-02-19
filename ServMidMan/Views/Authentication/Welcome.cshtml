@@ -1,4 +1,7 @@
-﻿<script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+﻿@using CaptchaMvc;
+@using CaptchaMvc.HtmlHelpers;
+
+<script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 <div class="container d-flex justify-content-center align-items-center">
     <div class="card">
         <div class="p-3 border-bottom d-flex align-items-center justify-content-center">
@@ -13,7 +16,7 @@
             }
         </div>
         <div class="p-3 px-4 py-4 border-bottom">
-            <form method="post" action="/Authentication/Login">
+            <form id="myForm" method="post" action="/Authentication/Captcha">
                 <input type="text" class="form-control mb-2" name="Email" placeholder="Email/Username" required />
                 <div class="form">
                     <input type="password" class="form-control" name="Password" placeholder="Password" required />
@@ -21,6 +24,10 @@
                 </div>
                 <div class="g-recaptcha" data-sitekey="6LcNA3gpAAAAAHXXiTCrEIQPbF1DkN9Mlu5EKovx" data-action="/Authentication/Login"></div>
                 <button type="submit" class="btn btn-danger btn-block continue" style="margin-top:10px">Login</button>
+            </form>
+            <form method="post" action="/Authentication/Captcha">
+                <input type="checkbox" name="check" />
+                <button type="submit">Valami</button>
             </form>
 
         </div>
@@ -30,3 +37,12 @@
         </div>
     </div>
 </div>
+<script>
+    // document.getElementById("myForm").onsubmit = function (event) {
+    //     var recaptchaDiv = document.querySelector('.recaptcha-checkbox-border[role="presentation"]');
+    //     if (recaptchaDiv && recaptchaDiv.style.display !== 'none') {
+    //         alert("Please complete the reCAPTCHA!");
+    //         event.preventDefault(); // Prevent form submission
+    //     }
+    // };
+</script>
