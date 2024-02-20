@@ -63,15 +63,15 @@
     @if (ViewBag.Error == null)
     {
         <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body" >
-                        <div class="row">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
 
-                            <div class="col-md-6">
-                                <div class="product-images">
-                                    <!-- Placeholder for product images -->
+                                <div class="col-md-6">
+                                    <div class="product-images">
+                                        <!-- Placeholder for product images -->
                                         @if (Model.ImagePaths.Count > 0)
                                         {
                                             <div class="product-images">
@@ -79,10 +79,10 @@
                                             </div>
                                             @if (Model.ImagePaths.Count > 1)
                                             {
-                                                <div class="additional-images" >
+                                                <div class="additional-images">
                                                     @for (int i = 1; i < Model.ImagePaths.Count; i++)
                                                     {
-                                                        <img src="@Model.ImagePaths[i]" width="100"  alt="Additional Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal" style="border: 2px solid black; margin: 5px;">
+                                                        <img src="@Model.ImagePaths[i]" width="100" alt="Additional Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal" style="border: 2px solid black; margin: 5px;">
                                                     }
                                                 </div>
                                             }
@@ -92,129 +92,140 @@
                                             <img src="https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg" alt="Product Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal">
                                         }
                                     </div>
-                                    
-                                <div class="image-indicators">
-                                    @for (int i = 0; i < 5; i++)
-                                    {
-                                        <span class="image-indicator" onclick="showImageAtIndex(@i)"></span>
-                                    }
-                                </div>
-                            </div>
-                            <div class="col-md-6" >
-                                
-                                <h2 class="card-title">@Model.Products.Name</h2>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <p><strong>Description:</strong> @Model.Products.Description</p>
-                                        <p><strong>Category:</strong> @Model.Products.Category</p>
-                                        <p><strong>Price:</strong> @Model.Products.Price€</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p><strong>Location:</strong> @Model.Products.Location</p>
-                                        <p><strong>Created Date:</strong> @Model.Products.CreatedDate</p>
+
+                                    <div class="image-indicators">
+                                        @for (int i = 0; i < 5; i++)
+                                        {
+                                            <span class="image-indicator" onclick="showImageAtIndex(@i)"></span>
+                                        }
                                     </div>
                                 </div>
-                                <div class="text-center mt-4">
+                                <div class="col-md-6">
+
+                                    <h2 class="card-title">@Model.Products.Name</h2>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Description:</strong> @Model.Products.Description</p>
+                                            <p><strong>Category:</strong> @Model.Products.Category</p>
+                                            <p><strong>Price:</strong> @Model.Products.Price€</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Location:</strong> @Model.Products.Location</p>
+                                            <p><strong>Created Date:</strong> @Model.Products.CreatedDate</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-4">
                                         @{
                                             var myUserType = ViewData["typeOfUser"];
                                         }
                                         @if (myUserType.Equals("Servicer"))
                                         {
                                             var a = 5;
-                                            
+
                                             <button class="btn btn-primary mr-2" onclick="toggleAdditionalFields()">Send request</button>
                                         }
                                         <form method="post" action="/Chat/Index" style="display: inline;">
                                             <input type="hidden" name="Id" value="@Model.Products.UserId" />
                                             <button type="submit" class="btn btn-success mr-2">Contact</button>
                                         </form>
-                                    @{
-                                        var clientId = Convert.ToInt32(ViewData["ClientId"]);
-                                        if (clientId == @Model.Products.UserId)
-                                        {
-                                            <button class="btn btn-dark mr-2" onclick="toggleEditMode()">Edit</button>
-                                            <form method="post" action="/Home/DeleteProduct" style="display: inline;">
-                                                <input type="hidden" name="Id" value="@Model.Products.Id" />
-                                                <button onclick="return confirmDelete()" class="btn btn-danger">Delete</button>
-                                            </form>
+                                        @{
+                                            var clientId = Convert.ToInt32(ViewData["ClientId"]);
+                                            if (clientId == @Model.Products.UserId)
+                                            {
+                                                <button class="btn btn-dark mr-2" onclick="toggleEditMode()">Edit</button>
+                                                <form method="post" action="/Home/DeleteProduct" style="display: inline;">
+                                                    <input type="hidden" name="Id" value="@Model.Products.Id" />
+                                                    <button onclick="return confirmDelete()" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form method="post" action="/Home/Profile" style="display: inline;">
+                                                    <input type="hidden" name="userId" value="@Model.Products.UserId" />
+                                                    <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
+                                                </form>
+                                            }
                                         }
-                                    }
-                                </div>
-                                <form method="post" action="/Home/UpdateProduct" >
-                                    <input type="hidden" name="Id" value="@Model.Products.Id" />
-                                    <div id="editFields" style="display: none; margin-top:10px">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="editName">Name</label>
-                                            <input type="text" class="form-control" name="Name" id="Name" value="@Model.Products.Name">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="editDescription">Description</label>
-                                            <textarea class="form-control" id="Description" name="Description" rows="4">@Model.Products.Description</textarea>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label for="validationDefault01">Category</label>
-                                            <select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
-                                                <option selected>@Model.Products.Category</option>
-                                                <option value="Electronincs">Electronincs</option>
-                                                <option value="Mobile">Mobile</option>
-                                                <option value="PC">PC</option>
-                                                <option value="Notebook">Notebook</option>
-                                                <option value="Camera">Camera</option>
-                                                <option value="Car">Car</option>
-                                                <option value="Vehicle">Vehicle</option>
-                                                <option value="Motorcycle">Motorcycle</option>
-                                                <option value="Bicycle">Bicycle</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="editPrice">Price</label>
-                                            <input type="text" class="form-control" id="Price" name="Price" oninput="validateNumber(this)" value="@Model.Products.Price">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="editLocation">Location</label>
-                                            <input type="text" class="form-control" id="Location" name="Location" value="@Model.Products.Location">
-                                        </div>
-                                        <div class="text-center">
-                                            <button class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
-                                            <button class="btn btn-secondary" onclick="toggleEditMode()">Cancel</button>
-                                        </div>
                                     </div>
-                                </form>
-                                <form method="post" action="/Service/SendRequest">
-                                    <input type="hidden" name="Id" value="@Model.Products.Id" />
-                                    <div id="additionalFields" style="display: none; margin-top:10px">
-                                        <!-- Additional fields to be displayed when the "Send request" button is clicked -->
-                                        <div class="col-md-6 mb-3">
-                                            <label for="validationDefault01">Description</label>
-                                            <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4"></textarea>
-                                        </div>
-                                        <div class="input-group col-md-6 mb-3">
-                                            <input type="text" name="Price" oninput="validateNumber(this)" class="form-control" id="validationDefault03" placeholder="Price" required>
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">€</span>
+                                    <form method="post" action="/Home/UpdateProduct">
+                                        <input type="hidden" name="Id" value="@Model.Products.Id" />
+                                        <div id="editFields" style="display: none; margin-top:10px">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="editName">Name</label>
+                                                <input type="text" class="form-control" name="Name" id="Name" value="@Model.Products.Name">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="editDescription">Description</label>
+                                                <textarea class="form-control" id="Description" name="Description" rows="4">@Model.Products.Description</textarea>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="validationDefault01">Category</label>
+                                                <select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
+                                                    <option selected>@Model.Products.Category</option>
+                                                    <option value="Electronincs">Electronincs</option>
+                                                    <option value="Mobile">Mobile</option>
+                                                    <option value="PC">PC</option>
+                                                    <option value="Notebook">Notebook</option>
+                                                    <option value="Camera">Camera</option>
+                                                    <option value="Car">Car</option>
+                                                    <option value="Vehicle">Vehicle</option>
+                                                    <option value="Motorcycle">Motorcycle</option>
+                                                    <option value="Bicycle">Bicycle</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="editPrice">Price</label>
+                                                <input type="text" class="form-control" id="Price" name="Price" oninput="validateNumber(this)" value="@Model.Products.Price">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="editLocation">Location</label>
+                                                <input type="text" class="form-control" id="Location" name="Location" value="@Model.Products.Location">
+                                            </div>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
+                                                <button class="btn btn-secondary" onclick="toggleEditMode()">Cancel</button>
                                             </div>
                                         </div>
-                                        <!-- Save button -->
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Save</button>
-                                            <button class="btn btn-secondary" onclick="toggleAdditionalFields()">Cancel</button>
+                                    </form>
+                                    <form method="post" action="/Service/SendRequest">
+                                        <input type="hidden" name="Id" value="@Model.Products.Id" />
+                                        <div id="additionalFields" style="display: none; margin-top:10px">
+                                            <!-- Additional fields to be displayed when the "Send request" button is clicked -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationDefault01">Description</label>
+                                                <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4"></textarea>
+                                                <label >Choose date :</label>
+                                                <input style="margin-top:10px" name="dateTimeToFinish" type="date"  />
+                                            </div>
+                                            <div class="input-group col-md-6 mb-3">
+                                                <input type="text" name="Price" oninput="validateNumber(this)" class="form-control" id="validationDefault03" placeholder="Price" required>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">€</span>
+                                                </div>
+                                                
+                                            </div>
+                                            
+                                            <!-- Save button -->
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                <button class="btn btn-secondary" onclick="toggleAdditionalFields()">Cancel</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
     }
     else
     {
         <div class="alert alert-danger" role="alert">
             <strong>Error:</strong> @ViewBag.Error
-        </div>  
+        </div>
     }
 
     <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">

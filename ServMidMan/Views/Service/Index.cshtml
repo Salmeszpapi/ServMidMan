@@ -37,12 +37,12 @@
         }
 
             .reject-button:hover {
-            background-color: darkred;
-        }
-
-            .approve-button:hover {
-                background-color: #45a049;
+                background-color: darkred;
             }
+
+        .approve-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -87,7 +87,7 @@
                                                 <div>Product ID: @group.service.ProductId</div>
                                                 <div>Recived service price: @group.service.Price€</div>
                                                 <div>Description: @group.service.Description</div>
-                                                <div>Date when finished: @group.service.ApproximetlyFinishDate</div>
+                                                <div>Date when finished: @group.service.ApproximetlyFinishDate.ToString("dd.mm.yyyy")</div>
                                                 @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
                                                     <h1 class="display-4 text-success">Approved !</h1>
@@ -101,7 +101,8 @@
                                                             <button class="approve-button" onclick="approveService(@group.service.Id)">Approve</button>
                                                             <button class="reject-button" onclick="rejectService(@group.service.Id)">Reject</button>
                                                         </div>
-                                                    }else
+                                                    }
+                                                    else
                                                     {
                                                         <div class="text-center">
                                                             <button class="reject-button" onclick="rejectService(@group.service.Id)">Remove request</button>
@@ -109,13 +110,37 @@
                                                     }
 
                                                 }
+
                                             </div>
                                             <div class="col-md-6">
                                                 <img class="product-images" src="@group.product.ImagePaths[0]" alt="Product Image" data-toggle="modal" data-target="#imageModal">
+                                                @*                                                 @using (Html.BeginForm("UpdateProductStatus", "Service", FormMethod.Post))
+                                    {
+                                    @Html.DropDownListFor(x => x.Services[0].service.productStatus,
+                                    new SelectList(Enum.GetValues(typeof(ProductStatus))),
+                                    new { @class = "form-control", onchange = "this.form.submit();" })
+                                    } *@
+                                                @if (group.service.Approved == ServiceStatus.Approved)
+                                                {
+                                                    <form id="productStatusForm" action="/Service/UpdateProductStatus" method="post">
+                                                        <input type="hidden" name="serviceId" value="@group.service.Id" />
+                                                        <select class="form-control" id="productStatus" name="productStatus" onchange="submitForm()">
+                                                            <option value="@group.service.productStatus" hidden selected>@group.service.productStatus</option>
+                                                            <option value="UnSettled">UnSettled</option>
+                                                            <option value="Sended">Sended</option>
+                                                            <option value="ArrivedToService">ArrivedToService</option>
+                                                            <option value="Repaired">Repaired</option>
+                                                            <option value="ReceivedToClient">ReceivedToClient</option>
+                                                        </select>
+                                                    </form>
+                                                }
+  
+
                                             </div>
                                         </div>
                                     </li>
                                 </ul>
+
                             }
                         </div>
                     }
@@ -135,6 +160,10 @@
         function showReceivedServices() {
             document.getElementById('receivedServices').style.display = 'block';
             document.getElementById('senderServices').style.display = 'none';
+        }
+
+        function submitForm() {
+            document.getElementById("productStatusForm").submit();
         }
 
         function showSenderServices() {
@@ -179,8 +208,7 @@
         }
     </script>
     <style>
-        .product-images{
-
+        .product-images {
             max-width: 300px;
             max-height: 400px; /* Set maximum height to 400 pixels */
             margin-bottom: 20px;

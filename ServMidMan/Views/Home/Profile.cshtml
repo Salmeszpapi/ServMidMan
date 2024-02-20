@@ -1,5 +1,11 @@
 ﻿@model ProductWithImagesPathAndUserInfo
-
+@{
+    bool visitor = false;
+    if (ViewData["Visitor"] != null)
+    {
+        visitor = (bool)ViewData["Visitor"];
+    }
+}
 
 <div class="container-xl px-4 mt-4">
     <input type="hidden" id="sendButton" value="Send Message" />
@@ -18,52 +24,61 @@
                         <img class="img-account-profile rounded-circle mb-2" src="@Model.UserInfo.ProfileImagePath" alt="">
                         <!-- Profile picture help block-->
                         <!-- Profile picture upload button-->
-                        <div class="form-group">
 
-                            <label for="fileInput">Select Image(s):</label>
-                            <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
+                        @if (!visitor)
+                        {
+                            <div class="form-group">
 
-                            <div class="image-preview-container" id="imagePreviewContainer">
-                                <!-- Image previews will be dynamically added here -->
+                                <label for="fileInput">Select Image(s):</label>
+                                <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
+
+                                <div class="image-preview-container" id="imagePreviewContainer">
+                                    <!-- Image previews will be dynamically added here -->
+                                </div>
                             </div>
-                        </div>
-                        <button class="btn btn-primary" type="submit">Upload new image</button>
+                            <button class="btn btn-primary" type="submit">Upload new image</button>
+                        }
+
                     </form>
                     <!-- Profile picture image-->
 
                 </div>
             </div>
         </div>
-        <div class="col-xl-4">
-            <!-- Account details card-->
-            <div class="card mb-4">
-                <div class="card-header">Account Details</div>
-                <div class="card-body">
-                    <form method="post" action="/Home/ProfileUpdate">
-                        <!-- Form Group (username)-->
-                        <div class="mb-3">
-                            <label class="small mb-1" for="inputUsername">Username </label>
-                            <input class="form-control" id="inputUsername" name="Name" type="text" placeholder="Enter your username" value="@Model.UserInfo.Name">
-                        </div>
-                        <!-- Form Row-->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (first name)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputFirstName">Password</label>
-                                <input class="form-control" name="Password" id="inputFirstName" type="text" placeholder="New password" value="">
+            <div class="col-xl-4">
+        @if (!visitor)
+        {
+                <!-- Account details card-->
+                <div class="card mb-4">
+                    <div class="card-header">Account Details</div>
+                    <div class="card-body">
+                        <form method="post" action="/Home/ProfileUpdate">
+                            <!-- Form Group (username)-->
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputUsername">Username </label>
+                                <input class="form-control" id="inputUsername" name="Name" type="text" placeholder="Enter your username" value="@Model.UserInfo.Name">
                             </div>
-                            <!-- Form Group (last name)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputLastName">Password again</label>
-                                <input class="form-control" name="Password2" id="inputLastName" type="text" placeholder="Repeat new password" value="">
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputFirstName">Password</label>
+                                    <input class="form-control" name="Password" id="inputFirstName" type="text" placeholder="New password" value="">
+                                </div>
+                                <!-- Form Group (last name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputLastName">Password again</label>
+                                    <input class="form-control" name="Password2" id="inputLastName" type="text" placeholder="Repeat new password" value="">
+                                </div>
                             </div>
-                        </div>
-                        
-                        <button class="btn btn-primary" type="submit">Save changes</button>
-                    </form>
+
+                            <button class="btn btn-primary" type="submit">Save changes</button>
+                        </form>
+                    </div>
                 </div>
+        }
             </div>
-        </div>
+
         <div class="col-xl-4">
             <!-- Account details card-->
             <div class="card mb-4">
@@ -71,6 +86,10 @@
                 <div class="card-body">
                     <form method="post" action="/Home/ProfileRatingUpdate">
                         <!-- Form Group (username)-->
+                        @if (visitor)
+                        {
+                            <input type="hidden" name="userIdDirected" value="@ViewData["VisitorId"]" />
+                        }
                         <div class="ratings">
                             <h3>Average rating: </h3>
                             <div class="rating-stars">

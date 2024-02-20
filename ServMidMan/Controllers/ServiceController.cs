@@ -72,7 +72,7 @@ namespace ServMidMan.Controllers
             return View(servicesOrdered);
         }
 
-        public IActionResult SendRequest(Product productId)
+        public IActionResult SendRequest(Product productId, DateTime dateTimeToFinish)
         {
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
@@ -83,6 +83,7 @@ namespace ServMidMan.Controllers
                 ProductId = productId.Id,
                 UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId")),
                 Description = productId.Description,
+                ApproximetlyFinishDate = dateTimeToFinish,
             };
 
             _dataProvider.Services.Add(service);
@@ -129,6 +130,13 @@ namespace ServMidMan.Controllers
             var myservice = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();
 
             _dataProvider.Services.Remove(myservice);
+            _dataProvider.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        public IActionResult UpdateProductStatus(ProductStatus productStatus,int serviceId) 
+        {
+            Service myService = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();
+            myService.productStatus = productStatus;
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");
         }

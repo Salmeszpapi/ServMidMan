@@ -12,6 +12,7 @@ namespace ServMidMan.Models
         public double Price { get; set; }
         public ServiceStatus Approved { get; set; }
         public string Description { get; set; }
+        public ProductStatus productStatus { get; set; } 
 
     }
     public class ServicesOrdered()
@@ -28,5 +29,13 @@ namespace ServMidMan.Models
         UnSettled,
         Approved,
         Rejected,
+    }
+    public enum ProductStatus
+    {
+        UnSettled,
+        Sended,
+        ArrivedToService,
+        Repaired,
+        ReceivedToClient
     }
 }

@@ -173,17 +173,26 @@ namespace ServMidMan.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Profile()
+        public IActionResult Profile(int? userId)
         {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
+            if(userId is null)
+            {
+                userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
 
+            }
+            else
+            {
+                ViewData["Visitor"] = true;
+                ViewData["VisitorId"] = userId;
+
+            }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
-            int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             var myProducts = _dataProvider.Products.Where(x=>x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
             productWithImagesPathAndUserInfo.UserInfo = _dataProvider.Users.Where(x => x.Id == userId).FirstOrDefault();
@@ -247,7 +256,7 @@ namespace ServMidMan.Controllers
         }
 
         [HttpPost]
-        public IActionResult ProfileRatingUpdate(int rating)
+        public IActionResult ProfileRatingUpdate(int rating,int? userIdDirected)
         {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
@@ -257,6 +266,10 @@ namespace ServMidMan.Controllers
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            if(userIdDirected != null)
+            {
+                userId = (int)userIdDirected;
+            }
             User myUser = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
             myUser.Voters += 1;
             myUser.Rating = myUser.Rating + rating;
@@ -281,6 +294,11 @@ namespace ServMidMan.Controllers
             }
 
             //checking 
+            if(userIdDirected != null)
+            {
+                return RedirectToAction("Profile", "Home", new { userId = userIdDirected });
+
+            }
             return View("Profile", productWithImagesPathAndUserInfo);
         }
 
