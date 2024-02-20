@@ -75,14 +75,14 @@
                                         @if (Model.ImagePaths.Count > 0)
                                         {
                                             <div class="product-images">
-                                                <img src="@Model.ImagePaths[0]" alt="Product Image" onclick="showImage(this)" style="border: 2px solid black; margin: 5px;" data-toggle="modal" data-target="#imageModal">
+                                                <img src="@Model.ImagePaths[0]" alt="Product Image" onclick="showImage(this)" onmouseover="changeCursor()" onmouseout="restoreCursor()" style="border: 2px solid black; margin: 5px;" data-toggle="modal" data-target="#imageModal">
                                             </div>
                                             @if (Model.ImagePaths.Count > 1)
                                             {
                                                 <div class="additional-images" >
                                                     @for (int i = 1; i < Model.ImagePaths.Count; i++)
                                                     {
-                                                        <img src="@Model.ImagePaths[i]" width="100"  alt="Additional Image" onclick="showImage(this)" data-toggle="modal" data-target="#imageModal" style="border: 2px solid black; margin: 5px;">
+                                                        <img src="@Model.ImagePaths[i]" width="100" alt="Additional Image" onclick="showImage(this)" onmouseover="changeCursor()" onmouseout="restoreCursor()" data-toggle="modal" data-target="#imageModal" style="border: 2px solid black; margin: 5px;">
                                                     }
                                                 </div>
                                             }
@@ -287,6 +287,16 @@
                 // If the user cancels, return false to prevent the form submission
                 return false;
             }
+        }
+    </script>
+
+    <script>
+        function changeCursor() {
+            document.body.style.cursor = "pointer";
+        }
+
+        function restoreCursor() {
+            document.body.style.cursor = "auto";
         }
     </script>
 </body>

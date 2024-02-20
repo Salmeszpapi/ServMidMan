@@ -20,14 +20,14 @@
                         <!-- Profile picture upload button-->
                         <div class="form-group">
 
-                            <label for="fileInput">Select Image(s):</label>
+                            <label for="fileInput">Select Image:</label>
                             <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
 
                             <div class="image-preview-container" id="imagePreviewContainer">
                                 <!-- Image previews will be dynamically added here -->
                             </div>
                         </div>
-                        <button class="btn btn-primary" type="submit">Upload new image</button>
+                        <button class="btn btn-primary" type="submit">Upload profile picture</button>
                     </form>
                     <!-- Profile picture image-->
 
@@ -49,13 +49,13 @@
                         <div class="row gx-3 mb-3">
                             <!-- Form Group (first name)-->
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputFirstName">Password</label>
-                                <input class="form-control" name="Password" id="inputFirstName" type="text" placeholder="New password" value="">
+                                <label class="small mb-1" for="inputPassword1">Password</label>
+                                <input class="form-control" name="Password" id="inputPassword1" type="password" placeholder="New password" value="">
                             </div>
                             <!-- Form Group (last name)-->
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputLastName">Password again</label>
-                                <input class="form-control" name="Password2" id="inputLastName" type="text" placeholder="Repeat new password" value="">
+                                <label class="small mb-1" for="inputPassword2">Password again</label>
+                                <input class="form-control" name="Password2" id="inputPassword2" type="password" placeholder="Repeat new password" value="">
                             </div>
                         </div>
                         
@@ -149,7 +149,7 @@
                         </div>
                         @if (productWithByteImages.ImagePaths.Any())
                         {
-                            <img src="@productWithByteImages.ImagePaths.First()" class="card-img-top" onclick="redirectToProduct(@productWithByteImages.Products.Id)" alt="Product Image" style="width: 100%;">
+                                    <img src="@productWithByteImages.ImagePaths.First()" class="card-img-top" onclick="redirectToProduct(@productWithByteImages.Products.Id)" onmouseover="changeCursor()" onmouseout="restoreCursor()" alt="Product Image" style="width: 100%;">
                         }
                         else
                         {
@@ -177,6 +177,17 @@
         window.location.href = '/Home/Product?id=' + productId;
     }
 </script>
+
+    <script>
+        function changeCursor() {
+            document.body.style.cursor = "pointer";
+        }
+
+        function restoreCursor() {
+            document.body.style.cursor = "auto";
+        }
+    </script>
+
 <style>
     body {
         background-color: #f2f6fc;
