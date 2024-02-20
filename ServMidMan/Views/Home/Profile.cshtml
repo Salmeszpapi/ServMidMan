@@ -29,8 +29,8 @@
                         {
                             <div class="form-group">
 
-                                <label for="fileInput">Select Image(s):</label>
-                                <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
+                            <label for="fileInput">Select Image:</label>
+                            <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
 
                                 <div class="image-preview-container" id="imagePreviewContainer">
                                     <!-- Image previews will be dynamically added here -->
@@ -168,7 +168,7 @@
                         </div>
                         @if (productWithByteImages.ImagePaths.Any())
                         {
-                            <img src="@productWithByteImages.ImagePaths.First()" class="card-img-top" onclick="redirectToProduct(@productWithByteImages.Products.Id)" alt="Product Image" style="width: 100%;">
+                                    <img src="@productWithByteImages.ImagePaths.First()" class="card-img-top" onclick="redirectToProduct(@productWithByteImages.Products.Id)" onmouseover="changeCursor()" onmouseout="restoreCursor()" alt="Product Image" style="width: 100%;">
                         }
                         else
                         {
@@ -196,6 +196,17 @@
         window.location.href = '/Home/Product?id=' + productId;
     }
 </script>
+
+    <script>
+        function changeCursor() {
+            document.body.style.cursor = "pointer";
+        }
+
+        function restoreCursor() {
+            document.body.style.cursor = "auto";
+        }
+    </script>
+
 <style>
     body {
         background-color: #f2f6fc;

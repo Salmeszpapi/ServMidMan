@@ -50,14 +50,14 @@
 		<div class="form-row">
 			<div class="col-md-4 mb-3">
 				<label for="validationDefault01">Product name</label>
-					<input type="text" name="Name" class="form-control" id="ProductUploadedButtonForm1" placeholder="Title" required>
+					<input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="Title" required>
 			</div>
 
 		</div>
 		<div class="form-row">
 			<div class="col-md-2 mb-3">
-				<label for="validationDefault01">Category</label>
-					<select class="form-control" id="ProductUploadedButtonForm2" name="Category" onchange="updateHiddenInput()">
+				<label for="validationDefault02">Category</label>
+					<select class="form-control" id="validationDefault02" name="Category" onchange="updateHiddenInput()">
 					<option selected>Category</option>
 					<option value="Electronincs">Electronincs </option>
 					<option value="Mobile">Mobile</option>
@@ -66,7 +66,6 @@
 					<option value="Camera">Camera</option>
 					<option value="Car">Car</option>
 					<option value="Vehchile">Vehchile</option>
-					<option value="Car">Car</option>
 					<option value="Motorcycle">Motorcycle</option>
 					<option value="Bicycle">Bicycle</option>
 				</select>
@@ -75,25 +74,25 @@
 		</div>
 		<div class="form-row">
 			<div class="col-md-6 mb-3">
-				<label for="validationDefault01">Description</label>
-					<textarea name="Description" class="form-control" id="ProductUploadedButtonForm3" placeholder="Description" rows="4" required></textarea>
+				<label for="validationDefault03">Description</label>
+					<textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" required></textarea>
 			</div>
 
 		</div>
 
 		<div class="form-row">
 			<div class="col-md-4 mb-3">
-				<label for="validationDefault03">Price</label>
+				<label for="validationDefault04">Price</label>
 				<div class="input-group">
-						<input type="text" class="form-control" id="ProductUploadedButtonForm4" name="Price" oninput="validateNumber(this)" required>
+						<input type="text" class="form-control" id="validationDefault04" name="Price" oninput="validateNumber(this)" required>
 					<div class="input-group-append">
 						<span class="input-group-text">€</span>
 					</div>
 
 				</div>
-					<label for="validationDefault03" style="margin-top:10px;">ProductUploadedButtonForm5</label>
+					<label for="validationDefault05" style="margin-top:10px;">Location</label>
 				<div class="input-group">
-					<input type="text" name="Location" class="form-control" id="validationDefault03" placeholder="Bratislavsak cesta 1713" required>
+						<input type="text" name="Location" class="form-control" id="validationDefault05" placeholder="" required>
 				</div>
 
 			</div>
@@ -101,7 +100,7 @@
 			<div class="form-group">
 
 				<label for="fileInput">Select Image(s):</label>
-					<input type="file" name="fileInput" id="ProductUploadedButtonForm6" accept="image/*" multiple onchange="previewImages(event)" />
+					<input type="file" name="fileInput" id="fileInput" accept="image/*" multiple onchange="validateFileCount(event)" />
 
 				<div class="image-preview-container" id="imagePreviewContainer">
 					<!-- Image previews will be dynamically added here -->
@@ -123,6 +122,21 @@
 		@* <button class="btn btn-primary" id="ProductUploadedButton">Submit2 form</button> *@
 </div>
     <script>
+
+		function validateFileCount(event) {
+			var input = event.target;
+			var maxFiles = 10;
+
+			if (input.files && input.files.length > maxFiles) {
+				alert("Maximum 10 images allowed.");
+				// Reset the file input
+				input.value = '';
+			} else {
+				// Process the files or update preview as needed
+				previewImages(event);
+			}
+		}
+
         function previewImages(event) {
             var input = event.target;
             var imagesContainer = document.getElementById('imagePreviewContainer');
@@ -150,7 +164,7 @@
 
         function updateHiddenInput() {
             // Get the selected value
-            var selectedValue = document.getElementById("CategoryRadio").value;
+			var selectedValue = document.getElementById("validationDefault02").value;
 
             // Update the value of the hidden input field
             document.getElementById("selectedValue").value = selectedValue;
