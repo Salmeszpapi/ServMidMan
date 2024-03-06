@@ -66,7 +66,11 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Product(string id)
         {
-            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
+			if (!SiteGuardian.CheckSession(HttpContext))
+			{
+				return RedirectToAction("Welcome", "Authentication");
+			}
+			ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
 
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
@@ -357,7 +361,10 @@ namespace ServMidMan.Controllers
                 return RedirectToAction("Welcome", "Authentication");
             }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
-            return View();
+            List<Location> locations = new List<Location>();
+			locations = _dataProvider.Locations.ToList();
+
+			return View(locations);
         }
 
         private List<Product> ProductsFilter(SearchProducts searchProducts)
@@ -422,5 +429,15 @@ namespace ServMidMan.Controllers
 
             return products;
         }
-    }
+		[HttpGet]
+		public IActionResult GetSuggestions(string input)
+		{
+			var suggestions = _dataProvider.Locations
+				.Where(x => x.Cities.Contains(input) || x.PostalCode.Contains(input))
+				.Select(x => x.Cities) // Assuming you want suggestions based on city names
+				.ToList();
+
+			return Json(suggestions);
+		}
+	}
 }

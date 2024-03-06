@@ -74,14 +74,14 @@ document.getElementById("ProductUploadedButton").addEventListener("click", funct
     event.preventDefault();
 });
 
-document.getElementById("sendMessageBtn").addEventListener("click", function (event) {
-    var user = document.getElementById("ChatWithCurrentUser").innerText;
-    var myPopupContainer = document.getElementById("popup-container");
-    myPopupContainer.style.display = "Block";
-    var myPopup = document.getElementById("popup-message");
-    connection.invoke("NewChatIncomed", user).catch(function (err) {
-        return console.error(err.toString());
-    });
-    event.preventDefault();
-});
+//document.getElementById("sendMessageBtn").addEventListener("click", function (event) {
+//    var user = document.getElementById("ChatWithCurrentUser").innerText;
+//    var myPopupContainer = document.getElementById("popup-container");
+//    myPopupContainer.style.display = "Block";
+//    var myPopup = document.getElementById("popup-message");
+//    connection.invoke("NewChatIncomed", user).catch(function (err) {
+//        return console.error(err.toString());
+//    });
+//    event.preventDefault();
+//});
 

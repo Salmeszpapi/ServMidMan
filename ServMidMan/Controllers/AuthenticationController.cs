@@ -34,6 +34,7 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Welcome()
         {
+            //ExcelDataTransmitter excelDataTransmitter = new ExcelDataTransmitter(_dataProvider);
             HttpContext.Session.SetString("Login","False");
 			if (TempData["ErrorMessage"] != null)
             {

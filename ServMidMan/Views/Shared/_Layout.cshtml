@@ -12,7 +12,8 @@
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-	<script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script>
+@* 	<script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script> *@
+	<script src="~/lib/microsoft/signalr/dist/browser/chat/ShowNewProductPopup.js"></script>
 </head>
 <style>
 	.orange-chat-bubble {
@@ -78,7 +79,7 @@
 			@RenderBody()
 		</main>
 	</div>
-	<div id="popup-container" style="display:none">
+	<div id="popup-container" style="display:none" >
 		<div id="popup-message">New product has been added</div>
 	</div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

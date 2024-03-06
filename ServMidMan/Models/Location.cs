@@ -6,6 +6,8 @@ namespace ServMidMan.Models
 	{
 		[Key]
 		public int Id { get; set; }
-		public string Number { get; set; }
+		public string Cities { get; set; }
+		public string PostalCode { get; set; }
+		public string Disctrict { get; set; }
 	}
 }
