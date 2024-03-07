@@ -6,8 +6,8 @@
     <title>Centered Form with Border</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-	<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-	<script src="~/lib/microsoft/signalr/dist/browser/chat/ProductUploaderNotifier.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/chat/ProductUploaderNotifier.js"></script>
     <style>
         .centered-form {
             display: flex;
@@ -20,8 +20,7 @@
             border: 2px solid #8B4513; /* Brown border color */
             padding: 20px;
             border-radius: 10px;
-			background-color:white;
-
+            background-color: white;
         }
 
         .image-preview-container {
@@ -39,103 +38,116 @@
             border: 2px solid #8B4513; /* Brown border color */
             border-radius: 5px;
         }
+
+        #suggestionsContainer {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            width: calc(100% - 20px);
+            margin-top: 5px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .suggestion {
+            padding: 5px;
+            cursor: pointer;
+        }
+
+            .suggestion:hover {
+                background-color: #f0f0f0;
+            }
     </style>
 </head>
 <body>
 
-<div class="centered-form">
+    <div class="centered-form">
 
-		<form class="bordered-form" id="ProductUploadedButtonForm" method="post" action="/Home/NewProduct" enctype="multipart/form-data">
-		<center><h2>Upload new product</h2></center>
-		<div class="form-row">
-			<div class="col-md-4 mb-3">
-				<label for="validationDefault01">Product name</label>
-					<input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="Title" required>
-			</div>
+        <form class="bordered-form" id="ProductUploadedButtonForm" method="post" action="/Home/NewProduct" enctype="multipart/form-data">
+            <center><h2>Upload new product</h2></center>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="validationDefault01">Product name</label>
+                    <input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="Title" required>
+                </div>
 
-		</div>
-		<div class="form-row">
-			<div class="col-md-2 mb-3">
-				<label for="validationDefault02">Category</label>
-					<select class="form-control" id="validationDefault02" name="Category">
-					<option selected>Category</option>
-					<option value="Electronincs">Electronincs </option>
-					<option value="Mobile">Mobile</option>
-					<option value="PC">PC</option>
-					<option value="Notebook">Notebook</option>
-					<option value="Camera">Camera</option>
-					<option value="Car">Car</option>
-					<option value="Vehchile">Vehchile</option>
-					<option value="Motorcycle">Motorcycle</option>
-					<option value="Bicycle">Bicycle</option>
-				</select>
-			</div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-2 mb-3">
+                    <label for="validationDefault02">Category</label>
+                    <select class="form-control" id="validationDefault02" name="Category">
+                        <option selected>Category</option>
+                        <option value="Electronincs">Electronincs </option>
+                        <option value="Mobile">Mobile</option>
+                        <option value="PC">PC</option>
+                        <option value="Notebook">Notebook</option>
+                        <option value="Camera">Camera</option>
+                        <option value="Car">Car</option>
+                        <option value="Vehchile">Vehchile</option>
+                        <option value="Motorcycle">Motorcycle</option>
+                        <option value="Bicycle">Bicycle</option>
+                    </select>
+                </div>
 
-		</div>
-		<div class="form-row">
-			<div class="col-md-6 mb-3">
-				<label for="validationDefault03">Description</label>
-					<textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" required></textarea>
-			</div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="validationDefault03">Description</label>
+                    <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" required></textarea>
+                </div>
 
-		</div>
+            </div>
 
-		<div class="form-row">
-			<div class="col-md-4 mb-3">
-				<label for="validationDefault04">Price</label>
-				<div class="input-group">
-						<input type="text" class="form-control" id="validationDefault04" name="Price" oninput="validateNumber(this)" required>
-					<div class="input-group-append">
-						<span class="input-group-text">€</span>
-					</div>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="validationDefault04">Price</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="validationDefault04" name="Price" oninput="validateNumber(this)" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text">€</span>
+                        </div>
 
-				</div>
-					<label for="validationDefault05" style="margin-top:10px;">Location</label>
-				<div class="input-group">
-						<input type="text" name="Location" class="form-control" id="inputField" placeholder="" required>
-						<div id="suggestionsContainer"></div>
-					</div>
-			</div>
+                    </div>
+                    <label for="validationDefault05">Location</label>
+                    <div class="input-group">
+                        <input type="text" name="Location" class="form-control" id="inputField" placeholder="Enter a city name" required>
+                        <div id="suggestionsContainer"></div>
+                    </div>
+                </div>
 
-			<div class="form-group">
+                <div class="form-group">
 
-				<label for="fileInput">Select Image(s):</label>
-					<input type="file" name="fileInput" id="fileInput" accept="image/*" multiple onchange="validateFileCount(event)" />
+                    <label for="fileInput">Select Image(s):</label>
+                    <input type="file" name="fileInput" id="fileInput" accept="image/*" multiple onchange="validateFileCount(event)" />
 
-				<div class="image-preview-container" id="imagePreviewContainer">
-					<!-- Image previews will be dynamically added here -->
-				</div>
-			</div>
+                    <div class="image-preview-container" id="imagePreviewContainer">
+                        <!-- Image previews will be dynamically added here -->
+                    </div>
+                </div>
 
-		</div>
-		<div class="form-group">
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
-				<label class="form-check-label" for="invalidCheck2">
-					Agree to terms and conditions
-				</label>
-			</div>
-		</div>
-			<button class="btn btn-primary" id="ProductUploadedButton" type="submit" >Submit form</button>
-	</form>
-		<input type="hidden" id="sendButton" value="Send Message" />
-		@* <button class="btn btn-primary" id="ProductUploadedButton">Submit2 form</button> *@
-</div>
+            </div>
+            <button class="btn btn-primary" id="ProductUploadedButton" type="submit">Submit form</button>
+        </form>
+        <input type="hidden" id="sendButton" value="Send Message" />
+        @* <button class="btn btn-primary" id="ProductUploadedButton">Submit2 form</button> *@
+    </div>
     <script>
 
-		function validateFileCount(event) {
-			var input = event.target;
-			var maxFiles = 10;
+        function validateFileCount(event) {
+            var input = event.target;
+            var maxFiles = 10;
 
-			if (input.files && input.files.length > maxFiles) {
-				alert("Maximum 10 images allowed.");
-				// Reset the file input
-				input.value = '';
-			} else {
-				// Process the files or update preview as needed
-				previewImages(event);
-			}
-		}
+            if (input.files && input.files.length > maxFiles) {
+                alert("Maximum 10 images allowed.");
+                // Reset the file input
+                input.value = '';
+            } else {
+                // Process the files or update preview as needed
+                previewImages(event);
+            }
+        }
 
         function previewImages(event) {
             var input = event.target;
@@ -161,39 +173,47 @@
             }
 
         }
-		$(document).ready(function () {
-			$('#inputField').on('input', function () {
-				var input = $(this).val();
-				if (input.length >= 3) {
-					$.ajax({
-						url: '@Url.Action("GetSuggestions", "HomeController")',
-						type: 'GET',
-						data: { input: input },
-						success: function (response) {
-							var suggestionsHtml = '';
-							$.each(response, function (index, value) {
-								suggestionsHtml += '<div class="suggestion">' + value + '</div>';
-							});
-							$('#suggestionsContainer').html(suggestionsHtml);
+        $(document).ready(function () {
+            $('#inputField').on('input', function () {
+                var input = $(this).val().trim();
+                if (input.length >= 3) {
+                    $.ajax({
+                        url: '/Home/GetSuggestions', // Adjust URL as needed
+                        type: 'GET',
+                        data: { input: input },
+                        success: function (response) {
+                            var suggestionsHtml = '';
+                            $.each(response, function (index, value) {
+                                suggestionsHtml += '<div class="suggestion">' + value + '</div>';
+                            });
+                            $('#suggestionsContainer').html(suggestionsHtml);
+                            $('#suggestionsContainer').css('display', 'block');
 
-							// Handle click event on suggestions
-							$('.suggestion').click(function () {
-								var selectedCity = $(this).text();
-								$('#inputField').val(selectedCity);
-								$('#suggestionsContainer').empty();
-							});
-						}
-					});
-				} else {
-					$('#suggestionsContainer').empty();
-				}
-			});
-		});
+                            // Handle click event on suggestions
+                            $('.suggestion').click(function () {
+                                var selectedCity = $(this).text();
+                                $('#inputField').val(selectedCity);
+                                $('#suggestionsContainer').empty().hide();
+                            });
+                        }
+                    });
+                } else {
+                    $('#suggestionsContainer').empty().hide();
+                }
+            });
 
-		function validateNumber(input) {
-			input.value = input.value.replace(/[^0-9.]/g, ''); // Remove all characters except digits and dots
-			input.value = input.value.replace(/^(\d*\.\d*).*$/, '$1'); // Allow only one dot
-		}
+            // Close suggestions on outside click
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('#suggestionsContainer').length && !$(e.target).closest('#inputField').length) {
+                    $('#suggestionsContainer').empty().hide();
+                }
+            });
+        });
+
+        function validateNumber(input) {
+            input.value = input.value.replace(/[^0-9.]/g, ''); // Remove all characters except digits and dots
+            input.value = input.value.replace(/^(\d*\.\d*).*$/, '$1'); // Allow only one dot
+        }
     </script>
 </body>
 </html>

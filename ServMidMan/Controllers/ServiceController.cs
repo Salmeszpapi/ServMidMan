@@ -133,10 +133,11 @@ namespace ServMidMan.Controllers
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");
         }
-        public IActionResult UpdateProductStatus(ProductStatus productStatus,int serviceId) 
+        [HttpPost]
+        public IActionResult UpdateProductStatus(string productStatus,int serviceId) 
         {
             Service myService = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();
-            myService.productStatus = productStatus;
+            myService.productStatus = (ProductStatus)Enum.Parse(typeof(ProductStatus), productStatus);
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");
         }

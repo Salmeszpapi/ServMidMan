@@ -6,26 +6,23 @@
 }
 
 <link href="ServMidMan.styles.css" rel="stylesheet" />
-
-<section id="navbar">
+<!-- Full-size navbar -->
+<section id="navbar-full">
     <input type="hidden" id="sendButton" value="Send Message" />
-    @* <button class="btn btn-primary" id="ProductUploadedButton">Submit2 form</button> *@
     <input type="hidden" id="ProductUploadedButton" value="Send Message" />
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <!-- Brand/logo -->
             <a class="navbar-brand" href="#">Product Filter</a>
-            <!-- Links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <form method="post" action="/Home/Index">
                     <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <input class="form-control" name="Name" type="search" placeholder="Search" aria-label="Search">
-                    </li>
-                    <li class="nav-item">
-                        <select class="form-control" id="CategoryRadio" name="Category" onchange="changeFirstElementContent()">
+                        <li class="nav-item">
+                            <input class="form-control" name="Name" type="search" placeholder="Search" aria-label="Search">
+                        </li>
+                        <li class="nav-item">
+                            <select class="form-control" id="CategoryRadio" name="Category" onchange="changeFirstElementContent()">
                                 <option value="Category" disabled selected hidden>Category</option>
-                                <option value="Electronincs">Electronincs</option>
+                                <option value="Electronics">Electronics</option>
                                 <option value="Mobile">Mobile</option>
                                 <option value="PC">PC</option>
                                 <option value="Notebook">Notebook</option>
@@ -35,31 +32,75 @@
                                 <option value="Motorcycle">Motorcycle</option>
                                 <option value="Bicycle">Bicycle</option>
                                 <option value="Other">Other</option>
-                            <!-- Add more category options as needed -->
-                        </select>
-                    </li>
-                    <li class="nav-item">
-                         <input class="form-control" type="text" name="Location" placeholder="Location">
-                    </li>
-                    <li class="nav-item">
-                        <input class="form-control" type="text" placeholder="Around of the location">
-                    </li>
-                    <li class="nav-item">
-                        <input class="form-control" type="number" name="minPrice" placeholder="Min Price">
-                    </li>
-                    <li class="nav-item">
-                        <input class="form-control" type="number" name="Price" placeholder="Max Price">
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </li>
-                    <!-- Add more filter options as needed -->
-                </ul>
+                            </select>
+                        </li>
+
+                        <li class="nav-item">
+                            <div class="input-group">
+                                <input type="text" name="Location" class="form-control" id="inputField" autocomplete="off" placeholder="Enter a city name" required>
+                                <div class="suggestions-container" id="suggestionsContainer"></div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control" type="number" name="minPrice" placeholder="Min Price">
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control" type="number" name="Price" placeholder="Max Price">
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </li>
+                    </ul>
                 </form>
             </div>
         </div>
     </nav>
 </section>
+
+<!-- Small-size navbar -->
+<section id="navbar-small">
+    <input type="hidden" id="sendButton" value="Send Message" />
+    <input type="hidden" id="ProductUploadedButton" value="Send Message" />
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Product Filter</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-small"
+                    aria-controls="navbarSupportedContent-small" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent-small">
+                <form class="form-inline my-2 my-lg-0" method="post" action="/Home/Index">
+                    <input class="form-control mr-sm-2" name="Name" type="search" placeholder="Search" aria-label="Search">
+                    <select class="form-control" id="CategoryRadio" name="Category" onchange="changeFirstElementContent()">
+                        <option value="Category" disabled selected hidden>Category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Mobile">Mobile</option>
+                        <option value="PC">PC</option>
+                        <option value="Notebook">Notebook</option>
+                        <option value="Camera">Camera</option>
+                        <option value="Car">Car</option>
+                        <option value="Vehicle">Vehicle</option>
+                        <option value="Motorcycle">Motorcycle</option>
+                        <option value="Bicycle">Bicycle</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input class="form-control mr-sm-2" type="text" name="Location" placeholder="Location">
+                    <li class="nav-item">
+                        <input class="form-control" type="text" placeholder="Around of the location">
+                        <div class="input-group">
+                            <input type="text" name="Location" class="form-control" id="inputField" placeholder="Enter a city name" required>
+                            <div id="suggestionsContainer"></div>
+                        </div>
+                    </li>
+                    <input class="form-control mr-sm-2" type="number" name="minPrice" placeholder="Min Price">
+                    <input class="form-control mr-sm-2" type="number" name="Price" placeholder="Max Price">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</section>
+
 <section class="section-products">
     <div class="container">
         <div class="container-fluid">
@@ -161,6 +202,43 @@
     function redirectToProduct(productId) {
         window.location.href = '/Home/Product?id=' + productId;
     }
+
+    $(document).ready(function () {
+        $('#inputField').on('input', function () {
+            var input = $(this).val().trim();
+            if (input.length >= 3) {
+                $.ajax({
+                    url: '/Home/GetSuggestions', // Adjust URL as needed
+                    type: 'GET',
+                    data: { input: input },
+                    success: function (response) {
+                        var suggestionsHtml = '';
+                        $.each(response, function (index, value) {
+                            suggestionsHtml += '<div class="suggestion">' + value + '</div>';
+                        });
+                        $('#suggestionsContainer').html(suggestionsHtml);
+                        $('#suggestionsContainer').css('display', 'block');
+
+                        // Handle click event on suggestions
+                        $('.suggestion').click(function () {
+                            var selectedCity = $(this).text();
+                            $('#inputField').val(selectedCity);
+                            $('#suggestionsContainer').empty().hide();
+                        });
+                    }
+                });
+            } else {
+                $('#suggestionsContainer').empty().hide();
+            }
+        });
+
+        // Close suggestions on outside click
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('#suggestionsContainer').length && !$(e.target).closest('#inputField').length) {
+                $('#suggestionsContainer').empty().hide();
+            }
+        });
+    });
 </script>
 
 <script>
@@ -173,6 +251,19 @@
     }
 </script>
 <style>
+    @@media (min-width: 992px) {
+        /* Apply styles only when the screen width is larger than 900px */
+        #navbar-small {
+            display: none; /* Hide small-size navbar */
+        }
+    }
+
+    @@media (max-width: 991px) {
+        /* Apply styles only when the screen width is smaller than or equal to 900px */
+        #navbar-full {
+            display: none; /* Hide full-size navbar */
+        }
+    }
     body {
         background-color: #f8f9fa;
         color: #333;
@@ -230,6 +321,33 @@
     .rating-stars {
         font-size: 24px;
     }
+
+    .input-group {
+        position: relative;
+    }
+
+    .suggestions-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 5px 5px;
+        z-index: 1000;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .suggestion {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+        .suggestion:hover {
+            background-color: #f0f0f0;
+        }
 </style>
 
 @* <script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script> *@

@@ -6,9 +6,9 @@ namespace ServMidMan.Helper
 {
     public static class ImageOperator
     {
-        private static string ImageBasePath = "https://servmidman.salmadevelop.eu/";
-		private static string ftpServerUrl = "ftp://salmadevelop.eu/salmadevelop.eu/sub/servmidman";
-		private static string userName = "hojszi.salmadevelop.eu";
+        private static string ImageBasePath = "https://servmidman.gugar.sk/";
+		private static string ftpServerUrl = "ftp://gugar.sk/gugar.sk/sub/servmidman";
+		private static string userName = "hojszi.gugar.sk";
 		private static string password = "myNewDatabasePassword1";
 
 		public static bool ImageUploaderToServer(List<IFormFile> fromFiles, List<string> images)

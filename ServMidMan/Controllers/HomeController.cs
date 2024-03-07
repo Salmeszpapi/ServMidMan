@@ -434,7 +434,7 @@ namespace ServMidMan.Controllers
 		{
 			var suggestions = _dataProvider.Locations
 				.Where(x => x.Cities.Contains(input) || x.PostalCode.Contains(input))
-				.Select(x => x.Cities) // Assuming you want suggestions based on city names
+				.Select(x => x.Cities) 
 				.ToList();
 
 			return Json(suggestions);
