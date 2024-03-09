@@ -23,6 +23,7 @@ namespace ServMidMan.Controllers
         {
             _logger = logger;
             _dataProvider = dataProviderContext;
+            _hubContext = hubContext;
         }
 
         public IActionResult Index(SearchProducts filteredProducts = null)
@@ -361,10 +362,10 @@ namespace ServMidMan.Controllers
                 return RedirectToAction("Welcome", "Authentication");
             }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
-            List<Location> locations = new List<Location>();
-			locations = _dataProvider.Locations.ToList();
 
-			return View(locations);
+            var nextProductId = _dataProvider.Products.Max(x => x.Id) +1;
+
+			return View(nextProductId);
         }
 
         private List<Product> ProductsFilter(SearchProducts searchProducts)

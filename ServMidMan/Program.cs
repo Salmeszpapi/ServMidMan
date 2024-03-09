@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ServMidMan.Data;
+using ServMidMan.Helper;
 using ServMidMan.Hubs;
+using ServMidMan.Interface;
 namespace ServMidMan
 {
     public class Program
@@ -16,6 +18,7 @@ namespace ServMidMan
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddSession(options =>
             {
 	            options.IdleTimeout = TimeSpan.FromMinutes(30);

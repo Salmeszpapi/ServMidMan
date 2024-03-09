@@ -122,17 +122,26 @@
                                     } *@
                                                 @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
-                                                    <form id="productStatusForm" action="/Service/UpdateProductStatus" method="post">
-                                                        <input type="hidden" name="serviceId" value="@group.service.Id" />
-                                                        <select class="form-control" id="productStatus" name="productStatus" onchange="submitForm()">
-                                                            <option value="@group.service.productStatus" hidden selected>@group.service.productStatus</option>
-                                                            <option value="UnSettled">UnSettled</option>
-                                                            <option value="Sended">Sended</option>
-                                                            <option value="ArrivedToService">ArrivedToService</option>
-                                                            <option value="Repaired">Repaired</option>
-                                                            <option value="ReceivedToClient">ReceivedToClient</option>
+                                                    @if (!ViewData["typeOfUser"].Equals("Client"))
+                                                    {
+                                                        <form id="productStatusForm" action="/Service/UpdateProductStatus" method="post">
+                                                            <input type="hidden" name="serviceId" value="@group.service.Id" />
+                                                            <select class="form-control" id="productStatus" name="productStatus" onchange="submitForm(@group.service.Id, this.value)">
+                                                                <option value="@group.service.productStatus" hidden selected>@group.service.productStatus</option>
+                                                                <option value="UnSettled">UnSettled</option>
+                                                                <option value="Sended">Sended</option>
+                                                                <option value="ArrivedToService">ArrivedToService</option>
+                                                                <option value="Repaired">Repaired</option>
+                                                                <option value="ReceivedToClient">ReceivedToClient</option>
+                                                            </select>
+                                                        </form>
+                                                    }
+                                                    else
+                                                    {
+                                                        <select class="form-control" id="productStatus" name="productStatus" disabled>
+                                                            <option value="@group.service.productStatus" selected>@group.service.productStatus</option>
                                                         </select>
-                                                    </form>
+                                                    }
                                                 }
   
 
@@ -162,8 +171,25 @@
             document.getElementById('senderServices').style.display = 'none';
         }
 
-        function submitForm() {
-            document.getElementById("productStatusForm").submit();
+        function submitForm(serviceId, selectedValue) {
+            fetch('/Service/UpdateProductStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    serviceId: serviceId,
+                    productStatus: selectedValue
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Handle success
+                    } else {
+                        // Handle error
+                    }
+                })
+                .catch(error => console.error('Error updating product status:', error));
         }
 
         function showSenderServices() {

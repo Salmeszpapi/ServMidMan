@@ -14,17 +14,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Trigger form submission
         var form = document.getElementById("ProductUploadedButtonForm");
-
+        var myNewProductId = document.getElementById("nextProductID").value;
         form.submit();
 
         var myPopupContainer = document.getElementById("popup-container");
         myPopupContainer.style.display = "Block";
         var myPopup = document.getElementById("popup-message");
-        connection.invoke("NewProductUpdated", "1", "2").catch(function (err) {
+        connection.invoke("NewProductUpdated", myNewProductId, "2").catch(function (err) {
             return console.error(err.toString());
         });
         event.preventDefault();
     });
+
+
 });
 
 

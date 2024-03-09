@@ -71,6 +71,10 @@ namespace ServMidMan.Controllers
         {
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             var userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            if(message is null)
+            {
+                return Json(new { });
+            }
             // Process the message
             User receiverUser = _dataProvider.Users.Where(x=>x.Name == receiverName).FirstOrDefault();
             Chat chat = new Chat()
