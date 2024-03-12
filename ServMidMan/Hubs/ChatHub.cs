@@ -25,7 +25,6 @@ namespace ServMidMan.Hubs
             {
                 await Clients.Client(signalrUserId).SendAsync("ReceiveMessage", SenderId);
             }
-
         }
 
         public async Task NewProductUpdated(string newProductID, string message)

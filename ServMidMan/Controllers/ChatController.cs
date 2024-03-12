@@ -45,10 +45,25 @@ namespace ServMidMan.Controllers
             }
             else
             {
-                chatWithPerson.Messages = _dataProvider.ChatHistory
+                //chatWithPerson.Messages 
+                    var loadDefaultMessage = _dataProvider.ChatHistory
                             .Where(c => c.SenderId == userId || c.ReceiverID == userId)
-                            .ToList();
-            }
+                            .FirstOrDefault();
+                if(loadDefaultMessage.SenderId == userId) 
+                {
+					chatWithPerson.Messages = _dataProvider.ChatHistory
+							.Where(c => c.SenderId == userId && c.ReceiverID == loadDefaultMessage.ReceiverID).ToList();
+                    
+
+				}
+                else
+                {
+					chatWithPerson.Messages = _dataProvider.ChatHistory
+							.Where(c => c.SenderId == loadDefaultMessage.ReceiverID && c.ReceiverID == userId).ToList();
+                    
+				}
+				id = loadDefaultMessage.ReceiverID;
+			}
 
             if (chatWithPerson.Messages.Count == 0)
             {
