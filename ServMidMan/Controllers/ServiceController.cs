@@ -133,7 +133,7 @@ namespace ServMidMan.Controllers
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");
         }
-        [HttpPost]
+        [HttpGet]
         public IActionResult UpdateProductStatus(string productStatus,int serviceId) 
         {
             Service myService = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();

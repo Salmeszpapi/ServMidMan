@@ -172,15 +172,11 @@
         }
 
         function submitForm(serviceId, selectedValue) {
-            fetch('/Service/UpdateProductStatus', {
-                method: 'POST',
+            fetch('/Service/UpdateProductStatus?productStatus=' + selectedValue + '&serviceId=' + serviceId, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    serviceId: serviceId,
-                    productStatus: selectedValue
-                })
+                }
             })
                 .then(response => {
                     if (response.ok) {
