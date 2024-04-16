@@ -82,9 +82,9 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div>Product name: @group.product.Products.Name</div>
-                                                <div>User ID: @group.product.Products.UserId </div>
-                                                <div>Service ID: @group.service.Id</div>
-                                                <div>Product ID: @group.service.ProductId</div>
+                                                <div>User ID: @group.OwnerName </div>
+@*                                                 <div>Service ID: @group.service.Id</div>
+                                                <div>Product ID: @group.service.ProductId</div> *@
                                                 <div>Recived service price: @group.service.Price€</div>
                                                 <div>Description: @group.service.Description</div>
                                                 <div>Date when finished: @group.service.ApproximetlyFinishDate.ToString("dd.MM.yyyy")</div>
@@ -110,6 +110,10 @@
                                                     }
 
                                                 }
+                                                <form method="post" action="/Home/Profile" style="display: inline;">
+                                                    <input type="hidden" name="userId" value="@group.service.UserId" />
+                                                    <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
+                                                </form>
 
                                             </div>
                                             <div class="col-md-6">

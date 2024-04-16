@@ -39,7 +39,7 @@ namespace ServMidMan.Controllers
                     foreach (var service in serviceList)
                     {
                         var foundProduct = _dataProvider.Products.FirstOrDefault(x => x.Id == product);
-                        
+                        serviceWithProduct.OwnerName = _dataProvider.Users.FirstOrDefault(x => x.Id == foundProduct.UserId).Name;
                         serviceWithProduct.product.Products = foundProduct;
                         serviceWithProduct.product.ImagePaths = ImageOperator.getImageFullPath(_dataProvider.Images.Where(x => x.ProductReferenceId == serviceWithProduct.product.Products.Id).Select(x => x.FileName).ToList());
                         serviceWithProduct.service = service;
@@ -59,6 +59,7 @@ namespace ServMidMan.Controllers
                     ServiceWithProduct serviceWithProduct = new ServiceWithProduct();
                     serviceWithProduct.service = service;
                     serviceWithProduct.product.Products = _dataProvider.Products.Where(x=>x.Id == service.ProductId).FirstOrDefault();
+                    serviceWithProduct.OwnerName = _dataProvider.Users.FirstOrDefault(x => x.Id == Convert.ToInt32(HttpContext.Session.GetString("UserId"))).Name;
                     serviceWithProduct.product.ImagePaths = ImageOperator.getImageFullPath(_dataProvider.Images.Where(x => x.ProductReferenceId == serviceWithProduct.product.Products.Id).Select(x => x.FileName).ToList());
                     servicesOrdered.Services.Add(serviceWithProduct);
                 }

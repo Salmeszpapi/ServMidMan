@@ -23,6 +23,7 @@ namespace ServMidMan.Models
     {
         public Service service { get; set; } = new Service();
         public ProductWithByteImages product {  get; set; } = new ProductWithByteImages();
+        public string OwnerName { get; set; }
     }
     public enum ServiceStatus
     {

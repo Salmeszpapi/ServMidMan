@@ -24,13 +24,12 @@
                         <img class="img-account-profile rounded-circle mb-2" src="@Model.UserInfo.ProfileImagePath" alt="">
                         <!-- Profile picture help block-->
                         <!-- Profile picture upload button-->
-
                         @if (!visitor)
                         {
                             <div class="form-group">
 
-                            <label for="fileInput">Select Image:</label>
-                            <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
+                                <label for="fileInput">Select Image:</label>
+                                <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
 
                                 <div class="image-preview-container" id="imagePreviewContainer">
                                     <!-- Image previews will be dynamically added here -->
@@ -45,9 +44,9 @@
                 </div>
             </div>
         </div>
-            <div class="col-xl-4">
-        @if (!visitor)
-        {
+        <div class="col-xl-4">
+            @if (!visitor)
+            {
                 <!-- Account details card-->
                 <div class="card mb-4">
                     <div class="card-header">Account Details</div>
@@ -76,8 +75,21 @@
                         </form>
                     </div>
                 </div>
-        }
-            </div>
+            }
+            else
+            {
+                <div class="card mb-4">
+                    <div class="card-header">Account Details</div>
+                    <div class="card-body">
+                        <!-- Form Group (username)-->
+                        <div class="mb-3">
+                            <h4>Username : @Model.UserInfo.Name</h4>
+                            <h4>Type  : @Model.UserInfo.TypeOfUser</h4>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
 
         <div class="col-xl-4">
             <!-- Account details card-->
@@ -114,7 +126,7 @@
                                         <i class="fas fa-star text-warning"></i>
                                     }
                                     <!-- Show remaining empty stars -->
-                                    @for (int i = Convert.ToInt32(@Model.UserInfo.Rating) / @Model.UserInfo.Voters; i < 5; i++)
+                                    @for (int i = Convert.ToInt32(@Model.UserInfo.Rating / @Model.UserInfo.Voters); i < 5; i++)
                                     {
                                         <i class="far fa-star text-warning"></i>
                                     }
@@ -147,55 +159,58 @@
                     </form>
                 </div>
             </div>
-    </div>
-</div>
-<div class="col-xl-12">
-    <!-- Products card -->
-        @if(ViewData["typeOfUser"].Equals("Client")){
-    <div class="card mb-4">
-        <div class="card-header">Products</div>
-        <div class="card-body d-flex flex-nowrap justify-content-start align-items-center overflow-auto" style="overflow-x: auto; max-width: calc(100vw - 30px);">
-            @if (Model.productWithByteImages != null)
-            {
-                @* <form method="get" id="myForm" action="Home/Product"> *@
-
-                 @foreach (var productWithByteImages in Model.productWithByteImages.Take(9))
-                {
-                    <input type="hidden" name="ProductId" value="@productWithByteImages.Products.Id" />
-                    <div class="card mb-3 mr-3" style="width: 12rem;">
-                        <div class="card-body text-center">
-                            <h5 class="card-title mb-0">@productWithByteImages.Products.Name</h5> <!-- Added mb-0 class to remove bottom margin -->
-                        </div>
-                        @if (productWithByteImages.ImagePaths.Any())
-                        {
-                                    <img src="@productWithByteImages.ImagePaths.First()" class="card-img-top" onclick="redirectToProduct(@productWithByteImages.Products.Id)" onmouseover="changeCursor()" onmouseout="restoreCursor()" alt="Product Image" style="width: 100%;">
-                        }
-                        else
-                        {
-                            <img src="https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg" class="card-img-top" alt="Default Image" style="width: 100%;">
-                        }
-                    </div>
-                }
-                @* </form> *@
-            }
-            else
-            {
-                <p>No products found.</p>
-            }
         </div>
-    </div> }
-    else{
+    </div>
+    <div class="col-xl-12">
+        <!-- Products card -->
+        @if (ViewData["typeOfUser"].Equals("Client"))
+        {
+            <div class="card mb-4">
+                <div class="card-header">Products</div>
+                <div class="card-body d-flex flex-nowrap justify-content-start align-items-center overflow-auto" style="overflow-x: auto; max-width: calc(100vw - 30px);">
+                    @if (Model.productWithByteImages != null)
+                    {
+                        @* <form method="get" id="myForm" action="Home/Product"> *@
 
-    }
-</div>
-<script>
-    function submitForm() {
-        document.getElementById("myForm").submit();
-    }
-    function redirectToProduct(productId) {
-        window.location.href = '/Home/Product?id=' + productId;
-    }
-</script>
+                        @foreach (var productWithByteImages in Model.productWithByteImages.Take(9))
+                        {
+                            <input type="hidden" name="ProductId" value="@productWithByteImages.Products.Id" />
+                            <div class="card mb-3 mr-3" style="width: 12rem;">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title mb-0">@productWithByteImages.Products.Name</h5> <!-- Added mb-0 class to remove bottom margin -->
+                                </div>
+                                @if (productWithByteImages.ImagePaths.Any())
+                                {
+                                    <img src="@productWithByteImages.ImagePaths.First()" class="card-img-top" onclick="redirectToProduct(@productWithByteImages.Products.Id)" onmouseover="changeCursor()" onmouseout="restoreCursor()" alt="Product Image" style="width: 100%;">
+                                }
+                                else
+                                {
+                                    <img src="https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg" class="card-img-top" alt="Default Image" style="width: 100%;">
+                                }
+                            </div>
+                        }
+                        @* </form> *@
+                    }
+                    else
+                    {
+                        <p>No products found.</p>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+
+        }
+    </div>
+    <script>
+        function submitForm() {
+            document.getElementById("myForm").submit();
+        }
+        function redirectToProduct(productId) {
+            window.location.href = '/Home/Product?id=' + productId;
+        }
+    </script>
 
     <script>
         function changeCursor() {
@@ -207,74 +222,74 @@
         }
     </script>
 
-<style>
-    body {
-        background-color: #f2f6fc;
-        color: #69707a;
-    }
-
-    .img-account-profile {
-        height: 10rem;
-    }
-
-    .rounded-circle {
-        border-radius: 50% !important;
-    }
-
-    .card {
-        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
-    }
-
-        .card .card-header {
-            font-weight: 500;
+    <style>
+        body {
+            background-color: #f2f6fc;
+            color: #69707a;
         }
 
-    .card-header:first-child {
-        border-radius: 0.35rem 0.35rem 0 0;
-    }
+        .img-account-profile {
+            height: 10rem;
+        }
 
-    .card-header {
-        padding: 1rem 1.35rem;
-        margin-bottom: 0;
-        background-color: rgba(33, 40, 50, 0.03);
-        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
-    }
+        .rounded-circle {
+            border-radius: 50% !important;
+        }
 
-    .form-control, .dataTable-input {
-        display: block;
-        width: 100%;
-        padding: 0.875rem 1.125rem;
-        font-size: 0.875rem;
-        font-weight: 400;
-        line-height: 1;
-        color: #69707a;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #c5ccd6;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        border-radius: 0.35rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+        }
 
-    .nav-borders .nav-link.active {
-        color: #0061f2;
-        border-bottom-color: #0061f2;
-    }
+            .card .card-header {
+                font-weight: 500;
+            }
 
-    .nav-borders .nav-link {
-        color: #69707a;
-        border-bottom-width: 0.125rem;
-        border-bottom-style: solid;
-        border-bottom-color: transparent;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        padding-left: 0;
-        padding-right: 0;
-        margin-left: 1rem;
-        margin-right: 1rem;
-    }
+        .card-header:first-child {
+            border-radius: 0.35rem 0.35rem 0 0;
+        }
+
+        .card-header {
+            padding: 1rem 1.35rem;
+            margin-bottom: 0;
+            background-color: rgba(33, 40, 50, 0.03);
+            border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+        }
+
+        .form-control, .dataTable-input {
+            display: block;
+            width: 100%;
+            padding: 0.875rem 1.125rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1;
+            color: #69707a;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #c5ccd6;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: 0.35rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .nav-borders .nav-link.active {
+            color: #0061f2;
+            border-bottom-color: #0061f2;
+        }
+
+        .nav-borders .nav-link {
+            color: #69707a;
+            border-bottom-width: 0.125rem;
+            border-bottom-style: solid;
+            border-bottom-color: transparent;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
 
         .rating {
             float: left;
@@ -319,5 +334,5 @@
             }
 
     </style>
-<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-<script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script>
