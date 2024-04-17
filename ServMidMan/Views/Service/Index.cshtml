@@ -133,10 +133,8 @@
                                                             <select class="form-control" id="productStatus" name="productStatus" onchange="submitForm(@group.service.Id, this.value)">
                                                                 <option value="@group.service.productStatus" hidden selected>@group.service.productStatus</option>
                                                                 <option value="UnSettled">UnSettled</option>
-                                                                <option value="Sended">Sended</option>
-                                                                <option value="ArrivedToService">ArrivedToService</option>
-                                                                <option value="Repaired">Repaired</option>
-                                                                <option value="ReceivedToClient">ReceivedToClient</option>
+                                                                <option value="InProgress">InProgress</option>
+                                                                <option value="Done">Done</option>
                                                             </select>
                                                         </form>
                                                     }
@@ -190,8 +188,7 @@
                     }
                 })
                 .catch(error => console.error('Error updating product status:', error));
-        }
-
+        } 
         function showSenderServices() {
             document.getElementById('senderServices').style.display = 'block';
             document.getElementById('receivedServices').style.display = 'none';

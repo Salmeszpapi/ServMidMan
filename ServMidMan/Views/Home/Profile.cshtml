@@ -163,7 +163,7 @@
     </div>
     <div class="col-xl-12">
         <!-- Products card -->
-        @if (ViewData["typeOfUser"].Equals("Client"))
+        @if (ViewData["typeOfUser"].Equals("Client") || visitor)
         {
             <div class="card mb-4">
                 <div class="card-header">Products</div>

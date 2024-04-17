@@ -31,12 +31,11 @@ namespace ServMidMan.Models
         Approved,
         Rejected,
     }
+
     public enum ProductStatus
     {
         UnSettled,
-        Sended,
-        ArrivedToService,
-        Repaired,
-        ReceivedToClient
+        InProgress,
+        Done,
     }
 }
