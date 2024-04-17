@@ -66,44 +66,45 @@
     <div class="centered-form">
 
         <form class="bordered-form" id="ProductUploadedButtonForm" method="post" action="/Home/NewProduct" enctype="multipart/form-data">
-            <center><h2>Upload new product</h2></center>
+            <center><h2>Új termék feltöltése</h2></center>
             <input type="hidden" id="nextProductID" value="@Model" />
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="validationDefault01">Product name</label>
-                    <input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="Title" required>
+                    <label for="validationDefault01">Termék neve</label>
+                    <input type="text" name="Name" class="form-control" id="validationDefault01" placeholder="Cím" required>
                 </div>
 
             </div>
             <div class="form-row">
                 <div class="col-md-2 mb-3">
-                    <label for="validationDefault02">Category</label>
+                    <label for="validationDefault02">Kategória</label>
                     <select class="form-control" id="validationDefault02" name="Category">
-                        <option selected>Category</option>
-                        <option value="Electronincs">Electronincs </option>
-                        <option value="Mobile">Mobile</option>
+                                <option value="Kategória" disabled selected hidden>Kategória</option>
+                        <option value="Elektronika">Elektronika</option>
+                        <option value="Mobil">Mobil</option>
                         <option value="PC">PC</option>
                         <option value="Notebook">Notebook</option>
-                        <option value="Camera">Camera</option>
-                        <option value="Car">Car</option>
-                        <option value="Vehchile">Vehchile</option>
-                        <option value="Motorcycle">Motorcycle</option>
-                        <option value="Bicycle">Bicycle</option>
+                        <option value="Kamera">Kamera</option>
+                        <option value="Autó">Autó</option>
+                        <option value="Jármű">Jármű</option>
+                        <option value="Motorkerékpár">Motorkerékpár</option>
+                        <option value="Kerékpár">Kerékpár</option>
+                        <option value="Egyéb">Egyéb</option>
                     </select>
                 </div>
 
             </div>
             <div class="form-row">
                 <div class="col-md-6 mb-3">
-                    <label for="validationDefault03">Description</label>
-                    <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4" required></textarea>
+                    <label for="validationDefault03">Leírás</label>
+                    <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Leírás" rows="4" required></textarea>
                 </div>
 
             </div>
 
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="validationDefault04">Price</label>
+                    <label for="validationDefault04">Ár</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="validationDefault04" name="Price" oninput="validateNumber(this)" required>
                         <div class="input-group-append">
@@ -111,16 +112,16 @@
                         </div>
 
                     </div>
-                    <label for="validationDefault05">Location</label>
+                    <label for="validationDefault05">Helyszín</label>
                     <div class="input-group">
-                        <input type="text" name="Location" class="form-control" id="inputField" placeholder="Enter a city name" required>
+                        <input type="text" name="Location" class="form-control" id="inputField" placeholder="Add meg a város nevét" required>
                         <div id="suggestionsContainer"></div>
                     </div>
                 </div>
 
                 <div class="form-group">
 
-                    <label for="fileInput">Select Image(s):</label>
+                    <label for="fileInput">Kép(ek) kiválasztása:</label>
                     <input type="file" name="fileInput" id="fileInput" accept="image/*" multiple onchange="validateFileCount(event)" />
 
                     <div class="image-preview-container" id="imagePreviewContainer">
@@ -129,7 +130,7 @@
                 </div>
 
             </div>
-            <button class="btn btn-primary" id="ProductUploadedButton" type="submit">Submit form</button>
+            <button class="btn btn-primary" id="ProductUploadedButton" type="submit">Feltöltés</button>
         </form>
         <input type="hidden" id="sendButton" value="Send Message" />
         @* <button class="btn btn-primary" id="ProductUploadedButton">Submit2 form</button> *@

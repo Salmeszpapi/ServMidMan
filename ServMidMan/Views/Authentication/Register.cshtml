@@ -1,7 +1,7 @@
 ﻿<div class="container d-flex justify-content-center align-items-center">
     <div class="card">
         <div class="p-3 border-bottom d-flex align-items-center justify-content-center">
-            <h5>Register to ServMidMan</h5>
+            <h5>Regisztráció a ServMidMan oldalra</h5>
         </div>
         <div class="p-3 d-flex align-items-center justify-content-center">
             @if (ViewBag.ErrorMessage != null)
@@ -17,31 +17,31 @@
                 <div class="input-group">
                     <input type="text" class="form-control mb-2" id="email" name="Email" placeholder="Email" onsubmit="return checkPasswordMatch() && validateEmail(this.elements['Email'])" required />
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" id="sendVerificationButton" type="button">Send verify</button>
+                        <button class="btn btn-outline-secondary" id="sendVerificationButton" type="button">Ellenőrző kód küldése</button>
                     </div>
                 </div>
-	            <input type="text" class="form-control mb-2" name="Name" placeholder="Username" required />
+	            <input type="text" class="form-control mb-2" name="Name" placeholder="Felhasználónév" required />
                 <div class="form">
-                    <input type="password" class="form-control" name="Password" placeholder="Password" required />
-                    <input type="password" class="form-control" name="Password2" placeholder="Password again" required style="margin: 9px 10px 0px 0px;" />
+                    <input type="password" class="form-control" name="Password" placeholder="Jelszó" required />
+                    <input type="password" class="form-control" name="Password2" placeholder="Jelszó újra" required style="margin: 9px 10px 0px 0px;" />
                 </div>
                 <!-- Radio buttons for user type -->
                 <div class="form-group text-center" style="margin-top:10px">
-	                <label>User Type:</label><br>
+	                <label>Felhasználó típusa:</label><br>
 	                <div style="display: inline-block; margin-right: 15px;">
                         <input type="radio" id="client" name="TypeOfUser" value="client" checked>
-		                <label for="client" style="margin-right: 5px;">Client</label>
+		                <label for="client" style="margin-right: 5px;">Felhasználó</label>
 	                </div>
 
 	                <div style="display: inline-block;">
                         <input type="radio" id="servicer" name="TypeOfUser" value="servicer">
-		                <label for="servicer" style="margin-right: 5px;">Servicer</label>
+		                <label for="servicer" style="margin-right: 5px;">Szerelő</label>
 	                </div>
                 </div>            <div class="d-flex justify-content-center">
-                    <input type="text" class="form-control mb-2" name="VerificationCode" placeholder="Verification Code" required />
+                    <input type="text" class="form-control mb-2" name="VerificationCode" placeholder="Ellenőrző kód" required />
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-danger btn-block continue" style="margin: 9px 10px 0px 0px;">Register</button>
+                    <button type="submit" class="btn btn-danger btn-block continue" style="margin: 9px 10px 0px 0px;">Regisztráció</button>
                 </div>
 
             </form>
@@ -49,8 +49,8 @@
                 <h5></h5>
             </div>
             <div class="p-3 d-flex flex-row justify-content-center align-items-center member">
-                <span>Already member? </span>
-                <a href="/Authentication/Welcome" class="text-decoration-none ml-2">Log In</a>
+                <span>Már tag? </span>
+                <a href="/Authentication/Welcome" class="text-decoration-none ml-2">Bejelentkezés</a>
             </div>
         </div>
     </div>

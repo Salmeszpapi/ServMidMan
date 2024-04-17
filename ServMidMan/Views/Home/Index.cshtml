@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Http
 @model List<ProductWithByteImages>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Fő Oldal";
 }
 
 
@@ -14,43 +14,43 @@
     <input type="hidden" id="ProductUploadedButton" value="Send Message" />
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Product Filter</a>
+            <a class="navbar-brand" href="#">Termék szűrő</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <form method="post" action="/Home/Index">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <input class="form-control" name="Name" type="search" placeholder="Search" aria-label="Search">
+                            <input class="form-control" name="Name" type="search" placeholder="Keresés" aria-label="Search">
                         </li>
                         <li class="nav-item">
                             <select class="form-control" id="CategoryRadio" name="Category" onchange="changeFirstElementContent()">
-                                <option value="Category" disabled selected hidden>Category</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Mobile">Mobile</option>
+                                <option value="Kategória" disabled selected hidden>Kategória</option>
+                                <option value="Elektronika">Elektronika</option>
+                                <option value="Mobil">Mobil</option>
                                 <option value="PC">PC</option>
                                 <option value="Notebook">Notebook</option>
-                                <option value="Camera">Camera</option>
-                                <option value="Car">Car</option>
-                                <option value="Vehicle">Vehicle</option>
-                                <option value="Motorcycle">Motorcycle</option>
-                                <option value="Bicycle">Bicycle</option>
-                                <option value="Other">Other</option>
+                                <option value="Kamera">Kamera</option>
+                                <option value="Autó">Autó</option>
+                                <option value="Jármű">Jármű</option>
+                                <option value="Motorkerékpár">Motorkerékpár</option>
+                                <option value="Kerékpár">Kerékpár</option>
+                                <option value="Egyéb">Egyéb</option>
                             </select>
                         </li>
 
                         <li class="nav-item">
                             <div class="input-group">
-                                <input type="text" name="Location" class="form-control" id="inputField" autocomplete="off" placeholder="Enter a city name" required>
+                                <input type="text" name="Location" class="form-control" id="inputField" autocomplete="off" placeholder="Adj meg város nevet" >
                                 <div class="suggestions-container" id="suggestionsContainer"></div>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <input class="form-control" type="number" name="minPrice" placeholder="Min Price">
+                            <input class="form-control" type="number" name="minPrice" placeholder="Min Ár">
                         </li>
                         <li class="nav-item">
-                            <input class="form-control" type="number" name="Price" placeholder="Max Price">
+                            <input class="form-control" type="number" name="Price" placeholder="Max Ár">
                         </li>
                         <li class="nav-item">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
+                            <button class="btn btn-outline-success" type="submit">Keresés</button>
                         </li>
                     </ul>
                 </form>
@@ -149,6 +149,7 @@
                 </div>
             </div>
         </div>
+    </div>
 </section>
 <script>
     window.onload = function () {
@@ -252,6 +253,7 @@
         document.body.style.cursor = "auto";
     }
 </script>
+
 <style>
     @@media (min-width: 992px) {
         /* Apply styles only when the screen width is larger than 900px */

@@ -39,16 +39,16 @@
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Profile">Profile</a>
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Profile">Profil</a>
 						</li>
 							@if ((string)ViewData["typeOfUser"] == "Client")
 						{
 							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Upload">Upload product</a>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Upload">Termék feltöltés</a>
 							</li>
 						}
 							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">Requests</a>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">Ajánlatok</a>
 							</li>
 
 					</ul>
@@ -67,7 +67,7 @@
 
 					<!-- Logout button -->
 					<form asp-controller="Home" asp-action="Logout" method="post" class="d-flex">
-						<button type="submit" class="btn btn-outline-primary">Logout</button>
+						<button type="submit" class="btn btn-outline-primary">Kilépés</button>
 					</form>
 				</div>
 			</div>

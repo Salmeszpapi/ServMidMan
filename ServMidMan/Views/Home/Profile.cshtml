@@ -18,7 +18,7 @@
         <div class="col-xl-4" style="margin-bottom:25px">
             <!-- Profile picture card-->
             <div class="card mb-4 mb-xl-0">
-                <div class="card-header">Profile Picture</div>
+                <div class="card-header">Profil Kép</div>
                 <div class="card-body text-center">
                     <form action="/Home/ProfilePictureUpdateUpdate" method="post" enctype="multipart/form-data">
                         <img class="img-account-profile rounded-circle mb-2" src="@Model.UserInfo.ProfileImagePath" alt="">
@@ -28,14 +28,14 @@
                         {
                             <div class="form-group">
 
-                                <label for="fileInput">Select Image:</label>
-                                <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
+                            <label for="fileInput">Kép kiválasztása:</label>
+                            <input type="file" name="fileInput" accept="image/*" onchange="previewImages(event)" />
 
                                 <div class="image-preview-container" id="imagePreviewContainer">
                                     <!-- Image previews will be dynamically added here -->
                                 </div>
                             </div>
-                            <button class="btn btn-primary" type="submit">Upload new image</button>
+                            <button class="btn btn-primary" type="submit">Kép feltöltése</button>
                         }
 
                     </form>
@@ -49,29 +49,29 @@
             {
                 <!-- Account details card-->
                 <div class="card mb-4">
-                    <div class="card-header">Account Details</div>
+                    <div class="card-header">Felhasználó Adatai</div>
                     <div class="card-body">
                         <form method="post" action="/Home/ProfileUpdate">
                             <!-- Form Group (username)-->
                             <div class="mb-3">
-                                <label class="small mb-1" for="inputUsername">Username </label>
-                                <input class="form-control" id="inputUsername" name="Name" type="text" placeholder="Enter your username" value="@Model.UserInfo.Name">
+                                <label class="small mb-1" for="inputUsername">Felhasználónév </label>
+                                <input class="form-control" id="inputUsername" name="Name" type="text" placeholder="Írd be a felhasznlóneved" value="@Model.UserInfo.Name">
                             </div>
                             <!-- Form Row-->
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (first name)-->
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="inputFirstName">Password</label>
-                                    <input class="form-control" name="Password" id="inputFirstName" type="text" placeholder="New password" value="">
+                                    <label class="small mb-1" for="inputFirstName">Jelszó</label>
+                                    <input class="form-control" name="Password" id="inputFirstName" type="password" placeholder="Új jelszó" value="">
                                 </div>
                                 <!-- Form Group (last name)-->
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="inputLastName">Password again</label>
-                                    <input class="form-control" name="Password2" id="inputLastName" type="text" placeholder="Repeat new password" value="">
+                                    <label class="small mb-1" for="inputLastName">Jelszó újra</label>
+                                    <input class="form-control" name="Password2" id="inputLastName" type="password" placeholder="Új jelszó ismét" value="">
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary" type="submit">Save changes</button>
+                            <button class="btn btn-primary" type="submit">Változások mentése</button>
                         </form>
                     </div>
                 </div>
@@ -79,13 +79,15 @@
             else
             {
                 <div class="card mb-4">
-                    <div class="card-header">Account Details</div>
+                    <div class="card-header">Felhasználó Adatai</div>
                     <div class="card-body">
-                        <!-- Form Group (username)-->
-                        <div class="mb-3">
-                            <h4>Username : @Model.UserInfo.Name</h4>
-                            <h4>Type  : @Model.UserInfo.TypeOfUser</h4>
-                        </div>
+                        
+                            <!-- Form Group (username)-->
+                            <div class="mb-3">
+                                <h4>Felhaszálónév: @Model.UserInfo.Name</h4>
+                                <h4>Felhasználó típus: @Model.UserInfo.TypeOfUser</h4>
+                            </div>
+                            <!-- Form Row-->
                     </div>
                 </div>
             }
@@ -94,7 +96,7 @@
         <div class="col-xl-4">
             <!-- Account details card-->
             <div class="card mb-4">
-                <div class="card-header">Rating</div>
+                <div class="card-header">Értékelés</div>
                 <div class="card-body">
                     <form method="post" action="/Home/ProfileRatingUpdate">
                         <!-- Form Group (username)-->
@@ -103,17 +105,12 @@
                             <input type="hidden" name="userIdDirected" value="@ViewData["VisitorId"]" />
                         }
                         <div class="ratings">
-                            <h3>Average rating: </h3>
+                            <h3>Átlagos értékelés: </h3>
                             <div class="rating-stars">
                                 @if (@Model.UserInfo.Voters == 0)
                                 {
-                                    <!-- Loop through to generate stars based on average rating -->
-                                    @for (int i = 5; i < 5; i++)
-                                    {
-                                        <i class="fas fa-star text-warning"></i>
-                                    }
-                                    <!-- Show remaining empty stars -->
-                                    @for (int i = 5; i < 5; i++)
+                                    <!-- Show empty stars since there are no votes -->
+                                    @for (int i = 0; i < 5; i++)
                                     {
                                         <i class="far fa-star text-warning"></i>
                                     }
@@ -139,23 +136,24 @@
                                     var average = @Model.UserInfo.Rating / @Model.UserInfo.Voters;
                                     average = Math.Round(average, 1);
                                 }
-                                <a>Rating : @Convert.ToString(average)</a>
+                                <a>Értékelés: @Convert.ToString(average)</a>
 
                             </div>
-                            <a>Total voters : @Model.UserInfo.Voters</a>
+                            <a>Összes szavazók: @Model.UserInfo.Voters</a>
                         </div>
-                        <div class="ratings">
-                            <h3>Rate </h3>
-                            <div class="rating">
-                                <input type="radio" id="star5" name="rating" value="5" /><label for="star5"></label>
-                                <input type="radio" id="star4" name="rating" value="4" /><label for="star4"></label>
-                                <input type="radio" id="star3" name="rating" value="3" /><label for="star3"></label>
-                                <input type="radio" id="star2" name="rating" value="2" /><label for="star2"></label>
-                                <input type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
+                        @if(visitor){
+                            <div class="ratings">
+                                <h3>Értékelés </h3>
+                                <div class="rating">
+                                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5"></label>
+                                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4"></label>
+                                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3"></label>
+                                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2"></label>
+                                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
+                                </div>
                             </div>
-                        </div>
-                        <button class="btn btn-primary" type="submit">Save changes</button>
-
+                            <button class="btn btn-primary" type="submit">Save changes</button>
+                        }
                     </form>
                 </div>
             </div>
