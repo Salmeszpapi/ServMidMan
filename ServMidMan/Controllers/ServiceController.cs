@@ -139,6 +139,11 @@ namespace ServMidMan.Controllers
         {
             Service myService = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();
             myService.productStatus = (ProductStatus)Enum.Parse(typeof(ProductStatus), productStatus);
+            if(myService.productStatus == ProductStatus.Done) 
+            {
+                myService.Approved = ServiceStatus.Done; 
+
+            }
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -83,37 +83,47 @@
                                             <div class="col-md-6">
                                                 <div>Product name: @group.product.Products.Name</div>
                                                 <div>User ID: @group.OwnerName </div>
-@*                                                 <div>Service ID: @group.service.Id</div>
-                                                <div>Product ID: @group.service.ProductId</div> *@
+                                                @*                                                 <div>Service ID: @group.service.Id</div>
+                                    <div>Product ID: @group.service.ProductId</div> *@
                                                 <div>Recived service price: @group.service.Price€</div>
                                                 <div>Description: @group.service.Description</div>
-                                                <div>Date when finished: @group.service.ApproximetlyFinishDate.ToString("dd.MM.yyyy")</div>
+                                                <div>Date aproximatelly finished: @group.service.ApproximetlyFinishDate.ToString("dd.MM.yyyy")</div>
                                                 @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
                                                     <h1 class="display-4 text-success">Approved !</h1>
                                                 }
+                                                @if (group.service.Approved == ServiceStatus.Done)
+                                                {
+                                                    <h1 class="display-4 text-black">Done !</h1>
+                                                }
                                                 else
                                                 {
-
-                                                    @if (ViewData["typeOfUser"].Equals("Client"))
-                                                    {
-                                                        <div class="text-center">
-                                                            <button class="approve-button" onclick="approveService(@group.service.Id)">Approve</button>
-                                                            <button class="reject-button" onclick="rejectService(@group.service.Id)">Reject</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="text-center">
-                                                            <button class="reject-button" onclick="rejectService(@group.service.Id)">Remove request</button>
-                                                        </div>
-                                                    }
-
+                                                    <div class="text-center">
+                                                        <form method="post" action="/Home/Profile" style="display: inline;">
+                                                            <input type="hidden" name="userId" value="@group.service.UserId" />
+                                                            <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
+                                                        </form>
+                                                        @if (ViewData["typeOfUser"].Equals("Client"))
+                                                        {
+                                                            @if (group.service.Approved != ServiceStatus.Approved)
+                                                            {
+                                                                <button class="btn btn-danger mr-2" onclick="rejectService(@group.service.Id)">Remove request</button>
+                                                                <button class="approve-button" onclick="approveService(@group.service.Id)">Approve</button>
+                                                                <button class="reject-button" onclick="rejectService(@group.service.Id)">Reject</button>
+                                                            }
+                                                           
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (group.service.Approved != ServiceStatus.Approved)
+                                                            {
+                                                                <button class="btn btn-danger mr-2" onclick="rejectService(@group.service.Id)">Remove request</button>
+                                                                
+                                                            }
+                                                        }
+                                                    </div>
                                                 }
-                                                <form method="post" action="/Home/Profile" style="display: inline;">
-                                                    <input type="hidden" name="userId" value="@group.service.UserId" />
-                                                    <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
-                                                </form>
+
 
                                             </div>
                                             <div class="col-md-6">
@@ -145,7 +155,7 @@
                                                         </select>
                                                     }
                                                 }
-  
+
 
                                             </div>
                                         </div>
@@ -188,7 +198,7 @@
                     }
                 })
                 .catch(error => console.error('Error updating product status:', error));
-        } 
+        }
         function showSenderServices() {
             document.getElementById('senderServices').style.display = 'block';
             document.getElementById('receivedServices').style.display = 'none';

@@ -30,6 +30,7 @@ namespace ServMidMan.Models
         UnSettled,
         Approved,
         Rejected,
+        Done,
     }
 
     public enum ProductStatus
