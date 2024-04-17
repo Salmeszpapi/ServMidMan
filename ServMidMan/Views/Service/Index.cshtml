@@ -52,7 +52,7 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-8 offset-md-2">
-                <h1 class="text-center">Requests</h1>
+                <h1 class="text-center">Ajánlatok</h1>
 
                 @if (ViewBag.Services != null)
                 {
@@ -68,29 +68,35 @@
                             <!-- Add this div -->
                             @if (ViewData["typeOfUser"].Equals("Client"))
                             {
-                                <h2>Received requests</h2>
+                                <h2>Beérkező ajánlatok</h2>
                             }
                             else
                             {
-                                <h2>Sended requests</h2>
+                                <h2>Küldött ajánlatok</h2>
                             }
                             @foreach (var group in Model.Services)
                             {
-                                <h3>Service ID: @group.service.Id</h3>
+                                <h3>Szervíz ID: @group.service.Id</h3>
                                 <ul class="service-list">
                                     <li class="service-item">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div>Product name: @group.product.Products.Name</div>
-                                                <div>User ID: @group.OwnerName </div>
-                                                @*                                                 <div>Service ID: @group.service.Id</div>
-                                    <div>Product ID: @group.service.ProductId</div> *@
-                                                <div>Recived service price: @group.service.Price€</div>
-                                                <div>Description: @group.service.Description</div>
-                                                <div>Date aproximatelly finished: @group.service.ApproximetlyFinishDate.ToString("dd.MM.yyyy")</div>
+                                                <div>Termék neve: @group.product.Products.Name</div>
+                                                <div>Felhasználó ID: @group.product.Products.UserId </div>
+                                                <div>Szervíz ID: @group.service.Id</div>
+                                                <div>Termék ID: @group.service.ProductId</div>
+                                                <div>Kapott szervíz ár: @group.service.Price€</div>
+                                                <div>Leírás: @group.service.Description </div>
+                                                <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.mm.dd")</div>
+                                                <div>
+                                                <form method="post" action="/Home/Profile" style="display: inline;">
+                                                    <input type="hidden" name="userId" value="@group.service.UserId" />
+                                                    <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
+                                                </form>
+                                                </div>
                                                 @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
-                                                    <h1 class="display-4 text-success">Approved !</h1>
+                                                    <h1 class="display-4 text-success">Elfogadva !</h1>
                                                 }
                                                 @if (group.service.Approved == ServiceStatus.Done)
                                                 {
@@ -127,7 +133,7 @@
 
                                             </div>
                                             <div class="col-md-6">
-                                                <img class="product-images" src="@group.product.ImagePaths[0]" alt="Product Image" data-toggle="modal" data-target="#imageModal">
+                                                <img class="product-images" src="@group.product.ImagePaths[0]" alt="Product Image" data-toggle="model" data-target="#imageModel">
                                                 @*                                                 @using (Html.BeginForm("UpdateProductStatus", "Service", FormMethod.Post))
                                     {
                                     @Html.DropDownListFor(x => x.Services[0].service.productStatus,
@@ -142,9 +148,11 @@
                                                             <input type="hidden" name="serviceId" value="@group.service.Id" />
                                                             <select class="form-control" id="productStatus" name="productStatus" onchange="submitForm(@group.service.Id, this.value)">
                                                                 <option value="@group.service.productStatus" hidden selected>@group.service.productStatus</option>
-                                                                <option value="UnSettled">UnSettled</option>
-                                                                <option value="InProgress">InProgress</option>
-                                                                <option value="Done">Done</option>
+                                                                <option value="Változatlan">Változatlan</option>
+                                                                <option value="Elküldve">Elküldve</option>
+                                                                <option value="MegérkezettASzerelőhöz">Megérkezett a Szerelőhöz</option>
+                                                                <option value="Megjavítva">Megjavítva</option>
+                                                                <option value="MegérkezettAzÜgyfélhez">Megérkezett az Ügyfélhez</option>
                                                             </select>
                                                         </form>
                                                     }
@@ -239,7 +247,8 @@
                 })
                 .catch(error => console.error('Error approving service:', error));
         }
-    </script>
+    </script>>
+
     <style>
         .product-images {
             max-width: 300px;

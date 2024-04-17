@@ -2,7 +2,7 @@
 <div class="container d-flex justify-content-center align-items-center">
     <div class="card">
         <div class="p-3 border-bottom d-flex align-items-center justify-content-center">
-            <h5>Login to ServMidMan</h5>
+            <h5>Bejelentkezés a ServMidMan oldalra</h5>
         </div>
         <div class="p-3 d-flex align-items-center justify-content-center">
             @if (ViewBag.ErrorMessage != null)
@@ -14,19 +14,19 @@
         </div>
         <div class="p-3 px-4 py-4 border-bottom">
             <form method="post" action="/Authentication/Login">
-                <input type="text" class="form-control mb-2" name="Email" placeholder="Email/Username" required />
+                <input type="text" class="form-control mb-2" name="Email" placeholder="Email" required />
                 <div class="form">
-                    <input type="password" class="form-control" name="Password" placeholder="Password" required />
+                    <input type="password" class="form-control" name="Password" placeholder="Jelszó" required />
                     @* <a href="#">Forgot?</a> *@
                 </div>
                 <div class="g-recaptcha" data-sitekey="6LcNA3gpAAAAAHXXiTCrEIQPbF1DkN9Mlu5EKovx" data-action="/Authentication/Login" required></div>
-                <button type="submit" class="btn btn-danger btn-block continue" style="margin-top:10px">Login</button>
+                <button type="submit" class="btn btn-danger btn-block continue" style="margin-top:10px">Belépés</button>
             </form>
 
         </div>
         <div class="p-3 d-flex flex-row justify-content-center align-items-center member">
-            <span>Not a member? </span>
-            <a href="/Authentication/Register" class="text-decoration-none ml-2">Register</a>
+            <span>Nem vagy tag? </span>
+            <a href="/Authentication/Register" class="text-decoration-none ml-2">Regisztráció</a>
         </div>
     </div>
 </div>
