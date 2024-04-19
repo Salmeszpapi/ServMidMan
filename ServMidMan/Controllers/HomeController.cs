@@ -41,10 +41,19 @@ namespace ServMidMan.Controllers
             List<ProductWithByteImages> myProductWithByteImages = new List<ProductWithByteImages>();
             foreach (var product in products)
             {
-                var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x=>x.FileName).ToList();
+                var prod = _dataProvider.Services.Where(x => x.ProductId == product.Id).FirstOrDefault();
+                if (prod != null)
+                {
+                    if (prod.Approved == ServiceStatus.Done)
+                    {
+                        continue;
+                    }
+                }
+                var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
+
                 myProductWithByteImages.Add(new ProductWithByteImages
                 {
-                    Products =  product ,
+                    Products = product,
                     //ImageResources =  ImageOperator.DownloadImages(myImages),
                     ImagePaths = ImageOperator.getImageFullPath(myImages),
                 });
@@ -67,16 +76,16 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Product(string id)
         {
-			if (!SiteGuardian.CheckSession(HttpContext))
-			{
-				return RedirectToAction("Welcome", "Authentication");
-			}
-			ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
+            if (!SiteGuardian.CheckSession(HttpContext))
+            {
+                return RedirectToAction("Welcome", "Authentication");
+            }
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
 
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             Product product = _dataProvider.Products.Where(x => x.Id.ToString() == id).FirstOrDefault();
-            if(product == null)
+            if (product == null)
             {
                 ViewBag.Error = "Product not find";
                 return View();
@@ -103,13 +112,13 @@ namespace ServMidMan.Controllers
             int lastId = 0;
             if (_dataProvider.Products.Any())
             {
-                lastId = _dataProvider.Products.Max(p => p.Id)+1;
+                lastId = _dataProvider.Products.Max(p => p.Id) + 1;
             }
             var userId = HttpContext.Session.GetString("UserId");
             product.UserId = Convert.ToInt32(userId);
             _dataProvider.Products.Add(product);
             List<string> myImagesToPush = new List<string>();
-            foreach (IFormFile file in files) 
+            foreach (IFormFile file in files)
             {
                 Guid guid = Guid.NewGuid();
                 Image myImage = new Image()
@@ -154,7 +163,7 @@ namespace ServMidMan.Controllers
                 _dataProvider.Images.Add(myImage);
             }
             _dataProvider.SaveChanges();
-            if(files.Count != 0)
+            if (files.Count != 0)
             {
                 ImageOperator.ImageUploaderToServer(files, myImagesToPush);
             }
@@ -165,10 +174,10 @@ namespace ServMidMan.Controllers
         {
             product.UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             Product dbProduct = _dataProvider.Products.FirstOrDefault(c => c.Id == product.Id);
-            List<Image> images= _dataProvider.Images.Where(c => c.ProductReferenceId == dbProduct.Id).ToList();
+            List<Image> images = _dataProvider.Images.Where(c => c.ProductReferenceId == dbProduct.Id).ToList();
             List<string> imageNames = images.Select(x => x.FileName).ToList();
             ImageOperator.FTPImgaeRemover(imageNames);
-            foreach(Image image in images)
+            foreach (Image image in images)
             {
                 _dataProvider.Images.Remove(image);
 
@@ -184,7 +193,7 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
-            if(userId is null)
+            if (userId is null)
             {
                 userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
 
@@ -197,8 +206,8 @@ namespace ServMidMan.Controllers
             }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
-            ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
-            var myProducts = _dataProvider.Products.Where(x=>x.UserId == userId).ToList();
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
+            var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
             productWithImagesPathAndUserInfo.UserInfo = _dataProvider.Users.Where(x => x.Id == userId).FirstOrDefault();
             //productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath = ImageOperator.getImageFullPath(new List<string>() { productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath }).FirstOrDefault();
@@ -208,6 +217,15 @@ namespace ServMidMan.Controllers
             foreach (var product in myProducts)
             {
                 var myImages = _dataProvider.Images.Where(x => x.ProductReferenceId == product.Id).Select(x => x.FileName).ToList();
+
+                var prod = _dataProvider.Services.Where(x => x.ProductId == product.Id).FirstOrDefault();
+                if (prod != null)
+                {
+                    if (prod.Approved == ServiceStatus.Done)
+                    {
+                        continue;
+                    }
+                }
                 productWithImagesPathAndUserInfo.productWithByteImages.Add(new ProductWithByteImages
                 {
                     Products = product,
@@ -232,7 +250,7 @@ namespace ServMidMan.Controllers
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             User myUser = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
-            if((user.Password == user.Password2) && !string.IsNullOrWhiteSpace(user.Password))
+            if ((user.Password == user.Password2) && !string.IsNullOrWhiteSpace(user.Password))
             {
                 myUser.Password = PasswordHasher.HashPassword(user.Password);
             }
@@ -261,7 +279,7 @@ namespace ServMidMan.Controllers
         }
 
         [HttpPost]
-        public IActionResult ProfileRatingUpdate(int rating,int? userIdDirected)
+        public IActionResult ProfileRatingUpdate(int rating, int? userIdDirected)
         {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
@@ -271,7 +289,7 @@ namespace ServMidMan.Controllers
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-            if(userIdDirected != null)
+            if (userIdDirected != null)
             {
                 userId = (int)userIdDirected;
             }
@@ -299,7 +317,7 @@ namespace ServMidMan.Controllers
             }
 
             //checking 
-            if(userIdDirected != null)
+            if (userIdDirected != null)
             {
                 return RedirectToAction("Profile", "Home", new { userId = userIdDirected });
 
@@ -356,16 +374,16 @@ namespace ServMidMan.Controllers
         }
         public IActionResult Upload()
         {
-            ViewData["typeOfUser"] =HttpContext.Session.GetString("UserType");
+            ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             if (!SiteGuardian.CheckSession(HttpContext))
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
 
-            var nextProductId = _dataProvider.Products.Max(x => x.Id) +1;
+            var nextProductId = _dataProvider.Products.Max(x => x.Id) + 1;
 
-			return View(nextProductId);
+            return View(nextProductId);
         }
 
         private List<Product> ProductsFilter(SearchProducts searchProducts)
@@ -377,7 +395,7 @@ namespace ServMidMan.Controllers
             }
             if (searchProducts.Category != null)
             {
-                if(products == null)
+                if (products == null)
                 {
                     products = _dataProvider.Products.Where(x => x.Category == searchProducts.Category).ToList();
                 }
@@ -385,7 +403,7 @@ namespace ServMidMan.Controllers
                 {
                     products = products.Where(x => x.Category == searchProducts.Category).ToList();
                 }
-                
+
             }
             if (searchProducts.Location != null)
             {
@@ -397,7 +415,7 @@ namespace ServMidMan.Controllers
                 {
                     products = products.Where(x => x.Location == searchProducts.Location).ToList();
                 }
-                
+
             }
             if (searchProducts.LocationAround != null)
             {
@@ -430,15 +448,15 @@ namespace ServMidMan.Controllers
 
             return products;
         }
-		[HttpGet]
-		public IActionResult GetSuggestions(string input)
-		{
-			var suggestions = _dataProvider.Locations
-				.Where(x => x.Cities.Contains(input) || x.PostalCode.Contains(input))
-				.Select(x => x.Cities) 
-				.ToList();
+        [HttpGet]
+        public IActionResult GetSuggestions(string input)
+        {
+            var suggestions = _dataProvider.Locations
+                .Where(x => x.Cities.Contains(input) || x.PostalCode.Contains(input))
+                .Select(x => x.Cities)
+                .ToList();
 
-			return Json(suggestions);
-		}
-	}
+            return Json(suggestions);
+        }
+    }
 }

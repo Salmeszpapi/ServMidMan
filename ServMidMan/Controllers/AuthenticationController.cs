@@ -61,7 +61,7 @@ namespace ServMidMan.Controllers
                 var isThereAnyEqualEmails = _dataProvider.Users.Where(x => x.Email == user.Email).FirstOrDefault();
                 if(isThereAnyEqualEmails is not null)
                 {
-                    ViewBag.ErrorMessage = "Already taken email";
+                    ViewBag.ErrorMessage = "Foglalt email";
                     return View("Register");
                 }
                 if(EmailVerificator.emailWithVerification.ContainsKey(user.Email))
@@ -70,13 +70,13 @@ namespace ServMidMan.Controllers
                     EmailVerificator.emailWithVerification.TryGetValue(user.Email, out myValidationCodeWithDate);
                     if(myValidationCodeWithDate.Item1 != verificationCode) 
                     {
-                        ViewBag.ErrorMessage = "Invalid verification code. Please enter the correct code.";
+                        ViewBag.ErrorMessage = "Helytelen ellenőrző kód";
                         return View("Register");
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Invalid Email";
+                    ViewBag.ErrorMessage = "Helytelen Email";
                     return View("Register");
                 }
                 user.Password = PasswordHasher.HashPassword(user.Password);
@@ -88,7 +88,7 @@ namespace ServMidMan.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Already taken email";
+                ViewBag.ErrorMessage = "Foglalt email";
             }
             return RedirectToAction("Register");
         }
@@ -108,7 +108,7 @@ namespace ServMidMan.Controllers
                 return RedirectToAction("Index","Home");
                 //show alert
             }
-            ViewBag.ErrorMessage = "Invalid Username or Password ";
+            ViewBag.ErrorMessage = "Helytelen email vagy jelszo";
             return View("Welcome");
         }
 
@@ -119,11 +119,11 @@ namespace ServMidMan.Controllers
             {
                 if(email is null)
                 {
-					return Json(new { success = false, message = "Please provide eamil address " });
+					return Json(new { success = false, message = "Adjon meg egy létező emailt" });
 				}
                 if (!EmailVerificator.IsValidEmail(email))
                 {
-                    return Json(new { success = false, message = "Wrong email" });
+                    return Json(new { success = false, message = "Helytelen email" });
                 }
                 // Your logic to send the verification email
                 Random random = new Random();
@@ -131,12 +131,12 @@ namespace ServMidMan.Controllers
                 EmailVerificator.SendVerificationEmail(email, sessionVerificationCode);
 
                 // Return a success response
-                return Json(new { success = true, message = "Verification email sent successfully" });
+                return Json(new { success = true, message = "Ellenőrző kód elküldve" });
             }
             catch (Exception ex)
             {
                 // Return an error response if something goes wrong
-                return Json(new { success = false, message = "Failed to send verification email: " + ex.Message });
+                return Json(new { success = false, message = "Hiba az ellenőrző kód küldésénél: " + ex.Message });
             }
         }
 

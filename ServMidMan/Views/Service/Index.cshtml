@@ -88,7 +88,7 @@
                                                 <div>Kapott szervíz ár: @group.service.Price€</div>
                                                 <div>Leírás: @group.service.Description </div>
                                                 <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.mm.dd")</div>
-                                                <div>
+                                                <div style="margin-bottom:15px">
                                                 <form method="post" action="/Home/Profile" style="display: inline;">
                                                     <input type="hidden" name="userId" value="@group.service.UserId" />
                                                     <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
@@ -100,14 +100,13 @@
                                                 }
                                                 @if (group.service.Approved == ServiceStatus.Done)
                                                 {
-                                                    <h1 class="display-4 text-black">Done !</h1>
+                                                    <h1 class="display-4 text-black">Befejezve !</h1>
                                                 }
                                                 else
                                                 {
                                                     <div class="text-center">
                                                         <form method="post" action="/Home/Profile" style="display: inline;">
                                                             <input type="hidden" name="userId" value="@group.service.UserId" />
-                                                            <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
                                                         </form>
                                                         @if (ViewData["typeOfUser"].Equals("Client"))
                                                         {

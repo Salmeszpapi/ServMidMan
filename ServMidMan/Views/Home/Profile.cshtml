@@ -85,8 +85,19 @@
                             <!-- Form Group (username)-->
                             <div class="mb-3">
                                 <h4>Felhaszálónév: @Model.UserInfo.Name</h4>
-                                <h4>Felhasználó típus: @Model.UserInfo.TypeOfUser</h4>
-                            </div>
+                            <h4>
+                                Felhasználó típus: @{
+                                    if (Model.UserInfo.TypeOfUser.ToString() == "Client")
+                                    {
+                                        @("Kliens")
+                                    }
+                                    else
+                                    {
+                                        @("Szerelő")
+                                    }
+                                }
+                            </h4>
+                        </div>
                             <!-- Form Row-->
                     </div>
                 </div>
@@ -164,7 +175,7 @@
         @if (ViewData["typeOfUser"].Equals("Client") || visitor)
         {
             <div class="card mb-4">
-                <div class="card-header">Products</div>
+                <div class="card-header">Termékek</div>
                 <div class="card-body d-flex flex-nowrap justify-content-start align-items-center overflow-auto" style="overflow-x: auto; max-width: calc(100vw - 30px);">
                     @if (Model.productWithByteImages != null)
                     {
