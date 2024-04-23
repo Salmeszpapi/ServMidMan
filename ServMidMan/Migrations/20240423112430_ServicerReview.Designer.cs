@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServMidMan.Data;
 
@@ -10,9 +11,11 @@ using ServMidMan.Data;
 namespace ServMidMan.Migrations
 {
     [DbContext(typeof(DataProviderContext))]
-    partial class DataProviderContextModelSnapshot : ModelSnapshot
+    [Migration("20240423112430_ServicerReview")]
+    partial class ServicerReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,9 +166,6 @@ namespace ServMidMan.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("CommenterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")

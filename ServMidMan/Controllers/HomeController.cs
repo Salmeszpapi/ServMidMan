@@ -205,6 +205,7 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
+            ViewData["BrowserUser"] = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             if (userId is null)
             {
                 userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
@@ -214,11 +215,28 @@ namespace ServMidMan.Controllers
             {
                 ViewData["Visitor"] = true;
                 ViewData["VisitorId"] = userId;
-
             }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
+            //Get Review comments
+            var reviews = _dataProvider.ServicerReviews.Where(x=>x.UserId == userId).ToList();
+            List<ServiceReviewExtended> reviewer = new List<ServiceReviewExtended>();
+            foreach (var item in reviews)
+            {
+                ServiceReviewExtended myReview = new ServiceReviewExtended()
+                {
+                    Id = item.Id,
+                    Rating = item.Rating,
+                    text = item.text,
+                    CommenterId = item.CommenterId,
+                    UserId = item.UserId,
+                };
+                myReview.UserName = _dataProvider.Users.Where(x => x.Id == item.CommenterId).Select(x => x.Name).FirstOrDefault();
+                reviewer.Add(myReview);
+            }
+            //end review
+            ViewData["ReviewComments"] = reviewer;
             var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
             productWithImagesPathAndUserInfo.UserInfo = _dataProvider.Users.Where(x => x.Id == userId).FirstOrDefault();
@@ -245,7 +263,7 @@ namespace ServMidMan.Controllers
                     ImagePaths = ImageOperator.getImageFullPath(myImages),
                 });
             }
-
+            
 
             return View(productWithImagesPathAndUserInfo);
         }
@@ -291,7 +309,7 @@ namespace ServMidMan.Controllers
         }
 
         [HttpPost]
-        public IActionResult ProfileRatingUpdate(int rating, int? userIdDirected)
+        public IActionResult ProfileRatingUpdate(int rating, int? userIdDirected, string reviewText, string visitorId)
         {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
@@ -308,6 +326,14 @@ namespace ServMidMan.Controllers
             User myUser = _dataProvider.Users.FirstOrDefault(c => c.Id == userId);
             myUser.Voters += 1;
             myUser.Rating = myUser.Rating + rating;
+            ServicerReviews servicerReviews = new ServicerReviews()
+            {
+                UserId = Convert.ToInt32(userIdDirected),
+                CommenterId = Convert.ToInt32(visitorId),
+                text = reviewText,
+                Rating = rating
+            };
+            _dataProvider.ServicerReviews.Add(servicerReviews);
             _dataProvider.SaveChanges();
             var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();

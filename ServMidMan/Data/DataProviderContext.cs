@@ -16,7 +16,7 @@ namespace ServMidMan.Data
         public DbSet<Image> Images { get; set; }
         public DbSet<Chat> ChatHistory { get; set; }
         public DbSet<Service> Services { get; set; }
-
+        public DbSet<ServicerReviews> ServicerReviews { get; set; }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    modelBuilder.Entity<UserEntity>()

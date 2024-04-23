@@ -103,7 +103,6 @@
                 </div>
             }
         </div>
-
         <div class="col-xl-4">
             <!-- Account details card-->
             <div class="card mb-4">
@@ -163,7 +162,12 @@
                                     <input type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
                                 </div>
                             </div>
-                            <button class="btn btn-primary" type="submit">Save changes</button>
+                            <div class="col-md-6 mb-3">
+                                <label for="editDescription">Üzenet</label>
+                                    <textarea class="form-control" id="ReviewText" name="reviewText" rows="4"></textarea>
+                            </div>
+                                <input type="hidden" name="visitorId" value="@ViewData["BrowserUser"]"/>
+                            <button class="btn btn-primary" type="submit">Értékelés elküldése</button>
                         }
                     </form>
                 </div>
@@ -212,6 +216,37 @@
 
         }
     </div>
+    <section id="Review">
+
+        @{
+            if (ViewData["ReviewComments"] != null)
+            {
+                var test123 = (List<ServiceReviewExtended>)ViewData["ReviewComments"];
+                @foreach (var item in test123)
+                {
+                    <div class="review-container">
+                        <span class="review-name">@item.UserName</span>
+                        <span class="review-rating">
+                            @if (item.Rating == 0)
+                            {
+                                <i>Nem értékelt</i>
+
+                            }
+                            else
+                            {
+                                @for (int i = 0; i < item.Rating; i++)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                            }
+                        </span>
+                        <p class="review-comment">@item.text</p>
+                    </div>
+                }
+            }
+        }
+    </section>
+    
     <script>
         function submitForm() {
             document.getElementById("myForm").submit();
@@ -341,6 +376,27 @@
             .rating > label:hover ~ input:checked ~ label {
                 color: #c59b08;
             }
+                  .review-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .review-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .review-rating {
+            color: #ffa500;
+        }
+
+        .review-comment {
+            margin-top: 10px;
+            color: #666;
+        }
 
     </style>
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
