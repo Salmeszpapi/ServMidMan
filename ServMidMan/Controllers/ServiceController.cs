@@ -32,7 +32,8 @@ namespace ServMidMan.Controllers
             ServicesOrdered servicesOrdered = new ServicesOrdered();
             if (ViewData["typeOfUser"].Equals("Client"))
             {
-                foreach (var product in myProducts) {
+                foreach (var product in myProducts)
+                {
                     serviceList = _dataProvider.Services.Where(service => service.ProductId == product)
                         .ToList();
                     ServiceWithProduct serviceWithProduct = new ServiceWithProduct();
@@ -53,12 +54,12 @@ namespace ServMidMan.Controllers
             }
             else
             {
-                   var myServices =  _dataProvider.Services.Where(x => x.UserId == Convert.ToInt32(HttpContext.Session.GetString("UserId"))).ToList();
-                foreach(var service in myServices)
+                var myServices = _dataProvider.Services.Where(x => x.UserId == Convert.ToInt32(HttpContext.Session.GetString("UserId"))).ToList();
+                foreach (var service in myServices)
                 {
                     ServiceWithProduct serviceWithProduct = new ServiceWithProduct();
                     serviceWithProduct.service = service;
-                    serviceWithProduct.product.Products = _dataProvider.Products.Where(x=>x.Id == service.ProductId).FirstOrDefault();
+                    serviceWithProduct.product.Products = _dataProvider.Products.Where(x => x.Id == service.ProductId).FirstOrDefault();
                     serviceWithProduct.OwnerName = _dataProvider.Users.FirstOrDefault(x => x.Id == Convert.ToInt32(HttpContext.Session.GetString("UserId"))).Name;
                     serviceWithProduct.product.ImagePaths = ImageOperator.getImageFullPath(_dataProvider.Images.Where(x => x.ProductReferenceId == serviceWithProduct.product.Products.Id).Select(x => x.FileName).ToList());
                     servicesOrdered.Services.Add(serviceWithProduct);
@@ -95,12 +96,12 @@ namespace ServMidMan.Controllers
         public IActionResult Approve(int serviceId)
         {
             // Implement the logic to approve the service with the given serviceId
-            var myAprrovedService = _dataProvider.Services.Where(x=>x.Id == serviceId).FirstOrDefault();
-            var ProductId = _dataProvider.Products.Where(x=>x.Id == myAprrovedService.ProductId).Select(x=>x.Id).FirstOrDefault();
+            var myAprrovedService = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();
+            var ProductId = _dataProvider.Products.Where(x => x.Id == myAprrovedService.ProductId).Select(x => x.Id).FirstOrDefault();
             myAprrovedService.Approved = ServiceStatus.Approved;
             _dataProvider.Services.Where(_x => _x.ProductId == ProductId).ToList().ForEach(x =>
             {
-                if(x.Approved != ServiceStatus.Approved)
+                if (x.Approved != ServiceStatus.Approved)
                 {
                     _dataProvider.Services.Remove(x);
                 }
@@ -135,18 +136,18 @@ namespace ServMidMan.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
-        public IActionResult UpdateProductStatus(string productStatus,int serviceId) 
+        public IActionResult UpdateProductStatus(string productStatus, int serviceId)
         {
             Service myService = _dataProvider.Services.Where(x => x.Id == serviceId).FirstOrDefault();
             myService.productStatus = (ProductStatus)Enum.Parse(typeof(ProductStatus), productStatus);
-            if(myService.productStatus == ProductStatus.Done) 
+            if (myService.productStatus == ProductStatus.Done)
             {
-                myService.Approved = ServiceStatus.Done; 
+                myService.Approved = ServiceStatus.Done;
 
             }
             _dataProvider.SaveChanges();
             return RedirectToAction("Index");
         }
-
     }
 }
+

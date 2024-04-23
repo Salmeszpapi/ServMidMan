@@ -26,7 +26,7 @@ namespace ServMidMan.Controllers
             _hubContext = hubContext;
         }
 
-        public IActionResult Index(SearchProducts filteredProducts = null)
+        public IActionResult Index(SearchProducts filteredProducts = null, int page = 0)
         {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
@@ -63,10 +63,22 @@ namespace ServMidMan.Controllers
                 ViewBag.NoProduct = "No existing products";
                 return View();
             }
+            page = page == 0 ? page : page-1;
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
-
-            return View(myProductWithByteImages);
+            int returnLeght = 0;
+            if(myProductWithByteImages.Count() < (page * 12 + 12))
+            {
+                var test = page * 12 + 12;
+                returnLeght = myProductWithByteImages.Count() % test - page*12;
+            }
+            else
+            {
+                returnLeght = page * 12 + 12;
+            }
+            ViewData["Page"] = page;
+            ViewData["MaxPages"] = (myProductWithByteImages.Count() + 12 - 1 ) / 12;
+            return View(myProductWithByteImages.GetRange(page*12, returnLeght));
         }
 
 

@@ -151,6 +151,26 @@
         </div>
     </div>
 </section>
+<section>
+    <div class="pagination">
+        <a href="#">&laquo;</a>
+@*         @{
+            var a = ViewData["MaxPages"];
+            if(true)
+        } *@
+        @for(int i = 0; i < Convert.ToInt32(ViewData["MaxPages"]); i++)
+        {
+            if (i == Convert.ToInt32(ViewData["Page"]))
+            {
+                <a class="active" href="#">@(i+1)</a>
+            }
+            else{
+            <a href="#">@(i+1)</a>
+            }
+        }
+        <a href="#">&raquo;</a>
+    </div>
+</section>
 <script>
     window.onload = function () {
         // Get the default option text
@@ -242,9 +262,34 @@
             }
         });
     });
-</script>
 
-<script>
+    $(document).ready(function(){
+    $(".pagination a").click(function(e){
+        e.preventDefault(); // Prevent the default action of the link
+        
+        var pageNumber = $(this).text(); // Get the text of the clicked link
+        
+        var urlWithParameters = '/Home/Index?page=' + pageNumber; // Construct URL with parameters
+window.location.href = urlWithParameters; 
+
+        @* // Now you can send the pageNumber to your controller via AJAX or any other method
+        // For example, you can use AJAX to send the pageNumber to your controller
+        $.ajax({
+            url: '/Home/Index?page= ' + pageNumber,
+            type: 'GET', // or 'GET' depending on your controller setup
+            success: function(response) {
+                // Handle the response from the controller
+                console.log(response);
+
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.error(error);
+            }
+        }); *@
+    });
+});
+
     function changeCursor() {
         document.body.style.cursor = "pointer";
     }
@@ -352,4 +397,30 @@
         .suggestion:hover {
             background-color: #f0f0f0;
         }
+
+    .pagination {
+        display: inline-block; /* Display the pagination as inline-block */
+        margin-top: 20px; /* Add some top margin for better spacing */
+    }
+
+        .pagination a {
+            color: black;
+            display: inline-block; /* Change from float:left to display:inline-block */
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+            .pagination a.active {
+                background-color: dodgerblue;
+                color: white;
+            }
+
+            .pagination a:hover:not(.active) {
+                background-color: #ddd;
+            }
+
+    section {
+        text-align: center; /* Center-align the content */
+    }
 </style>
