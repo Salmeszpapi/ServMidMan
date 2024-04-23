@@ -36,13 +36,26 @@
                                 <option value="Egyéb">Egyéb</option>
                             </select>
                         </li>
-
+                        <li class="nav-item">
+                            <select class="form-control" name="Region">
+                                <option value="Kerület" disabled selected hidden>Kerület</option>
+                                <option value="Banskobystrický">Banskobystrický</option>
+                                <option value="Trnavský">Trnavský</option>
+                                <option value="Prešovský">Prešovský</option>
+                                <option value="Žilinský">Žilinský</option>
+                                <option value="Trenčiansky">Trenčiansky</option>
+                                <option value="Nitriansky">Nitriansky</option>
+                                <option value="Košický">Košický</option>
+                                <option value="Bratislavský">Bratislavský</option>
+                            </select>
+                        </li>
                         <li class="nav-item">
                             <div class="input-group">
                                 <input type="text" name="Location" class="form-control" id="inputField" autocomplete="off" placeholder="Adj meg város nevet" >
                                 <div class="suggestions-container" id="suggestionsContainer"></div>
                             </div>
                         </li>
+
                         <li class="nav-item">
                             <input class="form-control" type="number" name="minPrice" placeholder="Min Ár">
                         </li>
@@ -153,7 +166,6 @@
 </section>
 <section>
     <div class="pagination">
-        <a href="#">&laquo;</a>
 @*         @{
             var a = ViewData["MaxPages"];
             if(true)
@@ -168,7 +180,6 @@
             <a href="#">@(i+1)</a>
             }
         }
-        <a href="#">&raquo;</a>
     </div>
 </section>
 <script>

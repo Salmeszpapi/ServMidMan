@@ -433,6 +433,17 @@ namespace ServMidMan.Controllers
             {
                 //TODO
             }
+            if(searchProducts.Region != null){
+                var DiscrictPostalCodes = _dataProvider.Locations.Where(l => l.Disctrict == searchProducts.Region).Select(x => x.PostalCode.Trim().Replace(" ","")).ToList();
+                if (products == null)
+                {
+                    products = _dataProvider.Products.Where(x=> DiscrictPostalCodes.Contains(x.Location)).ToList();
+                }
+                else
+                {
+                    products = products.Where(x => DiscrictPostalCodes.Contains(x.Location)).ToList();
+                }
+            }
             if (searchProducts.MinPrice != null)
             {
                 if (products == null)

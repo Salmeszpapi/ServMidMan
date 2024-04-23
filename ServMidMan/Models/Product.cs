@@ -43,5 +43,6 @@ namespace ServMidMan.Models
         public int? ServiceId { get; set; }
         public double? MinPrice { get; set; }
         public double LocationAround { get; set; }
+        public string Region { get; set; }
     }
 }
