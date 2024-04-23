@@ -214,8 +214,8 @@ namespace ServMidMan.Controllers
             else
             {
                 ViewData["Visitor"] = true;
-                ViewData["VisitorId"] = userId;
             }
+            ViewData["VisitorId"] = userId;
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
@@ -492,9 +492,6 @@ namespace ServMidMan.Controllers
                     products = products.Where(x => x.Price <= searchProducts.Price).ToList();
                 }
             }
-
-
-
             return products;
         }
         [HttpGet]
@@ -506,6 +503,14 @@ namespace ServMidMan.Controllers
                 .ToList();
 
             return Json(suggestions);
+        }
+        [HttpPost]
+        public IActionResult ProfileDescriptionUpdate(string Description, string userIdDirected)
+        {
+            var user = _dataProvider.Users.Where(x => x.Id == Convert.ToInt32(userIdDirected)).FirstOrDefault();
+            user.DescriptionOfUser = Description;
+            _dataProvider.SaveChanges();
+            return RedirectToAction("Profile","Home");
         }
     }
 }
