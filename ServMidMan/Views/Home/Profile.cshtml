@@ -204,232 +204,235 @@
         <div class="col-xl-4" style="margin-bottom:25px">
             <!-- Profile picture card-->
 
-            </div>
-            <div class="col-xl-12">
-                <!-- Products card -->
+        </div>
+        <div class="col-xl-12">
+            <!-- Products card -->
+
+            <div class="card mb-4">
                 @if (ViewData["typeOfUser"].Equals("Client") || visitor)
                 {
-                    <div class="card mb-4">
-                        <div class="card-header">Termékek</div>
-                        <div class="card-body d-flex flex-nowrap justify-content-start align-items-center overflow-auto" style="overflow-x: auto; max-width: calc(100vw - 30px);">
-                            @if (Model.productWithByteImages != null)
-                            {
-                                @* <form method="get" id="myForm" action="Home/Product"> *@
-
-                                @foreach (var productWithByteImages in Model.productWithByteImages.Take(9))
-                                {
-                                    <input type="hidden" name="ProductId" value="@productWithByteImages.Products.Id" />
-                                    <div class="card mb-3 mr-3" style="width: 12rem;">
-                                        <div class="card-body text-center">
-                                            <h5 class="card-title mb-0">@productWithByteImages.Products.Name</h5> <!-- Added mb-0 class to remove bottom margin -->
-                                        </div>
-                                        @if (productWithByteImages.ImagePaths.Any())
-                                        {
-                                            <img src="@productWithByteImages.ImagePaths.First()" class="card-img-top" onclick="redirectToProduct(@productWithByteImages.Products.Id)" onmouseover="changeCursor()" onmouseout="restoreCursor()" alt="Product Image" style="width: 100%;">
-                                        }
-                                        else
-                                        {
-                                            <img src="https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg" class="card-img-top" alt="Default Image" style="width: 100%;">
-                                        }
-                                    </div>
-                                }
-                                @* </form> *@
-                            }
-                            else
-                            {
-                                <p>No products found.</p>
-                            }
-                        </div>
-                    </div>
+                <div class="card-header">Termékek</div>
+                    
                 }
                 else
                 {
-
+                    <div class="card-header">Megjavitott termekek</div>
                 }
-            </div>
-            <section id="Review">
-
-                @{
-                    if (ViewData["ReviewComments"] != null)
+                <div class="card-body d-flex flex-nowrap justify-content-start align-items-center overflow-auto" style="overflow-x: auto; max-width: calc(100vw - 30px);">
+                    @if (Model.productWithByteImages != null)
                     {
-                        var test123 = (List<ServiceReviewExtended>)ViewData["ReviewComments"];
-                        @foreach (var item in test123)
-                        {
-                            <div class="review-container">
-                                <span class="review-name">@item.UserName</span>
-                                <span class="review-rating">
-                                    @if (item.Rating == 0)
-                                    {
-                                        <i>Nem értékelt</i>
+                        @* <form method="get" id="myForm" action="Home/Product"> *@
 
-                                    }
-                                    else
-                                    {
-                                        @for (int i = 0; i < item.Rating; i++)
-                                        {
-                                            <i class="fas fa-star text-warning"></i>
-                                        }
-                                    }
-                                </span>
-                                <p class="review-comment">@item.text</p>
+                        @foreach (var productWithByteImages in Model.productWithByteImages.Take(9))
+                        {
+                            <input type="hidden" name="ProductId" value="@productWithByteImages.Products.Id" />
+                            <div class="card mb-3 mr-3" style="width: 12rem;">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title mb-0">@productWithByteImages.Products.Name</h5> <!-- Added mb-0 class to remove bottom margin -->
+                                </div>
+                                @if (productWithByteImages.ImagePaths.Any())
+                                {
+                                    <img src="@productWithByteImages.ImagePaths.First()" class="card-img-top" onclick="redirectToProduct(@productWithByteImages.Products.Id)" onmouseover="changeCursor()" onmouseout="restoreCursor()" alt="Product Image" style="width: 100%;">
+                                }
+                                else
+                                {
+                                    <img src="https://www.viewhotels.jp/ryogoku/wp-content/uploads/sites/9/2020/03/test-img.jpg" class="card-img-top" alt="Default Image" style="width: 100%;">
+                                }
                             </div>
                         }
+                        @* </form> *@
+                    }
+                    else
+                    {
+                        <p>No products found.</p>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <section id="Review">
+
+            @{
+                if (ViewData["ReviewComments"] != null)
+                {
+                    var test123 = (List<ServiceReviewExtended>)ViewData["ReviewComments"];
+                    @foreach (var item in test123)
+                    {
+                        <div class="review-container">
+                            <span class="review-name">@item.UserName</span>
+                            <span class="review-rating">
+                                @if (item.Rating == 0)
+                                {
+                                    <i>Nem értékelt</i>
+
+                                }
+                                else
+                                {
+                                    @for (int i = 0; i < item.Rating; i++)
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                }
+                            </span>
+                            <p class="review-comment">@item.text</p>
+                        </div>
                     }
                 }
-            </section>
+            }
+        </section>
 
-            <script>
-                function submitForm() {
-                    document.getElementById("myForm").submit();
-                }
-                function redirectToProduct(productId) {
-                    window.location.href = '/Home/Product?id=' + productId;
-                }
-            </script>
+        <script>
+            function submitForm() {
+                document.getElementById("myForm").submit();
+            }
+            function redirectToProduct(productId) {
+                window.location.href = '/Home/Product?id=' + productId;
+            }
+        </script>
 
-            <script>
-                function changeCursor() {
-                    document.body.style.cursor = "pointer";
+        <script>
+            function changeCursor() {
+                document.body.style.cursor = "pointer";
+            }
+
+            function restoreCursor() {
+                document.body.style.cursor = "auto";
+            }
+        </script>
+
+        <style>
+            body {
+                background-color: #f2f6fc;
+                color: #69707a;
+            }
+
+            .img-account-profile {
+                height: 10rem;
+            }
+
+            .rounded-circle {
+                border-radius: 50% !important;
+            }
+
+            .card {
+                box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+            }
+
+                .card .card-header {
+                    font-weight: 500;
                 }
 
-                function restoreCursor() {
-                    document.body.style.cursor = "auto";
-                }
-            </script>
+            .card-header:first-child {
+                border-radius: 0.35rem 0.35rem 0 0;
+            }
 
-            <style>
-                body {
-                    background-color: #f2f6fc;
-                    color: #69707a;
+            .card-header {
+                padding: 1rem 1.35rem;
+                margin-bottom: 0;
+                background-color: rgba(33, 40, 50, 0.03);
+                border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+            }
+
+            .form-control, .dataTable-input {
+                display: block;
+                width: 100%;
+                padding: 0.875rem 1.125rem;
+                font-size: 0.875rem;
+                font-weight: 400;
+                line-height: 1;
+                color: #69707a;
+                background-color: #fff;
+                background-clip: padding-box;
+                border: 1px solid #c5ccd6;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                border-radius: 0.35rem;
+                transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            }
+
+            .nav-borders .nav-link.active {
+                color: #0061f2;
+                border-bottom-color: #0061f2;
+            }
+
+            .nav-borders .nav-link {
+                color: #69707a;
+                border-bottom-width: 0.125rem;
+                border-bottom-style: solid;
+                border-bottom-color: transparent;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+
+            .rating {
+                float: left;
+                height: 46px;
+                padding: 0 10px;
+            }
+
+                .rating:not(:checked) > input {
+                    position: absolute;
+                    top: -9999px;
                 }
 
-                .img-account-profile {
-                    height: 10rem;
+                .rating:not(:checked) > label {
+                    float: right;
+                    width: 1em;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    cursor: pointer;
+                    font-size: 30px;
+                    color: #ccc;
                 }
 
-                .rounded-circle {
-                    border-radius: 50% !important;
-                }
-
-                .card {
-                    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
-                }
-
-                    .card .card-header {
-                        font-weight: 500;
+                    .rating:not(:checked) > label:before {
+                        content: '★ ';
                     }
 
-                .card-header:first-child {
-                    border-radius: 0.35rem 0.35rem 0 0;
+                .rating > input:checked ~ label {
+                    color: #ffc700;
                 }
 
-                .card-header {
-                    padding: 1rem 1.35rem;
-                    margin-bottom: 0;
-                    background-color: rgba(33, 40, 50, 0.03);
-                    border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+                .rating:not(:checked) > label:hover,
+                .rating:not(:checked) > label:hover ~ label {
+                    color: #deb217;
                 }
 
-                .form-control, .dataTable-input {
-                    display: block;
-                    width: 100%;
-                    padding: 0.875rem 1.125rem;
-                    font-size: 0.875rem;
-                    font-weight: 400;
-                    line-height: 1;
-                    color: #69707a;
-                    background-color: #fff;
-                    background-clip: padding-box;
-                    border: 1px solid #c5ccd6;
-                    -webkit-appearance: none;
-                    -moz-appearance: none;
-                    appearance: none;
-                    border-radius: 0.35rem;
-                    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                .rating > input:checked + label:hover,
+                .rating > input:checked + label:hover ~ label,
+                .rating > input:checked ~ label:hover,
+                .rating > input:checked ~ label:hover ~ label,
+                .rating > label:hover ~ input:checked ~ label {
+                    color: #c59b08;
                 }
 
-                .nav-borders .nav-link.active {
-                    color: #0061f2;
-                    border-bottom-color: #0061f2;
-                }
+            .review-container {
+                margin-bottom: 20px;
+                padding: 15px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
 
-                .nav-borders .nav-link {
-                    color: #69707a;
-                    border-bottom-width: 0.125rem;
-                    border-bottom-style: solid;
-                    border-bottom-color: transparent;
-                    padding-top: 0.5rem;
-                    padding-bottom: 0.5rem;
-                    padding-left: 0;
-                    padding-right: 0;
-                    margin-left: 1rem;
-                    margin-right: 1rem;
-                }
+            .review-name {
+                font-weight: bold;
+                color: #333;
+            }
 
-                .rating {
-                    float: left;
-                    height: 46px;
-                    padding: 0 10px;
-                }
+            .review-rating {
+                color: #ffa500;
+            }
 
-                    .rating:not(:checked) > input {
-                        position: absolute;
-                        top: -9999px;
-                    }
+            .review-comment {
+                margin-top: 10px;
+                color: #666;
+            }
 
-                    .rating:not(:checked) > label {
-                        float: right;
-                        width: 1em;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        cursor: pointer;
-                        font-size: 30px;
-                        color: #ccc;
-                    }
-
-                        .rating:not(:checked) > label:before {
-                            content: '★ ';
-                        }
-
-                    .rating > input:checked ~ label {
-                        color: #ffc700;
-                    }
-
-                    .rating:not(:checked) > label:hover,
-                    .rating:not(:checked) > label:hover ~ label {
-                        color: #deb217;
-                    }
-
-                    .rating > input:checked + label:hover,
-                    .rating > input:checked + label:hover ~ label,
-                    .rating > input:checked ~ label:hover,
-                    .rating > input:checked ~ label:hover ~ label,
-                    .rating > label:hover ~ input:checked ~ label {
-                        color: #c59b08;
-                    }
-
-                .review-container {
-                    margin-bottom: 20px;
-                    padding: 15px;
-                    border: 1px solid #ccc;
-                    border-radius: 8px;
-                    background-color: #f9f9f9;
-                }
-
-                .review-name {
-                    font-weight: bold;
-                    color: #333;
-                }
-
-                .review-rating {
-                    color: #ffa500;
-                }
-
-                .review-comment {
-                    margin-top: 10px;
-                    color: #666;
-                }
-
-            </style>
-            <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-            <script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script>
+        </style>
+        <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+        <script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script>

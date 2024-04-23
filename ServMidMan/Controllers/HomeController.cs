@@ -237,12 +237,20 @@ namespace ServMidMan.Controllers
             }
             //end review
             ViewData["ReviewComments"] = reviewer;
-            var myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
             ProductWithImagesPathAndUserInfo productWithImagesPathAndUserInfo = new ProductWithImagesPathAndUserInfo();
             productWithImagesPathAndUserInfo.UserInfo = _dataProvider.Users.Where(x => x.Id == userId).FirstOrDefault();
-            //productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath = ImageOperator.getImageFullPath(new List<string>() { productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath }).FirstOrDefault();
             productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath = productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath;
             productWithImagesPathAndUserInfo.productWithByteImages = new List<ProductWithByteImages>(); // Inicializáld a listát
+            List<Product> myProducts;
+            if(productWithImagesPathAndUserInfo.UserInfo.TypeOfUser == UserType.Servicer)
+            {
+               var myProductsLocal = _dataProvider.Services.Where(x => x.Approved == ServiceStatus.Done).Select(x => x.ProductId).ToList();
+                myProducts = _dataProvider.Products.Where(x => myProductsLocal.Contains(x.Id)).ToList();
+            }
+            else
+            {
+                myProducts = _dataProvider.Products.Where(x => x.UserId == userId).ToList();
+            }
 
             foreach (var product in myProducts)
             {
@@ -251,7 +259,7 @@ namespace ServMidMan.Controllers
                 var prod = _dataProvider.Services.Where(x => x.ProductId == product.Id).FirstOrDefault();
                 if (prod != null)
                 {
-                    if (prod.Approved == ServiceStatus.Done)
+                    if (prod.Approved == ServiceStatus.Done && productWithImagesPathAndUserInfo.UserInfo.TypeOfUser != UserType.Servicer)
                     {
                         continue;
                     }

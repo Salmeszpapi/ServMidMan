@@ -18,7 +18,7 @@ namespace ServMidMan.Models
         public int Voters { get; set; }
         public DateTime LastLogin { get; set; }
         public string ProfileImagePath { get; set; } = "https://servmidman.gugar.sk/avatar1.png";
-        public string DescriptionOfUser { get; set; }
+        public string DescriptionOfUser { get; set; } = "";
     }
     public enum UserType
     {
