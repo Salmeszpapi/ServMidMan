@@ -34,4 +34,5 @@ namespace ServMidMan.Models
         public User UserInfo { get; set; }
         public List<Product> Products { get; set; }
     }
+
 }

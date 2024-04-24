@@ -14,7 +14,12 @@ namespace ServMidMan.Models
     public class ChatWithPerson()
     {
         public User Partner { get; set; }
-        public List<Chat> Messages { get; set; }
+        public List<ChatWithPersonImage> Messages { get; set; } = new List<ChatWithPersonImage>();
         public List<User> AllUsers { get; set; }
+    }
+
+    public class ChatWithPersonImage : Chat
+    {
+        public string ProfileImagePath { get; set; }
     }
 }

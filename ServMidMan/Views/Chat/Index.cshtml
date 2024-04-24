@@ -28,7 +28,7 @@
                             @foreach(var user in Model.AllUsers)
                             {
                                 <li class="clearfix" onclick="setPartner('@user.Name')">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
+                                    <img src="@user.ProfileImagePath.Replace(" ","%")" alt="avatar">
                                     <div class="about">
                                         <div class="name">@user.Name</div>
                                         <div class="status">
@@ -56,7 +56,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
+                                        <img id="guestMainPicture" src="@Model.Messages[0].ProfileImagePath" alt="avatar">
                                     </a>
                                     <div class="chat-about">
                                         @if (Model.Partner != null && !string.IsNullOrEmpty(Model.Partner.Name))
@@ -84,8 +84,8 @@
                                     {
                                         <li class="clearfix">
                                             <div class="message-data">
-                                                <span class="message-data-time">@messages.SendTime.ToString("hh:mm:tt")</span>
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
+                                                <span class="message-data-time">@messages.SendTime.ToString("hh:mm tt")</span>
+                                                    <img src="@messages.ProfileImagePath" alt="avatar">
                                             </div>
                                             <div class="message my-message">@messages.Massege </div>
                                         </li>
@@ -185,17 +185,20 @@
                         var messageHtml = '<li class="clearfix">';
                         messageHtml += '<div class="message-data">';
 
+                        var img = document.getElementById("guestMainPicture");
+                        img.setAttribute("src", message.guestPicture);
+
                         // Check if the message is from the sender (current user)
                         if (message.sender == @((int)ViewData["MyId"])) {
                             messageHtml += '<div class="message-data">';
                             messageHtml += '<span class="message-data-time">' + message.sendTime + '</span>';
-                            messageHtml += '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'; // Add this line to include the avatar
+                            messageHtml += '<img src=' + message.myPicture + ' alt="avatar">'; // Add this line to include the avatar
                             messageHtml += '</div>';
                             messageHtml += '<div class="message my-message">' + message.message + '</div>';
                         } else {
                             messageHtml += '<div class="message-data text-right">';
                             messageHtml += '<span class="message-data-time">' + message.sendTime + '</span>';
-                            messageHtml += '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'; // Add this line to include the avatar
+                            messageHtml += '<img src=' + message.guestPicture + ' alt="avatar">'; // Add this line to include the avatar
                             messageHtml += '</div>';
                             messageHtml += '<div class="message other-message float-right">' + message.message + '</div>';
                         }
@@ -280,7 +283,7 @@
                 }
 
             .people-list .chat-list img {
-                width: 45px;
+                width: 70px;
                 border-radius: 50%
             }
 
@@ -307,7 +310,7 @@
             .chat .chat-header img {
                 float: left;
                 border-radius: 40px;
-                width: 40px
+                width: 80px
             }
 
             .chat .chat-header .chat-about {
@@ -341,7 +344,8 @@
 
                 .chat .chat-history .message-data img {
                     border-radius: 40px;
-                    width: 40px
+                    width: 60px;
+                    margin:10px;
                 }
 
             .chat .chat-history .message-data-time {

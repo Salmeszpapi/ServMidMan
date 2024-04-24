@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI.Common;
 using ServMidMan.Data;
 using ServMidMan.Helper;
 using ServMidMan.Models;
@@ -37,31 +38,67 @@ namespace ServMidMan.Controllers
             chatWithPerson.AllUsers = usersWithMessages;
             if(id != null)
             {
-                chatWithPerson.AllUsers.Insert(0, _dataProvider.Users.Where(x => x.Id == id).FirstOrDefault());
-                chatWithPerson.Messages = _dataProvider.ChatHistory
+                //chatWithPerson.AllUsers.Insert(0, _dataProvider.Users.Where(x => x.Id == id).FirstOrDefault());
+                
+                    var result = _dataProvider.ChatHistory
                                                         .Where(c => c.SenderId == userId && c.ReceiverID == id)
                                                         .ToList();
                 chatWithPerson.Partner = _dataProvider.Users.Where(x=>x.Id == id).FirstOrDefault();
+                foreach(var item in result)
+                {
+                    ChatWithPersonImage chatWithPersonImage = new ChatWithPersonImage();
+                    chatWithPersonImage.SenderId = item.SenderId;
+                    chatWithPersonImage.Id = item.Id;
+                    chatWithPersonImage.SendTime = item.SendTime;
+                    chatWithPersonImage.ReceiverID = item.ReceiverID;
+                    chatWithPersonImage.Massege = item.Massege;
+                    chatWithPersonImage.ProfileImagePath = _dataProvider.Users.Where(x => x.Id == id).Select(x => x.ProfileImagePath).FirstOrDefault();
+                    chatWithPerson.Messages.Add(chatWithPersonImage);
+                }
             }
             else
             {
                 //chatWithPerson.Messages 
                     var loadDefaultMessage = _dataProvider.ChatHistory
-                            .Where(c => c.SenderId == userId || c.ReceiverID == userId)
+                            .Where(c => (c.SenderId == userId || c.ReceiverID == userId) && (c.SenderId != userId || c.ReceiverID != userId))
                             .FirstOrDefault();
                 if(loadDefaultMessage.SenderId == userId) 
                 {
-					chatWithPerson.Messages = _dataProvider.ChatHistory
-							.Where(c => c.SenderId == userId && c.ReceiverID == loadDefaultMessage.ReceiverID).ToList();
-                    
+                    //chatWithPerson.Messages = _dataProvider.ChatHistory
+                    //		.Where(c => c.SenderId == userId && c.ReceiverID == loadDefaultMessage.ReceiverID).ToList();
+                    var result = _dataProvider.ChatHistory
+                            .Where(c => c.SenderId == userId && c.ReceiverID == loadDefaultMessage.ReceiverID || (c.SenderId == loadDefaultMessage.ReceiverID && c.ReceiverID == userId)).ToList();
+                    foreach (var item in result)
+                    {
+                        ChatWithPersonImage chatWithPersonImage = new ChatWithPersonImage();
+                        chatWithPersonImage.SenderId = item.SenderId;
+                        chatWithPersonImage.Id = item.Id;
+                        chatWithPersonImage.SendTime = item.SendTime;
+                        chatWithPersonImage.ReceiverID = item.ReceiverID;
+                        chatWithPersonImage.Massege = item.Massege;
+                        chatWithPersonImage.ProfileImagePath = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                        chatWithPerson.Messages.Add(chatWithPersonImage);
+                    }
 
-				}
+                }
                 else
                 {
-					chatWithPerson.Messages = _dataProvider.ChatHistory
-							.Where(c => c.SenderId == loadDefaultMessage.ReceiverID && c.ReceiverID == userId).ToList();
-                    
-				}
+					var result = _dataProvider.ChatHistory
+							.Where(c => ( c.SenderId == loadDefaultMessage.ReceiverID && c.ReceiverID == loadDefaultMessage.SenderId) || (c.SenderId == loadDefaultMessage.SenderId && c.ReceiverID == loadDefaultMessage.ReceiverID)).ToList();
+
+                    foreach (var item in result)
+                    {
+                        ChatWithPersonImage chatWithPersonImage = new ChatWithPersonImage();
+                        chatWithPersonImage.SenderId = item.SenderId;
+                        chatWithPersonImage.Id = item.Id;
+                        chatWithPersonImage.SendTime = item.SendTime;
+                        chatWithPersonImage.ReceiverID = item.ReceiverID;
+                        chatWithPersonImage.Massege = item.Massege;
+                        chatWithPersonImage.ProfileImagePath = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                        chatWithPerson.Messages.Add(chatWithPersonImage);
+                    }
+
+                }
 				id = loadDefaultMessage.ReceiverID;
 			}
 
@@ -104,8 +141,9 @@ namespace ServMidMan.Controllers
             // Construct the response data
             var responseData = new
             {
-                time = DateTime.Now.ToString("h:mm tt"), // Format the time as needed
+                time = DateTime.Now.ToString("h:mm:tt"), // Format the time as needed
                 message = message // Use the received message in the response
+                
             };
 
             return Json(responseData);
@@ -121,6 +159,7 @@ namespace ServMidMan.Controllers
             {
                 return BadRequest("Partner not found.");
             }
+            var myProfilePicture = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
             var conversation = _dataProvider.ChatHistory
                 .Where(c => (c.SenderId == userId && c.ReceiverID == partner.Id) ||
                             (c.SenderId == partner.Id && c.ReceiverID == userId))
@@ -129,7 +168,10 @@ namespace ServMidMan.Controllers
                 {
                     sendTime = c.SendTime.ToString("h:mm tt"),
                     message = c.Massege,
-                    sender = c.SenderId
+                    sender = c.SenderId,
+                    guestPicture = partner.ProfileImagePath.Replace(" ","%"),
+                    myPicture = myProfilePicture,
+
                 })
                 .ToList();
             if(conversation != null)

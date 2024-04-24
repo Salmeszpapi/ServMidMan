@@ -378,6 +378,10 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
+            if(files.Count == 0)
+            {
+                return View("Profile");
+            }
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
