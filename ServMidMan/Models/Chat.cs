@@ -20,6 +20,7 @@ namespace ServMidMan.Models
 
     public class ChatWithPersonImage : Chat
     {
-        public string ProfileImagePath { get; set; }
+        public string SenderImage { get; set; }
+        public string ReceiverImae { get; set; }
     }
 }

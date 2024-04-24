@@ -56,7 +56,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                        <img id="guestMainPicture" src="@Model.Messages[0].ProfileImagePath" alt="avatar">
+                                        <img id="guestMainPicture" src="@Model.Messages[0].SenderImage" alt="avatar">
                                     </a>
                                     <div class="chat-about">
                                         @if (Model.Partner != null && !string.IsNullOrEmpty(Model.Partner.Name))
@@ -85,7 +85,7 @@
                                         <li class="clearfix">
                                             <div class="message-data">
                                                 <span class="message-data-time">@messages.SendTime.ToString("hh:mm tt")</span>
-                                                    <img src="@messages.ProfileImagePath" alt="avatar">
+                                                    <img src="@messages.SenderImage" alt="avatar">
                                             </div>
                                             <div class="message my-message">@messages.Massege </div>
                                         </li>
@@ -95,7 +95,7 @@
                                         <li class="clearfix">
                                             <div class="message-data text-right">
                                                 <span class="message-data-time">10:10 AM, Today</span>
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
+                                                    <img src="@messages.SenderImage" alt="avatar">
                                             </div>
                                             <div class="message other-message float-right">@messages.Massege </div>
                                         </li>
@@ -144,7 +144,7 @@
                             var newMessage = '<li class="clearfix">';
                             newMessage += '<div class="message-data">';
                             newMessage += '<span class="message-data-time">' + response.time + '</span>';
-                            newMessage += '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'; // Add this line to include the avatar
+                            newMessage += '<img src=' + response.myPicture + ' alt="avatar">'; // Add this line to include the avatar newMessage
                             newMessage += '</div>';
                             newMessage += '<div class="message my-message">' + response.message + '</div>';
                             newMessage += '</li>';

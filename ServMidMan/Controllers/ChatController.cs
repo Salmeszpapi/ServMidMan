@@ -52,7 +52,18 @@ namespace ServMidMan.Controllers
                     chatWithPersonImage.SendTime = item.SendTime;
                     chatWithPersonImage.ReceiverID = item.ReceiverID;
                     chatWithPersonImage.Massege = item.Massege;
-                    chatWithPersonImage.ProfileImagePath = _dataProvider.Users.Where(x => x.Id == id).Select(x => x.ProfileImagePath).FirstOrDefault();
+                    if (item.ReceiverID == userId)
+                    {
+                        chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                        chatWithPersonImage.SenderImage = _dataProvider.Users.Where(x => x.Id == item.SenderId).Select(x => x.ProfileImagePath).FirstOrDefault();
+
+                    }
+                    else
+                    {
+                        chatWithPersonImage.SenderImage = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                        chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == item.ReceiverID).Select(x => x.ProfileImagePath).FirstOrDefault();
+
+                    }
                     chatWithPerson.Messages.Add(chatWithPersonImage);
                 }
             }
@@ -76,7 +87,18 @@ namespace ServMidMan.Controllers
                         chatWithPersonImage.SendTime = item.SendTime;
                         chatWithPersonImage.ReceiverID = item.ReceiverID;
                         chatWithPersonImage.Massege = item.Massege;
-                        chatWithPersonImage.ProfileImagePath = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                        if (item.ReceiverID == userId)
+                        {
+                            chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                            chatWithPersonImage.SenderImage = _dataProvider.Users.Where(x => x.Id == item.SenderId).Select(x => x.ProfileImagePath).FirstOrDefault();
+
+                        }
+                        else
+                        {
+                            chatWithPersonImage.SenderImage = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                            chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == item.ReceiverID).Select(x => x.ProfileImagePath).FirstOrDefault();
+
+                        }
                         chatWithPerson.Messages.Add(chatWithPersonImage);
                     }
 
@@ -94,7 +116,18 @@ namespace ServMidMan.Controllers
                         chatWithPersonImage.SendTime = item.SendTime;
                         chatWithPersonImage.ReceiverID = item.ReceiverID;
                         chatWithPersonImage.Massege = item.Massege;
-                        chatWithPersonImage.ProfileImagePath = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                        if(item.ReceiverID == userId)
+                        {
+                            chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                            chatWithPersonImage.SenderImage = _dataProvider.Users.Where(x => x.Id == item.SenderId).Select(x => x.ProfileImagePath).FirstOrDefault();
+
+                        }
+                        else
+                        {
+                            chatWithPersonImage.SenderImage = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
+                            chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == item.ReceiverID).Select(x => x.ProfileImagePath).FirstOrDefault();
+
+                        }
                         chatWithPerson.Messages.Add(chatWithPersonImage);
                     }
 
@@ -112,8 +145,8 @@ namespace ServMidMan.Controllers
             {
                 id = chatWithPerson.AllUsers[0].Id;
             }
-
-            var partner = _dataProvider.Users.Where(c => c.Id == id).FirstOrDefault();
+            var part = chatWithPerson.Messages[0].ReceiverID != userId ? chatWithPerson.Messages[0].ReceiverID : chatWithPerson.Messages[0].SenderId;
+            var partner = _dataProvider.Users.Where(c => c.Id == part).FirstOrDefault();
             chatWithPerson.Partner = partner;
            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             return View(chatWithPerson);
@@ -123,7 +156,7 @@ namespace ServMidMan.Controllers
         {
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             var userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-            if(message is null)
+            if (message is null)
             {
                 return Json(new { });
             }
@@ -139,11 +172,12 @@ namespace ServMidMan.Controllers
             _dataProvider.Add(chat);
             _dataProvider.SaveChanges();
             // Construct the response data
+            var myProfilePicture = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
             var responseData = new
             {
                 time = DateTime.Now.ToString("h:mm:tt"), // Format the time as needed
-                message = message // Use the received message in the response
-                
+                message = message, // Use the received message in the response
+                myPicture = myProfilePicture,
             };
 
             return Json(responseData);
