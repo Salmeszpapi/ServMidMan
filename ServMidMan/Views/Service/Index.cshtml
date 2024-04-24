@@ -179,7 +179,6 @@
                                                         {
                                                             @if (group.service.Approved != ServiceStatus.Approved)
                                                             {
-                                                                <button class="btn btn-danger mr-2" onclick="rejectService(@group.service.Id)">Remove request</button>
                                                                 <button class="approve-button" onclick="approveService(@group.service.Id)">Approve</button>
                                                                 <button class="reject-button" onclick="rejectService(@group.service.Id)">Reject</button>
                                                             }
@@ -190,7 +189,6 @@
                                                             @if (group.service.Approved != ServiceStatus.Approved)
                                                             {
                                                                 <button class="btn btn-danger mr-2" onclick="rejectService(@group.service.Id)">Remove request</button>
-                                                                
                                                             }
                                                         }
                                                     </div>
@@ -200,12 +198,6 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <img class="product-images" src="@group.product.ImagePaths[0]" alt="Product Image" data-toggle="model" data-target="#imageModel">
-                                                @*                                                 @using (Html.BeginForm("UpdateProductStatus", "Service", FormMethod.Post))
-                                    {
-                                    @Html.DropDownListFor(x => x.Services[0].service.productStatus,
-                                    new SelectList(Enum.GetValues(typeof(ProductStatus))),
-                                    new { @class = "form-control", onchange = "this.form.submit();" })
-                                    } *@
                                                 @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
                                                     @if (!ViewData["typeOfUser"].Equals("Client"))
@@ -258,10 +250,11 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            var checkboxes = document.querySelectorAll('.ServiceSwitch input[type="checkbox"]');
-        
-            
-        }
+            var checkboxes = document.querySelectorAll('#ServiceSwitch input[type="checkbox"]');
+            // Now you can work with the checkboxes variable
+            console.log(checkboxes);
+        });
+
 
         function submitForm(serviceId, selectedValue) {
             fetch('/Service/UpdateProductStatus?productStatus=' + selectedValue + '&serviceId=' + serviceId, {
