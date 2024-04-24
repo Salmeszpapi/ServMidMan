@@ -127,11 +127,18 @@
                                         }
                                         <form method="post" action="/Chat/Index" style="display: inline;">
                                             <input type="hidden" name="Id" value="@Model.Products.UserId" />
-                                            <button type="submit" class="btn btn-success mr-2">Contact</button>
+                                            @{
+                                                var clientId = Convert.ToInt32(ViewData["ClientId"]);
+                                                if (clientId != @Model.Products.UserId)
+                                                {
+                                                    <button type="submit" class="btn btn-success mr-2">Contact</button>
+                                                }
+                                            }
+
                                         </form>
                                         @{
-                                            var clientId = Convert.ToInt32(ViewData["ClientId"]);
-                                            if (clientId == @Model.Products.UserId)
+                                            var clientId2 = Convert.ToInt32(ViewData["ClientId"]);
+                                            if (clientId2 == @Model.Products.UserId)
                                             {
                                                 <button class="btn btn-dark mr-2" onclick="toggleEditMode()">Edit</button>
                                                 <form method="post" action="/Home/DeleteProduct" style="display: inline;">
