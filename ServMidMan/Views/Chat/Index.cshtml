@@ -56,7 +56,14 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                        <img id="guestMainPicture" src="@Model.Messages[0].SenderImage" alt="avatar">
+                                        @if (Model.Messages[0].SenderId != (int)ViewData["MyId"])
+                                        {
+                                            <img id="guestMainPicture" src="@Model.Messages[0].SenderImage" alt="avatar">
+                                        }
+                                        else
+                                        {
+                                            <img id="guestMainPicture" src="@Model.Messages[0].ReceiverImae" alt="avatar">
+                                        }
                                     </a>
                                     <div class="chat-about">
                                         @if (Model.Partner != null && !string.IsNullOrEmpty(Model.Partner.Name))

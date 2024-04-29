@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MySqlX.XDevAPI;
 using MySqlX.XDevAPI.Common;
+using MySqlX.XDevAPI.CRUD;
 using ServMidMan.Data;
 using ServMidMan.Helper;
 using ServMidMan.Hubs;
@@ -179,7 +180,7 @@ namespace ServMidMan.Controllers
             {
                 ImageOperator.ImageUploaderToServer(files, myImagesToPush);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Product", "Home", new { id = dbProduct.Id });
         }
 
         public IActionResult DeleteProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
@@ -523,6 +524,16 @@ namespace ServMidMan.Controllers
             user.DescriptionOfUser = Description;
             _dataProvider.SaveChanges();
             return RedirectToAction("Profile","Home");
+        }
+        [HttpPost]
+        public IActionResult DeleteProductImage(string imageId)
+        {
+            imageId = imageId.Split("/").Last();
+            var image = _dataProvider.Images.Where(x => x.FileName == imageId).FirstOrDefault();
+            ImageOperator.FTPImgaeRemover(new List<string> { image.FileName });
+            _dataProvider.Images.Remove(image);
+            _dataProvider.SaveChanges();
+            return View();
         }
     }
 }

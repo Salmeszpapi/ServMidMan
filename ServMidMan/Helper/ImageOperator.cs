@@ -22,7 +22,7 @@ namespace ServMidMan.Helper
 
 					// Create FTP request
 					FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpFilePath);
-					ftpRequest.Credentials = new NetworkCredential(userName, password);
+                    ftpRequest.Credentials = new NetworkCredential(userName, password);
 					ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
 
 					// Upload the file to FTP server

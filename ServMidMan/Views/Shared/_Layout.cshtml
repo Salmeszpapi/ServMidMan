@@ -14,7 +14,7 @@
 	<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 @* 	<script src="~/lib/microsoft/signalr/dist/browser/chat/chat.js"></script> *@
 	<script src="~/lib/microsoft/signalr/dist/browser/chat/ShowNewProductPopup.js"></script>
-	<script src="~/lib/microsoft/signalr/dist/browser/chat/RegisterClientId.js"></script>
+@* 	<script src="~/lib/microsoft/signalr/dist/browser/chat/RegisterClientId.js"></script> *@
 </head>
 <style>
 	.orange-chat-bubble {
@@ -24,7 +24,8 @@
 		background-color :black;
 	}
 </style>
-<body style="background-image: url('https://servmidman.salmadevelop.eu/PngItem_1831938.png'); background-repeat: no-repeat; background-position:center; background-attachment: fixed; background-size:contain;">
+@* <body style="background-image: url('https://servmidman.salmadevelop.eu/PngItem_1831938.png'); background-repeat: no-repeat; background-position:center; background-attachment: fixed; background-size:contain;"> *@
+	<body>
 	@if ((string)ViewData["LoggedIn"] == "True")
 	{
 	// Your code here

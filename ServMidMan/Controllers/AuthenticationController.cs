@@ -139,8 +139,5 @@ namespace ServMidMan.Controllers
                 return Json(new { success = false, message = "Hiba az ellenőrző kód küldésénél: " + ex.Message });
             }
         }
-
-
     }
-
 }
