@@ -156,17 +156,17 @@
                                             var clientId2 = Convert.ToInt32(ViewData["ClientId"]);
                                             if (clientId2 == @Model.Products.UserId)
                                             {
-                                                <button class="btn btn-dark mr-2" onclick="toggleEditMode()">Edit</button>
+                                                <button class="btn btn-dark mr-2" onclick="toggleEditMode()">Módositás</button>
                                                 <form method="post" action="/Home/DeleteProduct" style="display: inline;">
                                                     <input type="hidden" name="Id" value="@Model.Products.Id" />
-                                                    <button onclick="return confirmDelete()" class="btn btn-danger">Delete</button>
+                                                    <button onclick="return confirmDelete()" class="btn btn-danger">Törlés</button>
                                                 </form>
                                             }
                                             else
                                             {
                                                 <form method="post" action="/Home/Profile" style="display: inline;">
                                                     <input type="hidden" name="userId" value="@Model.Products.UserId" />
-                                                    <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
+                                                    <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Fiók látogatása</button>
                                                 </form>
                                             }
                                         }
@@ -175,35 +175,34 @@
                                         <input type="hidden" name="Id" value="@Model.Products.Id" />
                                         <div id="editFields" style="display: none; margin-top:10px">
                                             <div class="col-md-6 mb-3">
-                                                <label for="editName">Name</label>
+                                                <label for="editName">Név</label>
                                                 <input type="text" class="form-control" name="Name" id="Name" value="@Model.Products.Name">
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="editDescription">Description</label>
+                                                <label for="editDescription">Leirás</label>
                                                 <textarea class="form-control" id="Description" name="Description" rows="4">@Model.Products.Description</textarea>
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <label for="validationDefault01">Category</label>
+                                                <label for="validationDefault01">Kategória</label>
                                                 <select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
                                                     <option selected>@Model.Products.Category</option>
-                                                    <option value="Electronincs">Electronincs</option>
-                                                    <option value="Mobile">Mobile</option>
+                                                    <option value="Electronincs">Elektronika</option>
+                                                    <option value="Mobile">Mobil</option>
                                                     <option value="PC">PC</option>
-                                                    <option value="Notebook">Notebook</option>
-                                                    <option value="Camera">Camera</option>
-                                                    <option value="Car">Car</option>
-                                                    <option value="Vehicle">Vehicle</option>
-                                                    <option value="Motorcycle">Motorcycle</option>
-                                                    <option value="Bicycle">Bicycle</option>
-                                                    <option value="Other">Other</option>
+                                                    <option value="Notebook">Laptop</option>
+                                                    <option value="Camera">Kamera</option>
+                                                    <option value="Car">Auto</option>
+                                                    <option value="Motorcycle">Motor</option>
+                                                    <option value="Bicycle">Bicikli</option>
+                                                    <option value="Other">Más</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="editPrice">Price</label>
+                                                <label for="editPrice">Ár</label>
                                                 <input type="text" class="form-control" id="Price" name="Price" oninput="validateNumber(this)" value="@Model.Products.Price">
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="editLocation">Location</label>
+                                                <label for="editLocation">Hely</label>
                                                 <input type="text" class="form-control" id="Location" name="Location" value="@Model.Products.Location">
                                             </div>
                                             <div class="additional-images2" id="additional-images2">
@@ -224,8 +223,8 @@
                                                 </div>
                                             </div>
                                             <div class="text-center">
-                                                <button class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
-                                                <button class="btn btn-secondary" onclick="toggleEditMode()">Cancel</button>
+                                                <button class="btn btn-primary" onclick="saveChanges()">Módositások mentése</button>
+                                                <button class="btn btn-secondary" onclick="toggleEditMode()">Visszavonás</button>
                                             </div>
                                         </div>
                                     </form>
@@ -234,7 +233,7 @@
                                         <div id="additionalFields" style="display: none; margin-top:10px">
                                             <!-- Additional fields to be displayed when the "Send request" button is clicked -->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationDefault01">Description</label>
+                                                <label for="validationDefault01">Leirás</label>
                                                 <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4"></textarea>
                                                 <label>Choose date :</label>
                                                 <input style="margin-top:10px" name="dateTimeToFinish" type="date" min="today" />
@@ -249,8 +248,8 @@
 
                                             <!-- Save button -->
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-primary">Save</button>
-                                                <button class="btn btn-secondary" onclick="toggleAdditionalFields()">Cancel</button>
+                                                <button type="submit" class="btn btn-primary">Mentés</button>
+                                                <button class="btn btn-secondary" onclick="toggleAdditionalFields()">Visszavonás</button>
                                             </div>
 
                                         </div>
@@ -268,7 +267,7 @@
     else
     {
         <div class="alert alert-danger" role="alert">
-            <strong>Error:</strong> @ViewBag.Error
+            <strong>Hibaüzenet!:</strong> @ViewBag.Error
         </div>
     }
 
