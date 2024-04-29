@@ -7,8 +7,8 @@ using ServMidMan.Models;
 
 namespace ServMidMan.Controllers
 {
-	public class ChatController : Controller
-	{
+    public class ChatController : Controller
+    {
         private ILogger<HomeController> _logger;
         private DataProviderContext _dataProvider;
 
@@ -18,7 +18,7 @@ namespace ServMidMan.Controllers
             _dataProvider = dataProviderContext;
         }
         public IActionResult Index(int? id)
-		{
+        {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
                 return RedirectToAction("Welcome", "Authentication");
@@ -29,22 +29,23 @@ namespace ServMidMan.Controllers
             ViewData["MyId"] = userId;
             ViewData["NoExistingMessages"] = true;
             ChatWithPerson chatWithPerson = new ChatWithPerson();
+            List<User> usersWithMessages = new List<User>();
+            usersWithMessages = _dataProvider.Users
+                .Where(user => _dataProvider.ChatHistory.Any(chat =>
+                (chat.SenderId == user.Id && chat.ReceiverID == userId) ||
+                (chat.SenderId == userId && chat.ReceiverID == user.Id)))
+                .ToList();
 
-            var usersWithMessages = _dataProvider.Users
-    .Where(user => _dataProvider.ChatHistory.Any(chat =>
-        (chat.SenderId == user.Id && chat.ReceiverID == userId) ||
-        (chat.SenderId == userId && chat.ReceiverID == user.Id)))
-    .ToList();
             chatWithPerson.AllUsers = usersWithMessages;
-            if(id != null)
+            if (id != null)
             {
                 //chatWithPerson.AllUsers.Insert(0, _dataProvider.Users.Where(x => x.Id == id).FirstOrDefault());
-                
-                    var result = _dataProvider.ChatHistory
-                                                        .Where(c => c.SenderId == userId && c.ReceiverID == id)
-                                                        .ToList();
-                chatWithPerson.Partner = _dataProvider.Users.Where(x=>x.Id == id).FirstOrDefault();
-                foreach(var item in result)
+
+                var result = _dataProvider.ChatHistory
+                                                    .Where(c=>(c.SenderId == id && c.ReceiverID == userId) ||  (c.SenderId == userId && c.ReceiverID == id))
+                                                    .ToList();
+                chatWithPerson.Partner = _dataProvider.Users.Where(x => x.Id == id).FirstOrDefault();
+                foreach (var item in result)
                 {
                     ChatWithPersonImage chatWithPersonImage = new ChatWithPersonImage();
                     chatWithPersonImage.SenderId = item.SenderId;
@@ -70,10 +71,10 @@ namespace ServMidMan.Controllers
             else
             {
                 //chatWithPerson.Messages 
-                    var loadDefaultMessage = _dataProvider.ChatHistory
-                            .Where(c => (c.SenderId == userId || c.ReceiverID == userId) && (c.SenderId != userId || c.ReceiverID != userId))
-                            .FirstOrDefault();
-                if(loadDefaultMessage.SenderId == userId) 
+                var loadDefaultMessage = _dataProvider.ChatHistory
+                        .Where(c => (c.SenderId == userId || c.ReceiverID == userId) && (c.SenderId != userId || c.ReceiverID != userId))
+                        .FirstOrDefault();
+                if (loadDefaultMessage.SenderId == userId)
                 {
                     //chatWithPerson.Messages = _dataProvider.ChatHistory
                     //		.Where(c => c.SenderId == userId && c.ReceiverID == loadDefaultMessage.ReceiverID).ToList();
@@ -105,8 +106,8 @@ namespace ServMidMan.Controllers
                 }
                 else
                 {
-					var result = _dataProvider.ChatHistory
-							.Where(c => ( c.SenderId == loadDefaultMessage.ReceiverID && c.ReceiverID == loadDefaultMessage.SenderId) || (c.SenderId == loadDefaultMessage.SenderId && c.ReceiverID == loadDefaultMessage.ReceiverID)).ToList();
+                    var result = _dataProvider.ChatHistory
+                            .Where(c => (c.SenderId == loadDefaultMessage.ReceiverID && c.ReceiverID == loadDefaultMessage.SenderId) || (c.SenderId == loadDefaultMessage.SenderId && c.ReceiverID == loadDefaultMessage.ReceiverID)).ToList();
 
                     foreach (var item in result)
                     {
@@ -116,7 +117,7 @@ namespace ServMidMan.Controllers
                         chatWithPersonImage.SendTime = item.SendTime;
                         chatWithPersonImage.ReceiverID = item.ReceiverID;
                         chatWithPersonImage.Massege = item.Massege;
-                        if(item.ReceiverID == userId)
+                        if (item.ReceiverID == userId)
                         {
                             chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
                             chatWithPersonImage.SenderImage = _dataProvider.Users.Where(x => x.Id == item.SenderId).Select(x => x.ProfileImagePath).FirstOrDefault();
@@ -132,8 +133,8 @@ namespace ServMidMan.Controllers
                     }
 
                 }
-				id = loadDefaultMessage.ReceiverID;
-			}
+                id = loadDefaultMessage.ReceiverID;
+            }
 
             if (chatWithPerson.Messages.Count == 0)
             {
@@ -141,16 +142,22 @@ namespace ServMidMan.Controllers
             }
             ViewData["NoExistingMessages"] = false;
 
-            if(id == null)
+            if (id == null)
             {
                 id = chatWithPerson.AllUsers[0].Id;
-            }
             var part = chatWithPerson.Messages[0].ReceiverID != userId ? chatWithPerson.Messages[0].ReceiverID : chatWithPerson.Messages[0].SenderId;
             var partner = _dataProvider.Users.Where(c => c.Id == part).FirstOrDefault();
             chatWithPerson.Partner = partner;
-           ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
+            }
+            else
+            {
+                var partner = _dataProvider.Users.Where(c => c.Id == id).FirstOrDefault();
+                chatWithPerson.Partner = partner;
+            }
+
+            ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             return View(chatWithPerson);
-		}
+        }
         [HttpPost]
         public ActionResult SendMessage(string message, string receiverName)
         {
@@ -161,7 +168,7 @@ namespace ServMidMan.Controllers
                 return Json(new { });
             }
             // Process the message
-            User receiverUser = _dataProvider.Users.Where(x=>x.Name == receiverName).FirstOrDefault();
+            User receiverUser = _dataProvider.Users.Where(x => x.Name == receiverName).FirstOrDefault();
             Chat chat = new Chat()
             {
                 Massege = message,
@@ -203,12 +210,12 @@ namespace ServMidMan.Controllers
                     sendTime = c.SendTime.ToString("h:mm tt"),
                     message = c.Massege,
                     sender = c.SenderId,
-                    guestPicture = partner.ProfileImagePath.Replace(" ","%"),
+                    guestPicture = partner.ProfileImagePath.Replace(" ", "%"),
                     myPicture = myProfilePicture,
 
                 })
                 .ToList();
-            if(conversation != null)
+            if (conversation != null)
             {
                 ViewData["NoExistingMessages"] = false;
             }
@@ -219,5 +226,5 @@ namespace ServMidMan.Controllers
         {
             return View();
         }
-	}
+    }
 }
