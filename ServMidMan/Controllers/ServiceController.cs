@@ -15,7 +15,7 @@ namespace ServMidMan.Controllers
             _logger = logger;
             _dataProvider = dataProviderContext;
         }
-        public IActionResult Index()
+        public IActionResult Index(bool wantAllServices = true)
         {
             if (!SiteGuardian.CheckSession(HttpContext))
             {
@@ -68,9 +68,14 @@ namespace ServMidMan.Controllers
             }
             if (servicesOrdered.Services.Count == 0)
             {
-                ViewBag.Services = "No existing requests";
+                ViewBag.Services = "Nincsnek létező kérések";
                 return View();
             }
+            if(!wantAllServices)
+            {
+                servicesOrdered.Services = servicesOrdered.Services.Where(x=>x.service.Approved != ServiceStatus.Done).ToList();
+            }
+            ViewData["AllServiceCheckbox"] = wantAllServices;
             return View(servicesOrdered);
         }
 

@@ -113,7 +113,15 @@
                 <h1 class="text-center">Ajánlatok</h1>
                 <div class="text-center" style="margin-top:50px">
                     <label class="switch">
+                        @if ((bool)ViewData["AllServiceCheckbox"])
+                        {
+
                         <input id="ServiceSwitch" type="checkbox" checked>
+                        }
+                        else
+                        {
+                            <input id="ServiceSwitch" type="checkbox">
+                        }
                         <span class="slider round"></span>
                     </label>
                     <h4>Aktuális / Összes  </h4>
@@ -147,17 +155,24 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div>Termék neve: @group.product.Products.Name</div>
-                                                <div>Felhasználó ID: @group.product.Products.UserId </div>
-                                                <div>Szervíz ID: @group.service.Id</div>
-                                                <div>Termék ID: @group.service.ProductId</div>
+                                                <div>Felhasználó ID: @group.OwnerName </div>
+                                                @*                                                 <div>Szervíz ID: @group.product.na</div>
+                                    <div>Termék ID: @group.service.ProductId</div> *@
                                                 <div>Kapott szervíz ár: @group.service.Price€</div>
                                                 <div>Leírás: @group.service.Description </div>
-                                                <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.mm.dd")</div>
+                                                <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.MM.dd")</div>
                                                 <div style="margin-bottom:15px">
-                                                <form method="post" action="/Home/Profile" style="display: inline;">
-                                                    <input type="hidden" name="userId" value="@group.service.UserId" />
-                                                    <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Visit profile</button>
-                                                </form>
+                                                    <form method="post" action="/Home/Profile" style="display: inline;">
+                                                        <input type="hidden" name="userId" value="@group.service.UserId" />
+                                                        <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Profil látogatása</button>
+                                                    </form>
+                                                    <form method="post" action="/Home/Product?id=@group.service.ProductId" style="display: inline;margin-10px">
+                                                        <input type="hidden" name="userId" value="@group.service.UserId" />
+                                                        @if (group.service.Approved != ServiceStatus.Done)
+                                                        {
+                                                        <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Termék megtekintése</button>
+                                                        }
+                                                    </form>
                                                 </div>
                                                 @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
@@ -177,16 +192,19 @@
                                                         {
                                                             @if (group.service.Approved != ServiceStatus.Approved)
                                                             {
-                                                                <button class="approve-button" onclick="approveService(@group.service.Id)">Approve</button>
-                                                                <button class="reject-button" onclick="rejectService(@group.service.Id)">Reject</button>
+                                                                <button class="approve-button" onclick="approveService(@group.service.Id)">Elfogadás</button>
+                                                                <input type="hidden" name="Id" value="@group.service.Id" />
+                                                                <button onclick="return confirmDelete(@group.service.Id)" class="reject-button">Elutasitás</button>
+
                                                             }
-                                                           
+
                                                         }
                                                         else
                                                         {
                                                             @if (group.service.Approved != ServiceStatus.Approved)
                                                             {
-                                                                <button class="btn btn-danger mr-2" onclick="rejectService(@group.service.Id)">Remove request</button>
+                                                                <input type="hidden" name="Id" value="@group.service.Id" />
+                                                                <button onclick="return confirmDelete(@group.service.Id)" class="reject-button">Visszavonás</button>
                                                             }
                                                         }
                                                     </div>
@@ -247,13 +265,6 @@
             document.getElementById('senderServices').style.display = 'none';
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var checkboxes = document.querySelectorAll('#ServiceSwitch input[type="checkbox"]');
-            // Now you can work with the checkboxes variable
-            console.log(checkboxes);
-        });
-
-
         function submitForm(serviceId, selectedValue) {
             fetch('/Service/UpdateProductStatus?productStatus=' + selectedValue + '&serviceId=' + serviceId, {
                 method: 'GET',
@@ -309,6 +320,33 @@
                     }
                 })
                 .catch(error => console.error('Error approving service:', error));
+        }
+
+        function confirmDelete(serviceId) {
+            if (confirm("Biztos törölni szeretnéd a productot?")) {
+                // If the user confirms, call the rejectService function
+                rejectService(serviceId);
+            } else {
+                // If the user cancels, return false to prevent the form submission
+                return false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var checkbox = document.getElementById('ServiceSwitch');
+            // Add click event listener to the checkbox
+            checkbox.addEventListener('click', function () {
+                if (this.checked) {
+                    window.location.href = '/Service/Index?wantAllServices=true';
+
+                } else {
+                    window.location.href = '/Service/Index?wantAllServices=false';
+                }
+            });
+               
+        });
+        function change(){
+
         }
     </script>
 
