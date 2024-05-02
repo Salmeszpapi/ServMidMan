@@ -468,12 +468,8 @@ namespace ServMidMan.Controllers
                 }
 
             }
-            if (searchProducts.LocationAround != null)
-            {
-                //TODO
-            }
             if(searchProducts.Region != null){
-                var DiscrictPostalCodes = _dataProvider.Locations.Where(l => l.Disctrict == searchProducts.Region).Select(x => x.PostalCode.Trim().Replace(" ","")).ToList();
+                var DiscrictPostalCodes = _dataProvider.Locations.Where(l => l.Disctrict == searchProducts.Region).Select(x => x.Cities.Trim().Replace(" ","")).ToList();
                 if (products == null)
                 {
                     products = _dataProvider.Products.Where(x=> DiscrictPostalCodes.Contains(x.Location)).ToList();
