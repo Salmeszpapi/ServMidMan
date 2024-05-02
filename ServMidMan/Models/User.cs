@@ -12,7 +12,6 @@ namespace ServMidMan.Models
         public string Name { get; set; } = "User";
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool EmailConfirmed { get; set; } = false;
         public UserType TypeOfUser { get; set; }
         public double Rating { get; set; }
         public int Voters { get; set; }
