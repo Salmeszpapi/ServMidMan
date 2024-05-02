@@ -33,10 +33,10 @@ namespace ServMidMan.Helper
             const string fromPassword = "myNewDatabasePassword1";
 
             // Set the email subject
-            const string subject = "Email Verification";
+            const string subject = "Email Ellenőrzés";
 
             // Construct the email body including the verification code
-            string body = "Your verification code is: " + verificationCode + ". Please enter this code to verify your email address.";
+            string body = "Az ellenőrző kódod a ServMidMan oldalra való regisztrációhoz: " + verificationCode + ". Kérlek add meg ezt a kódot, hogy megerősítsd az emailcímed.";
 
 
             // Set up the SMTP client with the SMTP server details

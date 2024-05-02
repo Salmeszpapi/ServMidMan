@@ -209,15 +209,9 @@
             <!-- Products card -->
 
             <div class="card mb-4">
-                @if (ViewData["typeOfUser"].Equals("Client") || visitor)
-                {
+
                 <div class="card-header">Termékek</div>
-                    
-                }
-                else
-                {
-                    <div class="card-header">Megjavitott termekek</div>
-                }
+                
                 <div class="card-body d-flex flex-nowrap justify-content-start align-items-center overflow-auto" style="overflow-x: auto; max-width: calc(100vw - 30px);">
                     @if (Model.productWithByteImages != null)
                     {
