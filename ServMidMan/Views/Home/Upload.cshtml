@@ -11,63 +11,11 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
     <script src="~/lib/microsoft/signalr/dist/browser/chat/ProductUploaderNotifier.js"></script>
-    <style>
-        .centered-form {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align to the top */
-            padding-top: 50px; /* Adjust top padding */
-        }
-
-        .bordered-form {
-            border: 2px solid #8B4513; /* Brown border color */
-            padding: 20px;
-            border-radius: 10px;
-            background-color: white;
-        }
-
-        .image-preview-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .image-preview {
-            max-width: 150px;
-            max-height: 150px;
-            border: 2px solid #8B4513; /* Brown border color */
-            border-radius: 5px;
-        }
-
-        #suggestionsContainer {
-            position: absolute;
-            background-color: white;
-            border: 1px solid #ddd;
-            max-height: 150px;
-            overflow-y: auto;
-            width: calc(100% - 20px);
-            margin-top: 5px;
-            border-radius: 5px;
-            display: none;
-        }
-
-        .suggestion {
-            padding: 5px;
-            cursor: pointer;
-        }
-
-            .suggestion:hover {
-                background-color: #f0f0f0;
-            }
-    </style>
+    
 </head>
 <body>
 
     <div class="centered-form">
-
         <form class="bordered-form" id="ProductUploadedButtonForm" method="post" action="/Home/NewProduct" enctype="multipart/form-data">
             <center><h2>Új termék feltöltése</h2></center>
             <input type="hidden" id="nextProductID" value="@Model" />
@@ -81,8 +29,8 @@
             <div class="form-row">
                 <div class="col-md-2 mb-3">
                     <label for="validationDefault02">Kategória</label>
-                    <select class="form-control" id="validationDefault02" name="Category">
-                                <option value="Kategória" disabled selected hidden>Kategória</option>
+                    <select class="form-control" id="validationDefault02" name="Category" required>
+                        <option value="Kategória" disabled hidden>Kategória</option>
                         <option value="Jármű">Jármű</option>
                         <option value="Elektronika">Elektronika</option>
                         <option value="Bútor">Bútor</option>
@@ -132,7 +80,7 @@
                 </div>
 
             </div>
-            <button class="btn btn-primary" id="ProductUploadedButton" type="submit">Feltöltés</button>
+            <button class="btn btn-primary" type="submit">Feltöltés</button>
         </form>
         <input type="hidden" id="sendButton" value="Send Message" />
         @* <button class="btn btn-primary" id="ProductUploadedButton">Submit2 form</button> *@
@@ -219,5 +167,57 @@
             input.value = input.value.replace(/^(\d*\.\d*).*$/, '$1'); // Allow only one dot
         }
     </script>
+    <style>
+        .centered-form {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to the top */
+            padding-top: 50px; /* Adjust top padding */
+        }
+
+        .bordered-form {
+            border: 2px solid #8B4513; /* Brown border color */
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+        }
+
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .image-preview {
+            max-width: 150px;
+            max-height: 150px;
+            border: 2px solid #8B4513; /* Brown border color */
+            border-radius: 5px;
+        }
+
+        #suggestionsContainer {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            width: calc(100% - 20px);
+            margin-top: 5px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .suggestion {
+            padding: 5px;
+            cursor: pointer;
+        }
+
+            .suggestion:hover {
+                background-color: #f0f0f0;
+            }
+    </style>
 </body>
 </html>

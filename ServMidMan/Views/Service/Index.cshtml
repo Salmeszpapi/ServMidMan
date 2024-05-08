@@ -120,7 +120,7 @@
                         @if ((bool)ViewData["AllServiceCheckbox"])
                         {
 
-                        <input id="ServiceSwitch" type="checkbox" checked>
+                            <input id="ServiceSwitch" type="checkbox" checked>
                         }
                         else
                         {
@@ -145,17 +145,21 @@
                             <!-- Add this div -->
                             @if (ViewData["typeOfUser"].Equals("Client"))
                             {
-                                <h2>Beérkező ajánlatok</h2>
+                                <center>
+                                    <h2 style="width:50%" class="shadow-none p-3 bg-info rounded">Beérkező ajánlatok</h2>
+                                </center>
                             }
                             else
                             {
-                                <h2>Küldött ajánlatok</h2>
+                                <center>
+                                    <h2 style="width:50%" class="shadow-none p-3 bg-info rounded">Elküldött ajánlatok</h2>
+                                </center>
                             }
                             @foreach (var group in Model.Services)
                             {
-                                <h3>Szervíz ID: @group.service.Id</h3>
                                 <ul class="service-list">
                                     <li class="service-item">
+                                        <h3 class="">Szervíz ID: @group.service.Id</h3>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 @if (ViewData["typeOfUser"].Equals("Client"))
@@ -183,7 +187,8 @@
                                                             <button type="submit" style="margin:5px" class="btn btn-success mr-2">Kontakt</button>
                                                         </form>
                                                     </div>
-                                                } else
+                                                }
+                                                else
                                                 {
                                                     <div>Termék neve: @group.product.Products.Name</div>
                                                     <div>Hirdető Neve: @group.OwnerName </div>
@@ -195,7 +200,7 @@
                                                             <input type="hidden" name="userId" value="@group.product.Products.UserId" />
                                                             <button type="submit" style="margin-top:5px" id="VisitProfile" class="btn btn-dark mr-2">Profil látogatása</button>
                                                         </form>
-            
+
                                                         <form method="post" action="/Home/Product?id=@group.service.ProductId" style="display: inline;margin-10px">
                                                             <input type="hidden" name="userId" value="@group.service.UserId" />
                                                             @if (group.service.Approved != ServiceStatus.Done)
@@ -210,7 +215,7 @@
                                                         </form>
                                                     </div>
                                                 }
-                                              
+
                                                 @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
                                                     <h1 class="display-4 text-success">Elfogadva !</h1>
@@ -255,10 +260,23 @@
                                                 {
                                                     @if (!ViewData["typeOfUser"].Equals("Client"))
                                                     {
+                                                        var hungaryanProductStatus = "";
+                                                        switch (group.service.productStatus.ToString())
+                                                        {
+                                                            case "UnSettled":
+                                                                hungaryanProductStatus = "Változatlan";
+                                                                break;
+                                                            case "InProgress":
+                                                                hungaryanProductStatus = "Folyamatban";
+                                                                break;
+                                                            case "Done":
+                                                                hungaryanProductStatus = "Befejezve";
+                                                                break;
+                                                        }
                                                         <form id="productStatusForm" action="/Service/UpdateProductStatus" method="post">
                                                             <input type="hidden" name="serviceId" value="@group.service.Id" />
                                                             <select class="form-control" id="productStatus" name="productStatus" onchange="submitForm(@group.service.Id, this.value)">
-                                                                <option value="@group.service.productStatus" hidden selected>@group.service.productStatus</option>
+                                                                <option value="@group.service.productStatus" hidden selected>@hungaryanProductStatus</option>
                                                                 <option value="UnSettled">Változatlan</option>
                                                                 <option value="InProgress">Folyamatban</option>
                                                                 <option value="Done">Befejezve</option>
@@ -358,7 +376,7 @@
         }
 
         function confirmDelete(serviceId) {
-            if (confirm("Biztos törölni szeretnéd a productot?")) {
+            if (confirm("Biztos törölni szeretnéd a terméket?")) {
                 // If the user confirms, call the rejectService function
                 rejectService(serviceId);
             } else {
@@ -378,9 +396,9 @@
                     window.location.href = '/Service/Index?wantAllServices=false';
                 }
             });
-               
+
         });
-        function change(){
+        function change() {
 
         }
     </script>

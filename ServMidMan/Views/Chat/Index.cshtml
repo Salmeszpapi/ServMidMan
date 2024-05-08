@@ -61,7 +61,10 @@
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
                                         @if (Model.Messages.Count() == 0)
                                         {
-                                            <img id="guestMainPicture" src="@Model.Partner.ProfileImagePath" alt="avatar">
+                                            if (Model.Partner is not null)
+                                            {
+                                                <img id="guestMainPicture" src="@Model.Partner.ProfileImagePath" alt="avatar">
+                                            }
                                         }
                                         else if(Model.Messages[0].SenderId != (int)ViewData["MyId"])
                                         {
@@ -79,8 +82,8 @@
                                         }
                                         else
                                         {
-                                            <h6 id="ChatWithCurrentUser" class="m-b-0">Unknown</h6>
-                                            <small>No information available</small>
+                                            <h6 id="ChatWithCurrentUser" class="m-b-0">Nincs elérhető beszélgetés</h6>
+                                            <small>Kezdeményezz beszélgetést a termék oldalon keresztül!</small>
                                         }
                                     </div>
                                 </div>
@@ -100,7 +103,7 @@
                                                 <span class="message-data-time">@messages.SendTime.ToString("hh:mm tt")</span>
                                                     <img src="@messages.SenderImage" alt="avatar">
                                             </div>
-                                            <div class="message my-message">@messages.MessageText </div>
+                                                <div class="message my-message">@messages.Massege </div>
                                         </li>
 
                                     }else
@@ -110,24 +113,28 @@
                                                     <span class="message-data-time">@messages.SendTime.ToString("hh:mm tt")</span>
                                                     <img src="@messages.SenderImage" alt="avatar">
                                             </div>
-                                            <div class="message other-message float-right">@messages.MessageText </div>
+                                                <div class="message other-message float-right">@messages.Massege </div>
                                         </li>
                                     }
                                 }
                             }
                                 </ul>
                         </div>
-                        <div class="chat-message clearfix">
-                            <div class="input-group mb-0">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-send"></i></span>
-                                </div>
-                                <input id="messageInput" type="text" class="form-control" placeholder="Enter text here...">
-                                <div class="input-group-append">
-                                    <button id="sendMessageBtn" class="btn btn-primary">Küldés</button>
+                        @if (Model.Partner  != null && !string.IsNullOrEmpty(Model.Partner.Name))
+                        {
+                            <div class="chat-message clearfix">
+                                <div class="input-group mb-0">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-send"></i></span>
+                                    </div>
+                                    <input id="messageInput" type="text" class="form-control" placeholder="Enter text here...">
+                                    <div class="input-group-append">
+                                        <button id="sendMessageBtn" class="btn btn-primary">Küldés</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
+                        
                     </div>
                 </div>
             </div>

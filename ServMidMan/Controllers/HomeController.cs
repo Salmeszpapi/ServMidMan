@@ -191,6 +191,11 @@ namespace ServMidMan.Controllers
 
         public IActionResult DeleteProduct(Product product, [FromForm(Name = "fileInput")] List<IFormFile> files)
         {
+             var servicesTodelete = _dataProvider.Services.Where(x => x.ProductId == product.Id).ToList();
+            foreach(var item in servicesTodelete)
+            {
+                _dataProvider.Services.Remove(item);
+            }
             product.UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             Product dbProduct = _dataProvider.Products.FirstOrDefault(c => c.Id == product.Id);
             List<Image> images = _dataProvider.Images.Where(c => c.ProductReferenceId == dbProduct.Id).ToList();
@@ -251,7 +256,7 @@ namespace ServMidMan.Controllers
             List<Product> myProducts;
             if (productWithImagesPathAndUserInfo.UserInfo.TypeOfUser == UserType.Servicer)
             {
-                var myProductsLocal = _dataProvider.Services.Where(x => x.Approved == ServiceStatus.Done).Select(x => x.ProductId).ToList();
+                var myProductsLocal = _dataProvider.Services.Where(x => x.Approved == ServiceStatus.Done && x.UserId == userId ).Select(x => x.ProductId).ToList();
                 myProducts = _dataProvider.Products.Where(x => myProductsLocal.Contains(x.Id)).ToList();
             }
             else

@@ -117,7 +117,12 @@ namespace ServMidMan.Controllers
         {
             try
             {
-                if(email is null)
+                var isThereAnyEqualEmails = _dataProvider.Users.Where(x => x.Email == email).FirstOrDefault();
+                if (isThereAnyEqualEmails is not null)
+                {
+                    return Json(new { success = false, message = "Foglalt email" });
+                }
+                if (email is null)
                 {
 					return Json(new { success = false, message = "Adjon meg egy létező emailt" });
 				}

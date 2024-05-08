@@ -103,6 +103,7 @@
 
                             <button class="btn btn-primary" type="submit">Változások mentése</button>
                         </form>
+
                     </div>
                 </div>
             }
@@ -130,7 +131,18 @@
                         </div>
                         <!-- Form Row-->
                     </div>
+                    <center style="margin-bottom:10px">
+                        <form method="post" action="/Chat/Index" style="display: inline;">
+                            <input type="hidden" name="Id" value="@Model.UserInfo.Id" />
+                            @{
+                                <button type="submit" class="btn btn-success mr-2">Kontakt</button>
+                            }
+
+                        </form>
+                    </center>
+
                 </div>
+
             }
         </div>
         <div class="col-xl-4">
@@ -214,9 +226,9 @@
             <div class="card mb-4">
 
                 <div class="card-header">Termékek</div>
-                
+
                 <div class="card-body d-flex flex-nowrap justify-content-start align-items-center overflow-auto" style="overflow-x: auto; max-width: calc(100vw - 30px);">
-                    @if (Model.productWithByteImages != null)
+                    @if (Model.productWithByteImages.Count > 0)
                     {
                         @* <form method="get" id="myForm" action="Home/Product"> *@
 
@@ -241,7 +253,15 @@
                     }
                     else
                     {
-                        <p>No products found.</p>
+                        if (Model.UserInfo.TypeOfUser.ToString() == "Client")
+                        {
+                            <p>Nincs elérhető feltöltött termék</p>
+                        }
+                        else
+                        {
+                            <p>Nincs elérhető megjavitott termék</p>
+                        }
+
                     }
                 </div>
             </div>

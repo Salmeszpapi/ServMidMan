@@ -22,7 +22,7 @@ namespace ServMidMan.Controllers
                 return RedirectToAction("Welcome", "Authentication");
             }
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
-
+            ViewData["AllServiceCheckbox"] = false;
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             var myProducts = _dataProvider.Products.Where(x => x.UserId == Convert.ToInt32(HttpContext.Session.GetString("UserId")))

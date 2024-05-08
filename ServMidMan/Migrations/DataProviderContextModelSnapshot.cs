@@ -25,7 +25,7 @@ namespace ServMidMan.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("MessageText")
+                    b.Property<string>("Massege")
                         .IsRequired()
                         .HasColumnType("longtext");
 
