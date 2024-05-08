@@ -1,7 +1,11 @@
 ﻿@model ServMidMan.Models.ServicesOrdered
+
 @using ServMidMan.Helper
 <html>
 <head>
+    @{
+        ViewData["Title"] = "Ajánlatok";
+    }
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .service-list {
@@ -154,26 +158,59 @@
                                     <li class="service-item">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div>Termék neve: @group.product.Products.Name</div>
-                                                <div>Felhasználó Neve: @group.OwnerName </div>
-                                                @*                                                 <div>Szervíz ID: @group.product.na</div>
-                                    <div>Termék ID: @group.service.ProductId</div> *@
-                                                <div>Kapott szervíz ár: @group.service.Price€</div>
-                                                <div>Leírás: @group.service.Description </div>
-                                                <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.MM.dd")</div>
-                                                <div style="margin-bottom:15px">
-                                                    <form method="post" action="/Home/Profile" style="display: inline;">
-                                                        <input type="hidden" name="userId" value="@group.service.UserId" />
-                                                        <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Profil látogatása</button>
-                                                    </form>
-                                                    <form method="post" action="/Home/Product?id=@group.service.ProductId" style="display: inline;margin-10px">
-                                                        <input type="hidden" name="userId" value="@group.service.UserId" />
-                                                        @if (group.service.Approved != ServiceStatus.Done)
-                                                        {
-                                                        <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Termék megtekintése</button>
-                                                        }
-                                                    </form>
-                                                </div>
+                                                @if (ViewData["typeOfUser"].Equals("Client"))
+                                                {
+                                                    <div>Termék neve: @group.product.Products.Name</div>
+                                                    <div>Felhasználó Neve: @group.OwnerName </div>
+                                                    <div>Kapott szervíz ár: @group.service.Price€</div>
+                                                    <div>Szerelő leírása: @group.service.Description </div>
+                                                    <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.MM.dd")</div>
+                                                    <div style="margin-bottom:15px">
+                                                        <form method="post" action="/Home/Profile" style="display: inline;">
+                                                            <input type="hidden" name="userId" value="@group.service.UserId" />
+                                                            <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Profil látogatása</button>
+                                                        </form>
+                                                        <form method="post" action="/Home/Product?id=@group.service.ProductId" style="display: inline;margin-10px">
+                                                            <input type="hidden" name="userId" value="@group.service.UserId" />
+                                                            @if (group.service.Approved != ServiceStatus.Done)
+                                                            {
+                                                                <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Termék megtekintése</button>
+                                                            }
+                                                        </form>
+
+                                                        <form method="post" action="/Chat/Index" style="display: inline;">
+                                                            <input type="hidden" name="Id" value="@group.service.UserId" />
+                                                            <button type="submit" class="btn btn-success mr-2">Kontakt</button>
+                                                        </form>
+                                                    </div>
+                                                } else
+                                                {
+                                                    <div>Termék neve: @group.product.Products.Name</div>
+                                                    <div>Felhasználó Neve: @group.OwnerName </div>
+                                                    <div>Adott szervíz ár: @group.service.Price€</div>
+                                                    <div>Szerelő leírása: @group.service.Description </div>
+                                                    <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.MM.dd")</div>
+                                                    <div style="margin-bottom:15px">
+                                                        <form method="post" action="/Home/Profile" style="display: inline;">
+                                                            <input type="hidden" name="userId" value="@group.product.Products.UserId" />
+                                                            <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Profil látogatása</button>
+                                                        </form>
+            
+                                                        <form method="post" action="/Home/Product?id=@group.service.ProductId" style="display: inline;margin-10px">
+                                                            <input type="hidden" name="userId" value="@group.service.UserId" />
+                                                            @if (group.service.Approved != ServiceStatus.Done)
+                                                            {
+                                                                <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Termék megtekintése</button>
+                                                            }
+                                                        </form>
+
+                                                        <form method="post" action="/Chat/Index" style="display: inline;">
+                                                            <input type="hidden" name="Id" value="@group.product.Products.UserId" />
+                                                            <button type="submit" class="btn btn-success mr-2">Kontakt</button>
+                                                        </form>
+                                                    </div>
+                                                }
+                                              
                                                 @if (group.service.Approved == ServiceStatus.Approved)
                                                 {
                                                     <h1 class="display-4 text-success">Elfogadva !</h1>
@@ -194,7 +231,7 @@
                                                             {
                                                                 <button class="approve-button" onclick="approveService(@group.service.Id)">Elfogadás</button>
                                                                 <input type="hidden" name="Id" value="@group.service.Id" />
-                                                                <button onclick="return confirmDelete(@group.service.Id)" class="reject-button">Elutasitás</button>
+                                                                <button onclick="return confirmDelete(@group.service.Id)" class="reject-button">Elutasítás</button>
 
                                                             }
 
@@ -222,11 +259,9 @@
                                                             <input type="hidden" name="serviceId" value="@group.service.Id" />
                                                             <select class="form-control" id="productStatus" name="productStatus" onchange="submitForm(@group.service.Id, this.value)">
                                                                 <option value="@group.service.productStatus" hidden selected>@group.service.productStatus</option>
-                                                                <option value="Változatlan">Változatlan</option>
-                                                                <option value="Elküldve">Elküldve</option>
-                                                                <option value="MegérkezettASzerelőhöz">Megérkezett a Szerelőhöz</option>
-                                                                <option value="Megjavítva">Megjavítva</option>
-                                                                <option value="MegérkezettAzÜgyfélhez">Megérkezett az Ügyfélhez</option>
+                                                                <option value="UnSettled">Változatlan</option>
+                                                                <option value="InProgress">Folyamatban</option>
+                                                                <option value="Done">Befejezve</option>
                                                             </select>
                                                         </form>
                                                     }

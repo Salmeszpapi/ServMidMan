@@ -122,9 +122,9 @@
                                     <h2 class="card-title">@Model.Products.Name</h2>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <p><strong>Leirás:</strong> @Model.Products.Description</p>
+                                            <p><strong>Leírás:</strong> @Model.Products.Description</p>
                                             <p><strong>Kategória:</strong> @Model.Products.Category</p>
-                                            <p><strong>Ár:</strong> @Model.Products.Price€</p>
+                                            <p><strong>Javításra szánt összeg:</strong> @Model.Products.Price€</p>
                                         </div>
                                         <div class="col-md-6">
                                             <p><strong>Hely:</strong> @Model.Products.Location</p>
@@ -139,24 +139,26 @@
                                         {
                                             var a = 5;
 
-                                            <button class="btn btn-primary mr-2" onclick="toggleAdditionalFields()">Send request</button>
+                                            <button class="btn btn-primary mr-2" onclick="toggleAdditionalFields()">Ajánlat küldése</button>
                                         }
-                                        <form method="post" action="/Chat/Index" style="display: inline;">
-                                            <input type="hidden" name="Id" value="@Model.Products.UserId" />
-                                            @{
-                                                var clientId = Convert.ToInt32(ViewData["ClientId"]);
-                                                if (clientId != @Model.Products.UserId)
-                                                {
-                                                    <button type="submit" class="btn btn-success mr-2">Contact</button>
+                                      
+                                            <form method="post" action="/Chat/Index" style="display: inline;">
+                                                <input type="hidden" name="Id" value="@Model.Products.UserId" />
+                                                @{
+                                                    var clientId = Convert.ToInt32(ViewData["ClientId"]);
+                                                    if (clientId != @Model.Products.UserId)
+                                                    {
+                                                        <button type="submit" class="btn btn-success mr-2">Kontakt</button>
+                                                    }
                                                 }
-                                            }
 
-                                        </form>
+                                            </form>
+                                        
                                         @{
                                             var clientId2 = Convert.ToInt32(ViewData["ClientId"]);
                                             if (clientId2 == @Model.Products.UserId)
                                             {
-                                                <button class="btn btn-dark mr-2" onclick="toggleEditMode()">Módositás</button>
+                                                <button class="btn btn-dark mr-2" onclick="toggleEditMode()">Módosítás</button>
                                                 <form method="post" action="/Home/DeleteProduct" style="display: inline;">
                                                     <input type="hidden" name="Id" value="@Model.Products.Id" />
                                                     <button onclick="return confirmDelete()" class="btn btn-danger">Törlés</button>
@@ -179,26 +181,26 @@
                                                 <input type="text" class="form-control" name="Name" id="Name" value="@Model.Products.Name">
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="editDescription">Leirás</label>
+                                                <label for="editDescription">Leírás</label>
                                                 <textarea class="form-control" id="Description" name="Description" rows="4">@Model.Products.Description</textarea>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="validationDefault01">Kategória</label>
                                                 <select class="form-control" id="CategoryRadio" name="Category" onchange="updateHiddenInput()">
                                                     <option selected>@Model.Products.Category</option>
-                                                    <option value="Electronincs">Elektronika</option>
-                                                    <option value="Mobile">Mobil</option>
-                                                    <option value="PC">PC</option>
-                                                    <option value="Notebook">Laptop</option>
-                                                    <option value="Camera">Kamera</option>
-                                                    <option value="Car">Auto</option>
-                                                    <option value="Motorcycle">Motor</option>
-                                                    <option value="Bicycle">Bicikli</option>
-                                                    <option value="Other">Más</option>
+                                                    <option value="Jármű">Jármű</option>
+                                                    <option value="Elektronika">Elektronika</option>
+                                                    <option value="Bútor">Bútor</option>
+                                                    <option value="Sport">Sport</option>
+                                                    <option value="Gép">Gép</option>
+                                                    <option value="Szerszám">Szerszám</option>
+                                                    <option value="Ruha">Ruha</option>
+                                                    <option value="Hangszer">Hangszer</option>
+                                                    <option value="Egyéb">Egyéb</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="editPrice">Ár</label>
+                                                <label for="editPrice">Javításra szánt összeg</label>
                                                 <input type="text" class="form-control" id="Price" name="Price" oninput="validateNumber(this)" value="@Model.Products.Price">
                                             </div>
                                             <div class="col-md-6 mb-3">
@@ -233,13 +235,14 @@
                                         <div id="additionalFields" style="display: none; margin-top:10px">
                                             <!-- Additional fields to be displayed when the "Send request" button is clicked -->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationDefault01">Leirás</label>
-                                                <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Description" rows="4"></textarea>
-                                                <label>Choose date :</label>
+                                                <label for="validationDefault01">Leírás:</label>
+                                                <textarea name="Description" class="form-control" id="validationDefault03" placeholder="Leírás" rows="4"></textarea>
+                                                <label>Dátum kiválasztása :</label>
                                                 <input style="margin-top:10px" name="dateTimeToFinish" type="date" min="today" />
                                             </div>
-                                            <div class="input-group col-md-6 mb-3">
-                                                <input type="text" name="Price" oninput="validateNumber(this)" class="form-control" id="validationDefault03" placeholder="Price" required>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="Price">Árajánlat:</label>
+                                                <input type="text" name="Price" oninput="validateNumber(this)" class="form-control" id="validationDefault03" placeholder="Ár" required>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">€</span>
                                                 </div>
@@ -248,7 +251,7 @@
 
                                             <!-- Save button -->
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-primary">Mentés</button>
+                                                <button type="submit" class="btn btn-primary">Küldés</button>
                                                 <button class="btn btn-secondary" onclick="toggleAdditionalFields()">Visszavonás</button>
                                             </div>
 

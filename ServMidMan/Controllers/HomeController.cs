@@ -61,7 +61,7 @@ namespace ServMidMan.Controllers
             }
             if (products.Count == 0)
             {
-                ViewBag.NoProduct = "No existing products";
+                ViewBag.NoProduct = "Nincs létezõ termék";
                 return View();
             }
             page = page == 0 ? page : page-1;
@@ -468,7 +468,8 @@ namespace ServMidMan.Controllers
                 }
 
             }
-            if(searchProducts.Region != null){
+            if(searchProducts.Region != null)
+            {
                 var DiscrictPostalCodes = _dataProvider.Locations.Where(l => l.Disctrict == searchProducts.Region).Select(x => x.Cities.Trim().Replace(" ","")).ToList();
                 if (products == null)
                 {
