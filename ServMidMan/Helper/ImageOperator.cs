@@ -35,78 +35,27 @@ namespace ServMidMan.Helper
 			}
 			else
 			{
-				// Handle case where no files are provided
 				return false;
 			}
 		}
-
-		//public static List<byte[]> DownloadImages(List<string> imageNames)
-  //      {
-  //          List<byte[]> bytesofImages = new List<byte[]>();
-
-  //          // Set TLS version explicitly
-  //          ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-  //          foreach (var picturename in imageNames)
-  //          {
-  //              try
-  //              {
-  //                  // Download the image from FTP server to cache
-  //                  using (WebClient client = new WebClient())
-  //                  {
-  //                      client.Credentials = new NetworkCredential(userName, password);
-  //                      bytesofImages.Add(client.DownloadData(ftpServerUrl + picturename));
-  //                  }
-  //              }
-  //              catch (WebException ex)
-  //              {
-  //                  // Handle specific FTP errors
-  //                  var response = ex.Response as FtpWebResponse;
-  //                  if (response != null && response.StatusCode == FtpStatusCode.NotLoggedIn)
-  //                  {
-  //                      // Handle not logged in error
-  //                      Console.WriteLine($"Error downloading image {picturename}: Not logged in.");
-  //                  }
-  //                  else
-  //                  {
-  //                      // Handle other FTP errors
-  //                      Console.WriteLine($"Error downloading image {picturename}: {ex.Massege}");
-  //                  }
-  //              }
-  //              catch (Exception ex)
-  //              {
-  //                  // Handle general errors
-  //                  Console.WriteLine($"Error downloading image {picturename}: {ex.Massege}");
-  //              }
-  //          }
-
-  //          return bytesofImages;
-  //      }
         public static void FTPImgaeRemover(List<string> imageNames)
         {
             foreach (var imageName in imageNames)
             {
-                // Create FTP request
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpServerUrl + imageName);
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
 
-                // Set credentials
                 request.Credentials = new NetworkCredential(userName, password);
 
                 try
                 {
-                    // Send the request to the FTP server
                     FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-
-                    // Display server response
                     Console.WriteLine($"FTP Server Response: {response.StatusDescription}");
 
-                    // Clean up resources
                     response.Close();
                 }
                 catch (WebException ex)
                 {
-                    // Handle any errors
                     Console.WriteLine($"Error: {ex.Message}");
                 }
             }

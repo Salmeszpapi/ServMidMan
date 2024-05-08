@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ServMidMan.Entity;
 using ServMidMan.Models;
 
 namespace ServMidMan.Data
@@ -17,13 +16,5 @@ namespace ServMidMan.Data
         public DbSet<Chat> ChatHistory { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ServicerReviews> ServicerReviews { get; set; }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<UserEntity>()
-        //        .Property(e => e.TypeOfUser)
-        //        .HasColumnType("nvarchar"); // specifying nvarchar type for enum
-
-        //    base.OnModelCreating(modelBuilder);
-        //}
     }
 }

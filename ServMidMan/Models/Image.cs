@@ -10,8 +10,4 @@ namespace ServMidMan.Models
         public string FileName { get; set; }
         public int ProductReferenceId { get; set; }
     }
-    public class ImageWithResources : Image
-    {
-        public List<Byte[]> ImageResources { get; set; } = new List<Byte[]>();
-    }
 }
