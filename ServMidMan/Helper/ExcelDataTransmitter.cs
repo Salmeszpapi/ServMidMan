@@ -18,7 +18,7 @@ namespace ServMidMan.Helper
 			{"ZI","Žilinský" },
 			{"TC","Trenčiansky" },
 			{"NI","Nitriansky" },
-			{"KL","Košický" },
+			{"KI","Košický" },
 			{"BL","Bratislavský" }
 		};
         public ExcelDataTransmitter(DataProviderContext dataProviderContext)

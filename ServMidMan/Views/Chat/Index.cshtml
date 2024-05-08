@@ -5,6 +5,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @{
+        ViewData["Title"] = "Chat";
+    }
     <meta charset="utf-8">
     <title>chat app - Bootdey.com</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,8 +75,7 @@
                                     <div class="chat-about">
                                         @if (Model.Partner != null && !string.IsNullOrEmpty(Model.Partner.Name))
                                         {
-                                            <h6 id="ChatWithCurrentUser" class="m-b-0">@Model.Partner.Name</h6>
-                                            <small>Last seen: 2 hours ago</small>
+                                            <h5 id="ChatWithCurrentUser" class="m-b-0">@Model.Partner.Name</h5>
                                         }
                                         else
                                         {
@@ -105,7 +107,7 @@
                                     {
                                         <li class="clearfix">
                                             <div class="message-data text-right">
-                                                <span class="message-data-time">10:10 AM, Today</span>
+                                                    <span class="message-data-time">@messages.SendTime.ToString("hh:mm tt")</span>
                                                     <img src="@messages.SenderImage" alt="avatar">
                                             </div>
                                             <div class="message other-message float-right">@messages.Massege </div>
@@ -122,7 +124,7 @@
                                 </div>
                                 <input id="messageInput" type="text" class="form-control" placeholder="Enter text here...">
                                 <div class="input-group-append">
-                                    <button id="sendMessageBtn" class="btn btn-primary">Send</button>
+                                    <button id="sendMessageBtn" class="btn btn-primary">Küldés</button>
                                 </div>
                             </div>
                         </div>

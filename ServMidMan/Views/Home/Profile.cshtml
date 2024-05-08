@@ -1,5 +1,8 @@
 ﻿@model ProductWithImagesPathAndUserInfo
 @{
+    ViewData["Title"] = "Profil";
+}
+@{
     bool visitor = false;
     if (ViewData["Visitor"] != null)
     {
@@ -43,7 +46,7 @@
                     <form style="margin-top:15px" method="post" action="/Home/ProfileDescriptionUpdate">
                         <input type="hidden" name="userIdDirected" value="@ViewData["VisitorId"]" />
                         <div class="col-md-12 mb-4">
-                            <label for="editDescription">Leiras</label>
+                            <label for="editDescription">Leírás</label>
                             @if (visitor)
                             {
                                 <textarea name="Description" class="form-control" id="validationDefault03" disabled rows="4">@Model.UserInfo.DescriptionOfUser</textarea>
@@ -63,7 +66,7 @@
                         @if (!visitor)
                         {
 
-                            <button style="margin-top:10px" class="btn btn-primary" type="submit">Leiras feltoltese</button>
+                            <button style="margin-top:10px" class="btn btn-primary" type="submit">Leírás feltöltése</button>
                         }
                     </form>
                     <!-- Profile picture image-->
@@ -195,7 +198,7 @@
                                 <textarea class="form-control" id="ReviewText" name="reviewText" rows="4"></textarea>
                             </div>
                             <input type="hidden" name="visitorId" value="@ViewData["BrowserUser"]" />
-                            <button class="btn btn-primary" type="submit">Értékelés elküldése</button>
+                            <button class="btn btn-primary" type="submit">Értékelés küldése</button>
                         }
                     </form>
                 </div>

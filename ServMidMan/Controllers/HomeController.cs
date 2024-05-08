@@ -61,7 +61,7 @@ namespace ServMidMan.Controllers
             }
             if (products.Count == 0)
             {
-                ViewBag.NoProduct = "No existing products";
+                ViewBag.NoProduct = "Nincs létezõ termék";
                 return View();
             }
             page = page == 0 ? page : page - 1;
@@ -454,7 +454,7 @@ namespace ServMidMan.Controllers
             }
             if (searchProducts.Region != null)
             {
-                var DiscrictPostalCodes = _dataProvider.Locations.Where(l => l.Disctrict == searchProducts.Region).Select(x => new { City = x.Cities.Trim().Replace(" ", ""), PSC = x.PostalCode }).ToList();
+                var DiscrictPostalCodes = _dataProvider.Locations.Where(l => l.Disctrict == searchProducts.Region).Select(x => new { City = x.Cities, PSC = x.PostalCode }).ToList();
                 var myCities = DiscrictPostalCodes.Select(x => x.City).ToList();
                 var myPsc = DiscrictPostalCodes.Select(x => x.PSC.Trim().Replace(" ", "")).ToList();
 
@@ -468,7 +468,24 @@ namespace ServMidMan.Controllers
             {
                 products = products.Where(x => x.Price <= searchProducts.Price).ToList();
             }
-            return products;
+            List<Product> finalPproductsList = new List<Product>();
+            if(products.Count > 0)
+            {
+                foreach (var product in products)
+                {
+                    var serviceProduct = _dataProvider.Services.Where(x => x.ProductId == product.Id).FirstOrDefault();
+                    if (serviceProduct != null && serviceProduct.Approved == ServiceStatus.Done)
+                    {
+                       //products.Remove(product);
+                    }
+                    else
+                    {
+                        finalPproductsList.Add(product);
+                    }
+                }
+            }
+
+            return finalPproductsList;
         }
         [HttpGet]
         public IActionResult GetSuggestions(string input)

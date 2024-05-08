@@ -108,7 +108,7 @@ namespace ServMidMan.Controllers
                 return RedirectToAction("Index","Home");
                 //show alert
             }
-            ViewBag.ErrorMessage = "Helytelen email vagy jelszo";
+            ViewBag.ErrorMessage = "Helytelen email vagy jelszó";
             return View("Welcome");
         }
 

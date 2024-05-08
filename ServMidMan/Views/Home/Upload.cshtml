@@ -1,6 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    @{
+        ViewData["Title"] = "Termék feltöltés";
+    }
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Centered Form with Border</title>
@@ -80,15 +83,14 @@
                     <label for="validationDefault02">Kategória</label>
                     <select class="form-control" id="validationDefault02" name="Category">
                                 <option value="Kategória" disabled selected hidden>Kategória</option>
-                        <option value="Elektronika">Elektronika</option>
-                        <option value="Mobil">Mobil</option>
-                        <option value="PC">PC</option>
-                        <option value="Notebook">Notebook</option>
-                        <option value="Kamera">Kamera</option>
-                        <option value="Autó">Autó</option>
                         <option value="Jármű">Jármű</option>
-                        <option value="Motorkerékpár">Motorkerékpár</option>
-                        <option value="Kerékpár">Kerékpár</option>
+                        <option value="Elektronika">Elektronika</option>
+                        <option value="Bútor">Bútor</option>
+                        <option value="Sport">Sport</option>
+                        <option value="Gép">Gép</option>
+                        <option value="Szerszám">Szerszám</option>
+                        <option value="Ruha">Ruha</option>
+                        <option value="Hangszer">Hangszer</option>
                         <option value="Egyéb">Egyéb</option>
                     </select>
                 </div>
@@ -104,7 +106,7 @@
 
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="validationDefault04">Ár</label>
+                    <label for="validationDefault04">Javításra szánt összeg</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="validationDefault04" name="Price" oninput="validateNumber(this)" required>
                         <div class="input-group-append">
@@ -142,7 +144,7 @@
             var maxFiles = 10;
 
             if (input.files && input.files.length > maxFiles) {
-                alert("Maximum 10 images allowed.");
+                alert("Maximum 10 kép engedélyezett.");
                 // Reset the file input
                 input.value = '';
             } else {
