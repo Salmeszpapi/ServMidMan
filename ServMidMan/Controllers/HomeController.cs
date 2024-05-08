@@ -64,22 +64,22 @@ namespace ServMidMan.Controllers
                 ViewBag.NoProduct = "No existing products";
                 return View();
             }
-            page = page == 0 ? page : page-1;
+            page = page == 0 ? page : page - 1;
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             int returnLeght = 0;
-            if(myProductWithByteImages.Count() < (page * 12 + 12))
+            if (myProductWithByteImages.Count() < (page * 12 + 12))
             {
                 var test = page * 12 + 12;
-                returnLeght = myProductWithByteImages.Count() % test - page*12;
+                returnLeght = myProductWithByteImages.Count() % test - page * 12;
             }
             else
             {
                 returnLeght = page * 12 + 12;
             }
             ViewData["Page"] = page;
-            ViewData["MaxPages"] = (myProductWithByteImages.Count() + 12 - 1 ) / 12;
-            return View(myProductWithByteImages.GetRange(page*12, returnLeght));
+            ViewData["MaxPages"] = (myProductWithByteImages.Count() + 12 - 1) / 12;
+            return View(myProductWithByteImages.GetRange(page * 12, returnLeght));
         }
 
 
@@ -221,7 +221,7 @@ namespace ServMidMan.Controllers
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
             //Get Review comments
-            var reviews = _dataProvider.ServicerReviews.Where(x=>x.UserId == userId).ToList();
+            var reviews = _dataProvider.ServicerReviews.Where(x => x.UserId == userId).ToList();
             List<ServiceReviewExtended> reviewer = new List<ServiceReviewExtended>();
             foreach (var item in reviews)
             {
@@ -243,9 +243,9 @@ namespace ServMidMan.Controllers
             productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath = productWithImagesPathAndUserInfo.UserInfo.ProfileImagePath;
             productWithImagesPathAndUserInfo.productWithByteImages = new List<ProductWithByteImages>(); // Inicializáld a listát
             List<Product> myProducts;
-            if(productWithImagesPathAndUserInfo.UserInfo.TypeOfUser == UserType.Servicer)
+            if (productWithImagesPathAndUserInfo.UserInfo.TypeOfUser == UserType.Servicer)
             {
-               var myProductsLocal = _dataProvider.Services.Where(x => x.Approved == ServiceStatus.Done).Select(x => x.ProductId).ToList();
+                var myProductsLocal = _dataProvider.Services.Where(x => x.Approved == ServiceStatus.Done).Select(x => x.ProductId).ToList();
                 myProducts = _dataProvider.Products.Where(x => myProductsLocal.Contains(x.Id)).ToList();
             }
             else
@@ -272,7 +272,7 @@ namespace ServMidMan.Controllers
                     ImagePaths = ImageOperator.getImageFullPath(myImages),
                 });
             }
-            
+
 
             return View(productWithImagesPathAndUserInfo);
         }
@@ -379,7 +379,7 @@ namespace ServMidMan.Controllers
             {
                 return RedirectToAction("Welcome", "Authentication");
             }
-            if(files.Count == 0)
+            if (files.Count == 0)
             {
                 return View("Profile");
             }
@@ -446,60 +446,27 @@ namespace ServMidMan.Controllers
             }
             if (searchProducts.Category != null)
             {
-                if (products == null)
-                {
-                    products = _dataProvider.Products.Where(x => x.Category == searchProducts.Category).ToList();
-                }
-                else
-                {
-                    products = products.Where(x => x.Category == searchProducts.Category).ToList();
-                }
-
+                products = products.Where(x => x.Category == searchProducts.Category).ToList();
             }
             if (searchProducts.Location != null)
             {
-                if (products == null)
-                {
-                    products = _dataProvider.Products.Where(x => x.Location == searchProducts.Location).ToList();
-                }
-                else
-                {
-                    products = products.Where(x => x.Location == searchProducts.Location).ToList();
-                }
-
+                products = products.Where(x => x.Location == searchProducts.Location).ToList();
             }
-            if(searchProducts.Region != null){
-                var DiscrictPostalCodes = _dataProvider.Locations.Where(l => l.Disctrict == searchProducts.Region).Select(x => x.Cities.Trim().Replace(" ","")).ToList();
-                if (products == null)
-                {
-                    products = _dataProvider.Products.Where(x=> DiscrictPostalCodes.Contains(x.Location)).ToList();
-                }
-                else
-                {
-                    products = products.Where(x => DiscrictPostalCodes.Contains(x.Location)).ToList();
-                }
+            if (searchProducts.Region != null)
+            {
+                var DiscrictPostalCodes = _dataProvider.Locations.Where(l => l.Disctrict == searchProducts.Region).Select(x => new { City = x.Cities.Trim().Replace(" ", ""), PSC = x.PostalCode }).ToList();
+                var myCities = DiscrictPostalCodes.Select(x => x.City).ToList();
+                var myPsc = DiscrictPostalCodes.Select(x => x.PSC.Trim().Replace(" ", "")).ToList();
+
+                products = products.Where(x => myCities.Contains(x.Location) || myPsc.Contains(x.Location)).ToList();
             }
             if (searchProducts.MinPrice != null)
             {
-                if (products == null)
-                {
-                    products = _dataProvider.Products.Where(x => x.Price >= searchProducts.MinPrice).ToList();
-                }
-                else
-                {
-                    products = products.Where(x => x.Price >= searchProducts.MinPrice).ToList();
-                }
+                products = products.Where(x => x.Price >= searchProducts.MinPrice).ToList();
             }
             if (searchProducts.Price != null)
             {
-                if (products == null)
-                {
-                    products = _dataProvider.Products.Where(x => x.Price <= searchProducts.Price).ToList();
-                }
-                else
-                {
-                    products = products.Where(x => x.Price <= searchProducts.Price).ToList();
-                }
+                products = products.Where(x => x.Price <= searchProducts.Price).ToList();
             }
             return products;
         }
@@ -519,7 +486,7 @@ namespace ServMidMan.Controllers
             var user = _dataProvider.Users.Where(x => x.Id == Convert.ToInt32(userIdDirected)).FirstOrDefault();
             user.DescriptionOfUser = Description;
             _dataProvider.SaveChanges();
-            return RedirectToAction("Profile","Home");
+            return RedirectToAction("Profile", "Home");
         }
         [HttpPost]
         public IActionResult DeleteProductImage(string imageId)
