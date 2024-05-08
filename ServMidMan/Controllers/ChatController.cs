@@ -52,7 +52,7 @@ namespace ServMidMan.Controllers
                     chatWithPersonImage.Id = item.Id;
                     chatWithPersonImage.SendTime = item.SendTime;
                     chatWithPersonImage.ReceiverID = item.ReceiverID;
-                    chatWithPersonImage.Massege = item.Massege;
+                    chatWithPersonImage.MessageText = item.MessageText;
                     if (item.ReceiverID == userId)
                     {
                         chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
@@ -87,7 +87,7 @@ namespace ServMidMan.Controllers
                         chatWithPersonImage.Id = item.Id;
                         chatWithPersonImage.SendTime = item.SendTime;
                         chatWithPersonImage.ReceiverID = item.ReceiverID;
-                        chatWithPersonImage.Massege = item.Massege;
+                        chatWithPersonImage.MessageText = item.MessageText;
                         if (item.ReceiverID == userId)
                         {
                             chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
@@ -116,7 +116,7 @@ namespace ServMidMan.Controllers
                         chatWithPersonImage.Id = item.Id;
                         chatWithPersonImage.SendTime = item.SendTime;
                         chatWithPersonImage.ReceiverID = item.ReceiverID;
-                        chatWithPersonImage.Massege = item.Massege;
+                        chatWithPersonImage.MessageText = item.MessageText;
                         if (item.ReceiverID == userId)
                         {
                             chatWithPersonImage.ReceiverImae = _dataProvider.Users.Where(x => x.Id == userId).Select(x => x.ProfileImagePath).FirstOrDefault();
@@ -171,7 +171,7 @@ namespace ServMidMan.Controllers
             User receiverUser = _dataProvider.Users.Where(x => x.Name == receiverName).FirstOrDefault();
             Chat chat = new Chat()
             {
-                Massege = message,
+                MessageText = message,
                 ReceiverID = receiverUser.Id,
                 SenderId = userId,
                 SendTime = DateTime.Now,
@@ -208,7 +208,7 @@ namespace ServMidMan.Controllers
                 .Select(c => new
                 {
                     sendTime = c.SendTime.ToString("h:mm tt"),
-                    message = c.Massege,
+                    message = c.MessageText,
                     sender = c.SenderId,
                     guestPicture = partner.ProfileImagePath.Replace(" ", "%"),
                     myPicture = myProfilePicture,

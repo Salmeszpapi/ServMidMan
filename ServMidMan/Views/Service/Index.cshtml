@@ -161,7 +161,7 @@
                                                 @if (ViewData["typeOfUser"].Equals("Client"))
                                                 {
                                                     <div>Termék neve: @group.product.Products.Name</div>
-                                                    <div>Felhasználó Neve: @group.OwnerName </div>
+                                                    <div>Kérvényező Neve: @group.OwnerName </div>
                                                     <div>Kapott szervíz ár: @group.service.Price€</div>
                                                     <div>Szerelő leírása: @group.service.Description </div>
                                                     <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.MM.dd")</div>
@@ -180,33 +180,33 @@
 
                                                         <form method="post" action="/Chat/Index" style="display: inline;">
                                                             <input type="hidden" name="Id" value="@group.service.UserId" />
-                                                            <button type="submit" class="btn btn-success mr-2">Kontakt</button>
+                                                            <button type="submit" style="margin:5px" class="btn btn-success mr-2">Kontakt</button>
                                                         </form>
                                                     </div>
                                                 } else
                                                 {
                                                     <div>Termék neve: @group.product.Products.Name</div>
-                                                    <div>Felhasználó Neve: @group.OwnerName </div>
+                                                    <div>Hirdető Neve: @group.OwnerName </div>
                                                     <div>Adott szervíz ár: @group.service.Price€</div>
                                                     <div>Szerelő leírása: @group.service.Description </div>
                                                     <div>Befejezés dátuma: @group.service.ApproximetlyFinishDate.ToString("yyyy.MM.dd")</div>
                                                     <div style="margin-bottom:15px">
                                                         <form method="post" action="/Home/Profile" style="display: inline;">
                                                             <input type="hidden" name="userId" value="@group.product.Products.UserId" />
-                                                            <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Profil látogatása</button>
+                                                            <button type="submit" style="margin-top:5px" id="VisitProfile" class="btn btn-dark mr-2">Profil látogatása</button>
                                                         </form>
             
                                                         <form method="post" action="/Home/Product?id=@group.service.ProductId" style="display: inline;margin-10px">
                                                             <input type="hidden" name="userId" value="@group.service.UserId" />
                                                             @if (group.service.Approved != ServiceStatus.Done)
                                                             {
-                                                                <button type="submit" id="VisitProfile" class="btn btn-dark mr-2">Termék megtekintése</button>
+                                                                <button type="submit" style="margin-top:5px" id="VisitProfile" class="btn btn-dark mr-2">Termék megtekintése</button>
                                                             }
                                                         </form>
 
                                                         <form method="post" action="/Chat/Index" style="display: inline;">
                                                             <input type="hidden" name="Id" value="@group.product.Products.UserId" />
-                                                            <button type="submit" class="btn btn-success mr-2">Kontakt</button>
+                                                            <button type="submit" style="margin-top:5px" class="btn btn-success mr-2">Kontakt</button>
                                                         </form>
                                                     </div>
                                                 }

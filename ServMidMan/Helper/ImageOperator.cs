@@ -70,13 +70,13 @@ namespace ServMidMan.Helper
   //                  else
   //                  {
   //                      // Handle other FTP errors
-  //                      Console.WriteLine($"Error downloading image {picturename}: {ex.Message}");
+  //                      Console.WriteLine($"Error downloading image {picturename}: {ex.MessageText}");
   //                  }
   //              }
   //              catch (Exception ex)
   //              {
   //                  // Handle general errors
-  //                  Console.WriteLine($"Error downloading image {picturename}: {ex.Message}");
+  //                  Console.WriteLine($"Error downloading image {picturename}: {ex.MessageText}");
   //              }
   //          }
 

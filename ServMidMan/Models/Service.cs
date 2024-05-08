@@ -29,7 +29,6 @@ namespace ServMidMan.Models
     {
         UnSettled,
         Approved,
-        Rejected,
         Done,
     }
 

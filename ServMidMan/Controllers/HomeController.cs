@@ -94,7 +94,7 @@ namespace ServMidMan.Controllers
                 return RedirectToAction("Welcome", "Authentication");
             }
             ViewData["typeOfUser"] = HttpContext.Session.GetString("UserType");
-
+            ViewData["isProductRepaired"] = false;
             ViewData["LoggedIn"] = HttpContext.Session.GetString("Login");
             ViewData["ClientId"] = HttpContext.Session.GetString("UserId");
             Product product = _dataProvider.Products.Where(x => x.Id.ToString() == id).FirstOrDefault();
@@ -111,6 +111,12 @@ namespace ServMidMan.Controllers
                 //ImageResources = ImageOperator.DownloadImages(myImages),
                 ImagePaths = ImageOperator.getImageFullPath(myImages)
             };
+
+            var serviceOfProduct = _dataProvider.Services.Where(x => x.ProductId == product.Id).ToList().FirstOrDefault();
+            if(serviceOfProduct != null)
+            {
+                ViewData["isProductRepaired"] = serviceOfProduct.Approved == ServiceStatus.Done ? true : false ;
+            }
             return View(myProductWithByteImages);
         }
         public IActionResult Logout()

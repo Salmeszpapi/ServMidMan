@@ -8,7 +8,7 @@ namespace ServMidMan.Models
         public int Id { get; set; }
         public int SenderId { get; set; }
         public int ReceiverID { get; set; }
-        public string Massege { get; set; }
+        public string MessageText { get; set; }
         public DateTime SendTime { get; set; }
     }
     public class ChatWithPerson()
