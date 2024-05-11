@@ -526,5 +526,6 @@ namespace ServMidMan.Controllers
             _dataProvider.SaveChanges();
             return View();
         }
+
     }
 }
